@@ -32,7 +32,7 @@ abstract class BaseFragment : Fragment() {
 
     @SuppressWarnings("unchecked")
     private fun configureViewModel(): CelesteViewModel {
-        val factory = ViewModelFactory(Executors.newSingleThreadExecutor())
+        val factory = ViewModelFactory()
         return ViewModelProvider(this, factory).get(CelesteViewModel::class.java)
     }
 

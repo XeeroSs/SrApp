@@ -4,7 +4,7 @@ package com.xeross.srapp.model.src.users;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Src {
+public class SrcUser {
 
     @SerializedName("data")
     @Expose

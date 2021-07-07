@@ -6,11 +6,11 @@ import com.xeross.srapp.controller.celeste.CelesteViewModel
 import com.xeross.srapp.controller.main.MainViewModel
 import java.util.concurrent.Executor
 
-class ViewModelFactory(private val executor: Executor) : ViewModelProvider.Factory {
+class ViewModelFactory : ViewModelProvider.Factory {
 
     override fun <VM : ViewModel?> create(modelClass: Class<VM>): VM {
         return when {
-            getViewModel<MainViewModel>(modelClass) -> MainViewModel(executor)
+            getViewModel<MainViewModel>(modelClass) -> MainViewModel()
             getViewModel<CelesteViewModel>(modelClass) -> CelesteViewModel()
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         } as VM

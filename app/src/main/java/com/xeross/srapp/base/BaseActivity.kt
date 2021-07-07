@@ -27,7 +27,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     @Suppress("UNCHECKED_CAST")
     private fun configureViewModel(): ViewModel {
-        val factory = ViewModelFactory(Executors.newSingleThreadExecutor())
+        val factory = ViewModelFactory()
         return ViewModelProvider(this, factory).get(getViewModelClass() as Class<ViewModel>)
     }
 
