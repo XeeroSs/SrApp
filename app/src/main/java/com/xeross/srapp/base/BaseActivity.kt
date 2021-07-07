@@ -20,11 +20,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.v("--------------", "1")
-        println("----------------- -1")
         setContentView(getFragmentId())
         viewModel = configureViewModel()
-        println("----------------- 0")
         build()
     }
 

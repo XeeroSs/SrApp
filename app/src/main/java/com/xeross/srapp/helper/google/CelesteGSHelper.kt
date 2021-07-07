@@ -1,4 +1,4 @@
-package com.xeross.srapp.helper
+package com.xeross.srapp.helper.google
 
 class CelesteGSHelper: CelesteService {
 

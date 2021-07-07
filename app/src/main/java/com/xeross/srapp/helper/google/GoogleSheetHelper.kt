@@ -1,4 +1,4 @@
-package com.xeross.srapp.helper
+package com.xeross.srapp.helper.google
 
 import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp
