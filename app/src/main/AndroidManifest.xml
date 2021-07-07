@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SrApp">
         <activity android:name=".controller.celeste.CelesteActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".controller.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
