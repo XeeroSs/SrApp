@@ -4,5 +4,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="games">Games</string>
     <string name="celeste">Celeste</string>
-    <string name="game_position">Position: %1$de</string>
+    <string name="game_position">Position: %1$d</string>
 </resources>

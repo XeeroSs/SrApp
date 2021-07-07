@@ -18,7 +18,7 @@ object RetrofitHelper {
 
         api = RetrofitHelper.getClient().create(SrcApiService::class.java)
 
-        api?.getNotifications(/*"1xcf0mqyj4yhzz78iuakxd3gd"*/)?.enqueue(object : Callback<SrcNotifications> {
+        api?.getNotifications()?.enqueue(object : Callback<SrcNotifications> {
             override fun onResponse(call: Call<SrcNotifications>, response: Response<SrcNotifications>) {
 
 

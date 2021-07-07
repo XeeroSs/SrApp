@@ -1,5 +1,6 @@
 package com.xeross.srapp.controller.main
 
+import androidx.lifecycle.Observer
 import com.xeross.srapp.R
 import com.xeross.srapp.adapter.GameAdapter
 import com.xeross.srapp.base.BaseActivity
@@ -12,18 +13,24 @@ class MainActivity : BaseActivity(), ClickListener<Game> {
     override fun getViewModelClass() = MainViewModel::class.java
     override fun getFragmentId() = R.layout.activity_main
 
-    private var adapter: GameAdapter? = null
+    private lateinit var adapter: GameAdapter
     private val games = ArrayList<Game>()
 
     override fun build() {
-        getGames()
+        (viewModel as? MainViewModel)?.build()
         adapter = GameAdapter(this, games, this).also {
             activity_main_recyclerview.setRecyclerViewAdapter(it, false)
         }
+        getGames()
     }
 
     private fun getGames() {
-        games.add(Game("Do stuff", getString(R.string.celeste), R.drawable.im_celeste, 113))
+        (viewModel as? MainViewModel)?.getCeleste()?.observe(this, {
+            it?.let { game ->
+                games.add(game)
+                adapter.notifyDataSetChanged()
+            }
+        })
     }
 
     override fun onClick(o: Game) {

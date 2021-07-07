@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.xeross.srapp.controller.celeste.CelesteViewModel
 import com.xeross.srapp.injection.ViewModelFactory
-import java.util.concurrent.Executors
 
 abstract class BaseFragment : Fragment() {
 
@@ -21,7 +19,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = configureViewModel().also {
+        viewModel = configureViewModel()?.also {
             it.build(getSheetsName())
         }
     }
@@ -31,9 +29,12 @@ abstract class BaseFragment : Fragment() {
     }
 
     @SuppressWarnings("unchecked")
-    private fun configureViewModel(): CelesteViewModel {
-        val factory = ViewModelFactory()
-        return ViewModelProvider(this, factory).get(CelesteViewModel::class.java)
+    private fun configureViewModel(): CelesteViewModel? {
+        context?.let { c ->
+            val factory = ViewModelFactory(c)
+            return ViewModelProvider(this, factory).get(CelesteViewModel::class.java)
+        }
+        return null
     }
 
 }
