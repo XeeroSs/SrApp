@@ -10,8 +10,10 @@ import com.xeross.srapp.base.BaseFragment
 
 class OldCityFragment : BaseFragment() {
 
-    override fun getFragmentId() = R.layout.fragment_old_city
+    override fun getFragmentId() = R.layout.fragment_celeste_run
     override fun getSheetsName() = "Old City"
+    override fun getLevelName() = "Old City"
+    override fun getImageLevelId() = R.drawable.im_celeste_level_2
 
     companion object {
         fun getInstance() = OldCityFragment()

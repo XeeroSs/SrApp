@@ -1,7 +1,6 @@
 package com.xeross.srapp.base
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,19 +8,18 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xeross.srapp.injection.ViewModelFactory
-import java.util.concurrent.Executors
 
 abstract class BaseActivity : AppCompatActivity() {
 
     abstract fun getFragmentId(): Int
     abstract fun getViewModelClass(): Class<*>
     abstract fun build()
-    protected var viewModel: ViewModel? = null
+    protected var vm: ViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getFragmentId())
-        viewModel = configureViewModel()
+        vm = configureViewModel()
         build()
     }
 

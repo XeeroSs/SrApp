@@ -10,8 +10,10 @@ import com.xeross.srapp.base.BaseFragment
 
 class GoldenRidgeFragment : BaseFragment() {
 
-    override fun getFragmentId() = R.layout.fragment_golden_ridge
+    override fun getFragmentId() = R.layout.fragment_celeste_run
     override fun getSheetsName() = "Golden Ridge"
+    override fun getLevelName() = "Golden Ridge"
+    override fun getImageLevelId() = R.drawable.im_celeste_level_4
 
     companion object {
         fun getInstance() = GoldenRidgeFragment()

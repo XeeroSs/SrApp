@@ -10,8 +10,10 @@ import com.xeross.srapp.base.BaseFragment
 
 class CelestialResortFragment : BaseFragment() {
 
-    override fun getFragmentId() = R.layout.fragment_celestial_resort
+    override fun getFragmentId() = R.layout.fragment_celeste_run
     override fun getSheetsName() = "Celestial Resort"
+    override fun getLevelName() = "Celestial Resort"
+    override fun getImageLevelId() = R.drawable.im_celeste_level_3
 
     companion object {
         fun getInstance() = CelestialResortFragment()

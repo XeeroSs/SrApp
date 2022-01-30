@@ -10,8 +10,10 @@ import com.xeross.srapp.base.BaseFragment
 
 class ReflectionFragment : BaseFragment() {
 
-    override fun getFragmentId() = R.layout.fragment_reflection
+    override fun getFragmentId() = R.layout.fragment_celeste_run
     override fun getSheetsName() = "Reflection"
+    override fun getLevelName() = "Reflection"
+    override fun getImageLevelId() = R.drawable.im_celeste_level_6
 
     companion object {
         fun getInstance() = ReflectionFragment()

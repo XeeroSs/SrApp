@@ -1,37 +1,37 @@
 package com.xeross.srapp.helper.google
 
-import java.io.IOException
+import androidx.lifecycle.LiveData
 
 interface CelesteService {
 
-    fun fetchRuns(): Array<String>?
-
-    fun fetchRunsAverage(): String?
-
-    fun fetchBestRun(): String?
-
-    fun fetchWorstRun(): String?
+    fun fetchRuns(): LiveData<List<String>?>
+    fun fetchRunsAverage(): LiveData<String?>
+    fun fetchBestRun(): LiveData<String?>
+    fun fetchWorstRun(): LiveData<String?>
+    fun fetchRunAmount(): LiveData<String?>
 
     /**
      * Fetch the world record runs .
      * @return [Int] is leaders board positions & [String] is Time.
      */
-    fun fetchRunsWordRecord(): Map<Int, String>?
+    fun fetchRunsWordRecord(): LiveData<Map<String, String>?>
 
     /**
      * Fetch the world record runs into any% run world record.
      * @return [Int] is leaders board positions & [String] is Time.
      */
-    fun fetchAnyPercentRunsWordRecord(): Map<Int, String>?
+    fun fetchAnyPercentRunsWordRecord(): LiveData<Map<String, String>?>
+    fun fetchSRNameAnyPercentRunsWordRecord(): LiveData<Map<String, String>?>
 
     /**
      * Fetch the differnce time betwwen the any % world record and your personnel best
      * @return [Int] is leaders board positions & [String] is Time.
      */
-    fun fetchDifferenceBetweenPBAndWR(): Map<Int, String>?
+    fun fetchDifferenceBetweenPBAndWR(): LiveData<Map<String, String>?>
 
-    fun fetchFRRunAnyPercent(): Map<Int, String>?
+    fun fetchFRRunAnyPercent(): LiveData<Map<String, String>?>
+    fun fetchSRNameFRRunAnyPercent(): LiveData<Map<String, String>?>
 
-    fun fetchDifferenceBetweenPBAndFRWR(): Map<Int, String>?
+    fun fetchDifferenceBetweenPBAndFRWR(): LiveData<Map<String, String>?>
 
 }

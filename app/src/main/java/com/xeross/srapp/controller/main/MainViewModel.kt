@@ -10,8 +10,9 @@ import com.xeross.srapp.helper.http.NetworkCallHelper
 import com.xeross.srapp.helper.http.RetrofitHelper
 import com.xeross.srapp.helper.http.SrcApiService
 import com.xeross.srapp.model.Game
+import com.xeross.srapp.model.SpeedrunType
 
-class MainViewModel(private val context: Context) : ViewModel() {
+class MainViewModel : ViewModel() {
 
     private var api: SrcApiService? = null
     private var networkCallHelper = NetworkCallHelper()
@@ -26,12 +27,12 @@ class MainViewModel(private val context: Context) : ViewModel() {
         api = RetrofitHelper.getClient().create(SrcApiService::class.java)
     }
 
-    fun getCeleste(): LiveData<Game> {
+    fun getCeleste(context: Context): LiveData<Game> {
         val celeste = MutableLiveData<Game>()
         api?.let {
             networkCallHelper.getHTTPRequest(it.getPBByGame(nameSpeedrunner, nameSpeedrun)).observe((context as AppCompatActivity), { data ->
                 if (data.data == null || data.data.isEmpty()) return@observe
-                celeste.postValue(Game("celeste", "Celeste", R.drawable.im_celeste, data.data[0].place))
+                celeste.postValue(Game(SpeedrunType.CELESTE, "Celeste", R.drawable.im_celeste, data.data[0].place))
             })
         }
         return celeste

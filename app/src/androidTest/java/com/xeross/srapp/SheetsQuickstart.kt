@@ -8,7 +8,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.JsonFactory
-import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.api.client.json.gson.GsonFactory
 import com.google.api.client.util.store.FileDataStoreFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
@@ -21,7 +21,7 @@ import java.io.InputStreamReader
 
 object SheetsQuickstart {
     private val APPLICATION_NAME = "SrApp"
-    private val JSON_FACTORY: JsonFactory = JacksonFactory.getDefaultInstance()
+    private val JSON_FACTORY: JsonFactory = GsonFactory.getDefaultInstance()
     private val TOKENS_DIRECTORY_PATH = "tokens"
     private val ID = "1_N10ANx6O4ioiGdYhGLt2742iBGmnfCElvAMRvSQRtE"
     private var service: Sheets? = null

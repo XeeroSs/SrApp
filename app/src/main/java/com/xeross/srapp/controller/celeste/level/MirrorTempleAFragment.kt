@@ -10,8 +10,10 @@ import com.xeross.srapp.base.BaseFragment
 
 class MirrorTempleAFragment : BaseFragment() {
 
-    override fun getFragmentId() = R.layout.fragment_mirror_temple_a
+    override fun getFragmentId() = R.layout.fragment_celeste_run
     override fun getSheetsName() = "Mirror Temple 5A (Cassette)"
+    override fun getLevelName() = "Mirror Temple 5A"
+    override fun getImageLevelId() = R.drawable.im_celeste_level_5
 
     companion object {
         fun getInstance() = MirrorTempleAFragment()
