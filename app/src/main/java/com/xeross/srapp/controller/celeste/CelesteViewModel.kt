@@ -5,16 +5,11 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.services.sheets.v4.Sheets
-import com.google.api.services.sheets.v4.model.ValueRange
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.xeross.srapp.base.BaseActivityOAuth
 import com.xeross.srapp.helper.google.CelesteSheetsHelper
 import com.xeross.srapp.model.LeaderBoard
-import java.io.IOException
 import java.lang.ref.WeakReference
-import java.security.GeneralSecurityException
 
 class CelesteViewModel(private val context: WeakReference<Context>) : ViewModel() {
     
@@ -22,9 +17,9 @@ class CelesteViewModel(private val context: WeakReference<Context>) : ViewModel(
     private var nSheets = ""
     private var celesteSheetHelper: CelesteSheetsHelper? = null
     
-    fun build(nSheets: String) {
+    fun build(nSheets: String, credential: GoogleAccountCredential, baseActivityOAuth: BaseActivityOAuth) {
         this.nSheets = nSheets
-   /*     celesteSheetHelper = context.get()?.let { CelesteSheetsHelper(this, nSheets, it,null).build() }*/
+        celesteSheetHelper = context.get()?.let { CelesteSheetsHelper(this, nSheets, it, credential).build(baseActivityOAuth) }
     }
     
     fun getCelesteSheets() = celesteSheetHelper
@@ -59,13 +54,8 @@ class CelesteViewModel(private val context: WeakReference<Context>) : ViewModel(
     private fun getSRNameAnyPercentRunsWordRecord(helper: CelesteSheetsHelper, context: LifecycleOwner): LiveData<Map<String, String>?> {
         val leaderBoards = MutableLiveData<Map<String, String>?>()
         helper.fetchAnyPercentRunsWordRecord().observe(context, { it1 ->
-            if (it1 != null) helper.fetchDifferenceBetweenPBAndWR().observe(context, { it2 ->
-                if (it2 != null) helper.fetchSRNameAnyPercentRunsWordRecord().observe(context, { result ->
-                    if (result != null) leaderBoards.postValue(result)
-                })
-            })
+            leaderBoards.postValue(it1)
         })
-        
         return leaderBoards
     }
     

@@ -4,6 +4,8 @@ import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.services.sheets.v4.SheetsScopes
@@ -14,17 +16,26 @@ abstract class BaseActivityOAuth : AppCompatActivity() {
     private val REQUEST_GOOGLE_PLAY_SERVICES = 2
     val REQUEST_AUTHORIZATION = 3
     private val PREF_ACCOUNT_NAME = "name"
+    private var authorization: MutableLiveData<Boolean>? = null
     
     abstract fun getFragmentId(): Int
-    
-    abstract fun getAuthorization()
     
     var credential: GoogleAccountCredential? = null
     private val SCOPES = listOf(SheetsScopes.SPREADSHEETS_READONLY)
     
+    private fun authorize(isAuthorized: Boolean) {
+        authorization?.postValue(isAuthorized)
+    }
+    
+    fun getAuthorization(): LiveData<Boolean>? {
+        return authorization
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getFragmentId())
+        
+        this.authorization = MutableLiveData()
         
         credential = GoogleAccountCredential.usingOAuth2(this, SCOPES).also {
             val settings = getPreferences(MODE_PRIVATE)
@@ -49,7 +60,7 @@ abstract class BaseActivityOAuth : AppCompatActivity() {
                 checkGooglePlayServicesAvailable()
             }
             REQUEST_AUTHORIZATION -> if (resultCode == RESULT_OK) {
-                getAuthorization()
+                authorize(true)
             } else {
                 chooseAccount()
             }
@@ -61,7 +72,7 @@ abstract class BaseActivityOAuth : AppCompatActivity() {
                     val editor = settings.edit()
                     editor.putString(PREF_ACCOUNT_NAME, accountName)
                     editor.apply()
-                    getAuthorization()
+                    authorize(true)
                 }
             }
         }

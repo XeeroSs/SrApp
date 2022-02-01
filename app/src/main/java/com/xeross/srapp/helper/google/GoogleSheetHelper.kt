@@ -11,6 +11,7 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.JsonFactory
@@ -18,11 +19,14 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.client.util.store.FileDataStoreFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
+import com.xeross.srapp.base.BaseActivityOAuth
+import com.xeross.srapp.base.BaseAsyncTask
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStreamReader
+import java.util.concurrent.Callable
 
 
 @Suppress("PrivatePropertyName", "LocalVariableName")
@@ -34,6 +38,7 @@ class GoogleSheetHelper(private val nameGSClass: String) {
     private val ID = "1_N10ANx6O4ioiGdYhGLt2742iBGmnfCElvAMRvSQRtE"
     private var service: Sheets? = null
     private var viewModel: ViewModel? = null
+    private var baseAsyncTask: BaseAsyncTask? = null
     
     /**
      * Global instance of the scopes required by this quickstart.
@@ -46,6 +51,7 @@ class GoogleSheetHelper(private val nameGSClass: String) {
         // Build a new authorized API client service.
         //  val HTTP_TRANSPORT = NetHttpTransport()
         this.viewModel = viewModel
+        this.baseAsyncTask = BaseAsyncTask()
         
         return runBlocking {
             val HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport()
@@ -93,24 +99,46 @@ class GoogleSheetHelper(private val nameGSClass: String) {
         return mutableLiveData
     }
     
-    fun getValuesToStringMap(keyRangeFrom: String, keyRangTo: String, valueRangeFrom: String, valueRangTo: String): LiveData<Map<String, String>?> {
+    fun getValuesToStringMap(baseActivityOAuth: BaseActivityOAuth?, keyRangeFrom: String, keyRangTo: String, valueRangeFrom: String, valueRangTo: String): LiveData<Map<String, String>?> {
         val mutableLiveData = MutableLiveData<Map<String, String>?>()
-        service?.let { sheets ->
-            viewModel?.viewModelScope?.launch {
-                
-                val keyRange = "$nameGSClass!$keyRangeFrom:$keyRangTo"
-                val keyResponse = sheets.spreadsheets().values()[ID, keyRange].execute()
-                val keyResult = keyResponse.getValues()
-                if (keyResult == null || keyResult.isEmpty()) return@launch
-                val KeyResults = keyResult.map { it[0].toString() }
-                
-                val valueRange = "$nameGSClass!$valueRangeFrom:$valueRangTo"
-                val valueResponse = sheets.spreadsheets().values()[ID, valueRange].execute()
-                val valueResult = valueResponse.getValues()
-                if (valueResult == null || valueResult.isEmpty()) return@launch
-                val valueResults = valueResult.map { it[0].toString() }
-                
-                mutableLiveData.postValue(KeyResults.zip(valueResults).toMap())
+        baseActivityOAuth?.let { activity ->
+            service?.let { sheets ->
+                baseAsyncTask?.executeAsync(object : Callable<Boolean> {
+                    override fun call(): Boolean {
+                        try {
+                            val keyRange = "$nameGSClass!$keyRangeFrom:$keyRangTo"
+                            val keyResponse = sheets.spreadsheets().values()[ID, keyRange].execute()
+                            val keyResult = keyResponse.getValues()
+                            if (keyResult == null) {
+                                mutableLiveData.postValue(null)
+                                return false
+                            }
+                            val KeyResults = keyResult.map { it[0].toString() }
+            
+                            val valueRange = "$nameGSClass!$valueRangeFrom:$valueRangTo"
+                            val valueResponse = sheets.spreadsheets().values()[ID, valueRange].execute()
+                            val valueResult = valueResponse.getValues()
+                            if (valueResult == null) {
+                                mutableLiveData.postValue(null)
+                                return false
+                            }
+                            val valueResults = valueResult.map { it[0].toString() }
+            
+                            mutableLiveData.postValue(KeyResults.zip(valueResults).toMap())
+                        } catch (e: UserRecoverableAuthIOException) {
+                            // Trigger intent to have the user authorize
+                            activity.startActivityForResult(e.intent, activity.REQUEST_AUTHORIZATION);
+                            return false;
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                            return false;
+                        }
+                        return true
+                    }
+                }, object : BaseAsyncTask.Callback<Boolean> {
+                    override fun onComplete(result: Boolean) {
+                    }
+                })
             }
         }
         return mutableLiveData

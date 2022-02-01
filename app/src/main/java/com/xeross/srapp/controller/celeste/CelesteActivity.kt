@@ -28,8 +28,4 @@ class CelesteActivity : BaseActivityOAuth() {
         
         viewPager2.adapter = PageAdapter(this, fragmentList)
     }
-    
-    override fun getAuthorization() {
-        println("Il a eu les authorisations, bravo")
-    }
 }
