@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_blue_dark_eye"
     android:orientation="vertical"
     tools:context=".controller.main.MainActivity">
 
@@ -15,7 +14,6 @@
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/roboto_bold"
         android:text="@string/games"
-        android:textColor="@color/white"
         android:textSize="40sp" />
 
     <androidx.recyclerview.widget.RecyclerView

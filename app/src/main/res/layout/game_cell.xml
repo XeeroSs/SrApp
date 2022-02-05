@@ -14,7 +14,6 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="5dp"
-        android:background="@color/color_blue__eye"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -24,7 +23,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/color_blue__eye"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -66,7 +64,6 @@
                         android:ellipsize="end"
                         android:fontFamily="@font/roboto_bold"
                         android:maxLines="1"
-                        android:textColor="@color/white_eye"
                         android:textSize="18sp" />
 
                     <TextView
@@ -77,7 +74,6 @@
                         android:fontFamily="@font/roboto_bold"
                         android:gravity="center_vertical"
                         android:maxLines="1"
-                        android:textColor="@color/grey_blue"
                         android:textSize="15sp" />
 
                 </LinearLayout>

@@ -2,8 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/color_blue_dark_eye">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/fragment_celeste_image_level"
@@ -28,7 +27,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="center_vertical"
-                android:textColor="@color/white"
                 android:textSize="25sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageView2"
@@ -61,35 +59,30 @@
             android:id="@+id/fragment_celeste_best_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:textSize="40sp" />
 
         <TextView
             android:id="@+id/fragment_celeste_worst_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:textSize="40sp" />
 
         <TextView
             android:id="@+id/fragment_celeste_average_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:textSize="40sp" />
 
         <TextView
             android:id="@+id/fragment_celeste_runs_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:textSize="40sp" />
 
         <TextView
             android:id="@+id/fragment_celeste_rank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:textSize="40sp" />
 
         <androidx.recyclerview.widget.RecyclerView
