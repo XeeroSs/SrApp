@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_profile"
+        android:enabled="true"
+        android:icon="@drawable/ic_circle_user"
+        android:iconTint="@color/on_surface"
+        android:title="@string/menu_profile" />
+    <item
+        android:id="@+id/menu_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:iconTint="@color/on_surface"
+        android:title="@string/menu_home" />
+    <item
+        android:id="@+id/menu_settings"
+        android:enabled="true"
+        android:icon="@drawable/ic_settings"
+        android:iconTint="@color/on_surface"
+        android:title="@string/menu_settings" />
+</menu>

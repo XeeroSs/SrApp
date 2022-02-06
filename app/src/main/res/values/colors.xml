@@ -4,6 +4,11 @@
 
     <color name="background">#F5F5F5</color> <!--light gray-->
     <color name="surface">#FFFFFF</color> <!--white-->
+
+    <color name="blue_gradient">#364F6B</color> <!--white-->
+    <color name="purple_gradient">#6B5072</color> <!--white-->
+    <color name="pink_gradient">#FC5185</color> <!--white-->
+
     <array name="surface_header">
         <item>#364F6B</item>
         <item>#6B5072</item>
@@ -14,6 +19,7 @@
     <color name="on_primary">#484848</color> <!--super dark gray-->
     <color name="on_primary_variant">#A9A9A9</color> <!--gray-->
     <color name="on_surface">#484848</color> <!--super dark gray-->
+    <color name="on_surface_variant">#A9A9A9</color> <!--light gray-->
     <color name="on_surface_header">#FFFFFF</color> <!--super dark gray-->
     <color name="on_surface_header_variant">#A9A9A9</color> <!--gray-->
 

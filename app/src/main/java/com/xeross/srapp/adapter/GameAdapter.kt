@@ -33,7 +33,7 @@ class GameAdapter(context: Context, objectList: ArrayList<Game>, clickListener: 
 
     override fun updateItem(holder: ViewHolder, dObject: Game) {
         holder.title.text = dObject.name
-        holder.position.text = context.getString(R.string.game_position, dObject.position)
+     //   holder.position.text = context.getString(R.string.game_position, dObject.position)
         glide.load(dObject.img).into(holder.img)
     }
 
