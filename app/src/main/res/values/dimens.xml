@@ -7,11 +7,16 @@
     <dimen name="header_content_start">16dp</dimen>
     <dimen name="header_content_end">50dp</dimen>
     <dimen name="header_content_top_with_status_bar">45dp</dimen>
-    <dimen name="header_content_bottom">20dp</dimen>
+    <dimen name="header_content_bottom">15dp</dimen>
     <dimen name="header_image_size">104dp</dimen>
     <dimen name="header_text_size_title">18sp</dimen>
     <dimen name="header_text_size_label">12sp</dimen>
     <dimen name="header_text_start">15dp</dimen>
     <dimen name="header_space_between_texts">5dp</dimen>
     <dimen name="header_image_border_size">5dp</dimen>
+    <dimen name="header_buttons_end">16dp</dimen>
+
+    <dimen name="header_fab_size">36dp</dimen>
+    <dimen name="header_fab_icon_size">14dp</dimen>
+
 </resources>

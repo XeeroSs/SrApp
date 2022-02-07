@@ -11,86 +11,133 @@
         android:background="@drawable/shape_header"
         android:elevation="2dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/header_content_start"
+            android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/header_content_top_with_status_bar"
-            android:layout_marginEnd="@dimen/header_content_end"
-            android:layout_marginBottom="@dimen/header_content_bottom"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <RelativeLayout
-                android:id="@+id/activity_game_details_content_image_header"
-                android:layout_width="@dimen/header_image_size"
-                android:gravity="center"
-                android:layout_height="@dimen/header_image_size"
-                android:background="@drawable/shape_image_header">
-
-                <ImageView
-                    android:id="@+id/activity_game_details_image_header"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:scaleType="centerCrop" />
-
-            </RelativeLayout>
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/header_text_start"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/header_content_start"
+                android:layout_toStartOf="@+id/relativeLayout"
                 android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <TextView
+                <RelativeLayout
+                    android:id="@+id/activity_game_details_content_image_header"
+                    android:layout_width="@dimen/header_image_size"
+                    android:layout_height="@dimen/header_image_size"
+                    android:background="@drawable/shape_image_header"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/activity_game_details_image_header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:scaleType="centerCrop" />
+
+                </RelativeLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/gilroy_light"
-                    android:maxLines="1"
-                    android:text="Text qui sert de test"
-                    android:textColor="@color/on_surface_header"
-                    android:textSize="@dimen/header_text_size_title" />
+                    android:layout_marginStart="@dimen/header_text_start"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/header_space_between_texts" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/gilroy_light"
+                        android:maxLines="1"
+                        android:text="Forsaken City"
+                        android:textColor="@color/on_surface_header"
+                        android:textSize="@dimen/header_text_size_title" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/gilroy_light"
-                    android:maxLines="1"
-                    android:text="Text qui sert de test 2"
-                    android:textColor="@color/on_surface_header_variant"
-                    android:textSize="@dimen/header_text_size_label" />
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/header_space_between_texts" />
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/header_space_between_texts" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/gilroy_light"
+                        android:maxLines="1"
+                        android:text="Celeste IL"
+                        android:textColor="@color/on_surface_header_variant"
+                        android:textSize="@dimen/header_text_size_label" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/gilroy_light"
-                    android:maxLines="1"
-                    android:text="Text qui sert de test 3"
-                    android:textColor="@color/on_surface_header_variant"
-                    android:textSize="@dimen/header_text_size_label" />
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/header_space_between_texts" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/gilroy_light"
+                        android:maxLines="1"
+                        android:text="PB: 31:21.233"
+                        android:textColor="@color/on_surface_header_variant"
+                        android:textSize="@dimen/header_text_size_label" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
+            <RelativeLayout
+                android:id="@+id/relativeLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true">
 
-        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="@dimen/header_content_top_with_status_bar"
+                    android:layout_marginEnd="@dimen/header_buttons_end"
+                    android:layout_marginBottom="@dimen/header_content_bottom"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/previous"
+                        android:src="@drawable/ic_arrow_previous"
+                        android:tint="@color/on_primary"
+                        app:backgroundTint="@color/primary"
+                        app:fabCustomSize="@dimen/header_fab_size"
+                        app:maxImageSize="@dimen/header_fab_icon_size"
+                        app:tint="@color/on_primary" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/next"
+                        android:src="@drawable/ic_arrow_next"
+                        app:backgroundTint="@color/primary"
+                        app:fabCustomSize="@dimen/header_fab_size"
+                        app:maxImageSize="@dimen/header_fab_icon_size"
+                        app:tint="@color/on_primary" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
 
     </RelativeLayout>
 

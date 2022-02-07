@@ -16,7 +16,7 @@
     </array>
 
     <color name="on_background">#000000</color> <!--black-->
-    <color name="on_primary">#484848</color> <!--super dark gray-->
+    <color name="on_primary">#ffffff</color> <!--super dark gray-->
     <color name="on_primary_variant">#A9A9A9</color> <!--gray-->
     <color name="on_surface">#484848</color> <!--super dark gray-->
     <color name="on_surface_variant">#A9A9A9</color> <!--light gray-->
