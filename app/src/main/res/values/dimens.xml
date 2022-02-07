@@ -2,7 +2,7 @@
 <resources>
     <dimen name="shape_header_corner">50dp</dimen>
 
-    <!-- Header activity game details-->
+    <!-- Header activity game details -->
     <dimen name="header_height_with_status_bar">170dp</dimen>
     <dimen name="header_content_start">16dp</dimen>
     <dimen name="header_content_end">50dp</dimen>
@@ -15,8 +15,23 @@
     <dimen name="header_space_between_texts">5dp</dimen>
     <dimen name="header_image_border_size">5dp</dimen>
     <dimen name="header_buttons_end">16dp</dimen>
-
     <dimen name="header_fab_size">36dp</dimen>
     <dimen name="header_fab_icon_size">14dp</dimen>
+
+    <!-- Activity game details -->
+    <dimen name="activity_game_size_text_plus_and_fab">70dp</dimen>
+    <dimen name="activity_game_details_space">15dp</dimen>
+    <dimen name="activity_game_text_size">18sp</dimen>
+    <dimen name="activity_game_start_text">18dp</dimen>
+    <dimen name="activity_game_start_text_clickable">5dp</dimen>
+    <dimen name="activity_game_button_add_size">25dp</dimen>
+    <dimen name="activity_game_icon_button_add_size">18dp</dimen>
+    <dimen name="activity_game_space_stats_cell">50dp</dimen>
+
+    <!-- Stats cell -->
+    <dimen name="stats_cell_height">100dp</dimen>
+    <dimen name="stats_cell_text_size_category">15sp</dimen>
+    <dimen name="stats_cell_text_size_result">50sp</dimen>
+    <dimen name="stats_cell_space">10dp</dimen>
 
 </resources>

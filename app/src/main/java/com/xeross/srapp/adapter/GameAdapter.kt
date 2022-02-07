@@ -27,7 +27,7 @@ class GameAdapter(context: Context, objectList: ArrayList<Game>, clickListener: 
 
     override fun onClick(holder: ViewHolder, dObject: Game) {
         holder.item.setOnClickListener {
-            clickListener.onClick(dObject)
+            clickListener?.onClick(dObject)
         }
     }
 
