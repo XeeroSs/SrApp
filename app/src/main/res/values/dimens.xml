@@ -34,4 +34,27 @@
     <dimen name="stats_cell_text_size_result">50sp</dimen>
     <dimen name="stats_cell_space">10dp</dimen>
 
+    <!-- Ranking cell -->
+    <dimen name="ranking_cell_size_height">120dp</dimen>
+    <dimen name="ranking_cell_content_image_size_width">15dp</dimen>
+    <dimen name="ranking_cell_content_space_image_size_width">15dp</dimen>
+    <dimen name="ranking_cell_image_size_height">80dp</dimen>
+    <dimen name="ranking_cell_image_size_width">63dp</dimen>
+    <dimen name="ranking_cell_content_image_width">80dp</dimen>
+    <dimen name="ranking_cell_image_end">10dp</dimen>
+    <dimen name="ranking_cell_text_position_bottom">20dp</dimen>
+    <dimen name="ranking_cell_text_position_size">12sp</dimen>
+    <dimen name="ranking_cell_text_name_size">14sp</dimen>
+    <dimen name="ranking_cell_text_time_size">10sp</dimen>
+    <dimen name="ranking_cell_text_difference_size">11sp</dimen>
+    <dimen name="ranking_cell_text_position_start">20dp</dimen>
+    <dimen name="ranking_cell_text_position_end">5dp</dimen>
+    <dimen name="ranking_cell_menu_size_height">20dp</dimen>
+    <dimen name="ranking_cell_menu_size_width">5dp</dimen>
+    <dimen name="ranking_cell_menu_end">45dp</dimen>
+    <dimen name="ranking_cell_menu_top">22dp</dimen>
+    <dimen name="ranking_cell_menu_start">10dp</dimen>
+    <dimen name="ranking_cell_space_name_time">4dp</dimen>
+    <dimen name="ranking_cell_space_time_difference">8dp</dimen>
+
 </resources>

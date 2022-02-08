@@ -11,11 +11,13 @@ import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
 import com.xeross.srapp.adapter.DividerItemDecoration
+import com.xeross.srapp.adapter.RankingAdapter
 import com.xeross.srapp.adapter.StatisticAdapter
 import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.controller.celeste.CelesteActivity
 import com.xeross.srapp.listener.ClickListener
 import com.xeross.srapp.model.Game
+import com.xeross.srapp.model.Ranking
 import com.xeross.srapp.model.SpeedrunType
 import com.xeross.srapp.model.Statistic
 import kotlinx.android.synthetic.main.activity_celeste.*
@@ -29,20 +31,37 @@ class MainActivity : BaseActivity(), ClickListener<Game> {
     override fun getViewModelClass() = MainViewModel::class.java
     override fun getFragmentId() = R.layout.activity_main
     
-    private lateinit var adapter: StatisticAdapter
+    private lateinit var statisticAdapter: StatisticAdapter
     private val stats = ArrayList<Statistic>()
+    
+    private lateinit var rankingAdapter: RankingAdapter
+    private val rankings = ArrayList<Ranking>()
+    
     private var viewModel: MainViewModel? = null
     
     override fun build() {
         viewModel = (vm as MainViewModel)
         viewModel?.build()
-        adapter = StatisticAdapter(this, stats).also { a ->
+        statisticAdapter = StatisticAdapter(this, stats).also { a ->
             activity_game_details_recyclerview_stats.let {
                 val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 it.setHasFixedSize(true)
                 it.layoutManager = linearLayoutManager
                 //    val dd = DividerItemDecoration(this, 20, R.drawable.shape_divider, LinearLayoutManager.HORIZONTAL)
-                val dd = DividerItemDecoration(this, 20, R.drawable.shape_divider, LinearLayoutManager.HORIZONTAL)
+                val dd = DividerItemDecoration(this, 20, R.drawable.shape_divider_horizontal, LinearLayoutManager.HORIZONTAL)
+                it.addItemDecoration(dd)
+                //   it.addItemDecoration(androidx.recyclerview.widget.DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL))
+                it.itemAnimator = DefaultItemAnimator()
+                it.adapter = a
+            }
+        }
+        rankingAdapter = RankingAdapter(this, rankings).also { a ->
+            activity_game_details_recyclerview_ranking.let {
+                val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                it.setHasFixedSize(true)
+                it.layoutManager = linearLayoutManager
+                //    val dd = DividerItemDecoration(this, 20, R.drawable.shape_divider, LinearLayoutManager.HORIZONTAL)
+                val dd = DividerItemDecoration(this, 0, R.drawable.shape_divider_vertical, LinearLayoutManager.VERTICAL)
                 it.addItemDecoration(dd)
                 //   it.addItemDecoration(androidx.recyclerview.widget.DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL))
                 it.itemAnimator = DefaultItemAnimator()
@@ -112,7 +131,12 @@ class MainActivity : BaseActivity(), ClickListener<Game> {
         stats.add(Statistic("12:322", "Best"))
         stats.add(Statistic("45:936", "Worst"))
         stats.add(Statistic("42:152", "Average"))
-        adapter.notifyDataSetChanged()
+        statisticAdapter.notifyDataSetChanged()
+        
+        rankings.add(Ranking("Zkad", "23:23.222", R.drawable.im_celeste_level_1, 1))
+        rankings.add(Ranking("Marlin", "24:33.124", R.drawable.im_celeste_result, 2))
+        rankings.add(Ranking("Buhbai", "25:42.568", R.drawable.im_celeste_level_5, 3))
+        rankingAdapter.notifyDataSetChanged()
 
 /*        viewModel?.getCeleste(this)?.observe(this, {
             it?.let { game ->

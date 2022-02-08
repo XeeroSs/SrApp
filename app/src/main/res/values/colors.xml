@@ -28,6 +28,8 @@
 
     <color name="blue_graphic">#0BA5FF</color> <!--super dark gray-->
 
+    <color name="super_light_gray">#F1F1F1</color> <!--super light gray-->
+
 
     <!--    <color name="purple_light">#794de3</color>
         <color name="purple">#6a59ff</color>
