@@ -57,4 +57,7 @@
     <dimen name="ranking_cell_space_name_time">4dp</dimen>
     <dimen name="ranking_cell_space_time_difference">8dp</dimen>
 
+    <!-- Bottom navigation menu -->
+    <dimen name="bottom_navigation_menu_size_height">50dp</dimen>
+
 </resources>

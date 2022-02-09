@@ -3,6 +3,7 @@ package com.xeross.srapp.controller.main
 import android.content.Intent
 import android.graphics.Color
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -96,6 +97,10 @@ class MainActivity : BaseActivity(), ClickListener<Game> {
             Glide.with(this).load(R.drawable.im_celeste)
                 .centerCrop() // scale image to fill the entire ImageView
                 .circleCrop().into(image)
+    
+            // Add margin bottom to recyclerview for this one don't hide by bottom navigation menu
+            val paramsRecyclerViewRanking = activity_game_details_recyclerview_ranking.layoutParams as ViewGroup.MarginLayoutParams
+            paramsRecyclerViewRanking.bottomMargin = bottom_navigation_menu.measuredHeight
         }
         
         // Status bar transparent
@@ -105,6 +110,18 @@ class MainActivity : BaseActivity(), ClickListener<Game> {
             decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             statusBarColor = Color.TRANSPARENT
         }
+        
+        
+        // Set text underline
+        val stats = activity_game_details_text_your_stats
+        val ranking = activity_game_details_text_ranking
+        
+        // TODO("Use cache with sharedPreferences")
+        val resStats = resources.getString(R.string.game_details_text_stats, "all runs")
+        val resRanking = resources.getString(R.string.game_details_text_ranking, "global")
+        
+        stats.text = resStats
+        ranking.text = resRanking
         
         handleBottomNavigationMenu()
     }

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">SrApp</string>
 
+    <!-- Game details -->
     <string name="game_details_stats_place_holder">%1$s</string>
     <string name="game_details_stats_runs_amount">Total runs</string>
     <string name="game_details_stats_sum_of_best">Sum of Best</string>
@@ -10,11 +11,15 @@
     <string name="game_details_ranking">Ranking</string>
     <string name="game_details_ranking_runner_name">%1$s</string>
     <string name="game_details_ranking_runner_time">Time: %1$s</string>
-    <string name="game_details_ranking_difference">PB: %1$s / Best: %1$s</string>
+    <string name="game_details_ranking_difference">Diff PB: %1$s / Best: %1$s</string>
     <string name="game_details_ranking_position">%1$d.</string>
     <string name="game_details_header_category_name">%1$s</string>
     <string name="game_details_header_time_personnel_best">PB: %1$s</string>
     <string name="game_details_header_level_name">%1$s</string>
+    <string name="game_details_text_stats">%1$s</string>
+    <string name="game_details_text_ranking">%1$s</string>
+    <string name="game_details_content_image_description">Image level</string>
+
     <string name="games_header">Games</string>
     <string name="games_your_category">Your category</string>
     <string name="games_category_name">%1$s</string>
