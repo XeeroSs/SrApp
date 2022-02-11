@@ -1,86 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/game_cell_item"
+    android:layout_width="@dimen/game_cell_width"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    android:layout_width="match_parent"
-    android:layout_height="110dp">
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/game_cell_item"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="5dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="3dp">
+        android:layout_height="@dimen/game_cell_content_image_height"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/game_cell_image_width"
+            android:layout_height="@dimen/game_cell_image_height"
+            app:cardCornerRadius="15dp"
+            app:elevation="8dp">
+
+            <ImageView
+                android:id="@+id/game_cell_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/im_celeste_level_7" />
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/game_cell_text_start"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/game_cell_space_between_image_name_category">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="29dp"
-                android:layout_marginEnd="10dp"
-                android:padding="5dp"
-                android:scaleType="centerCrop"
-                app:cardCornerRadius="20dp">
-
-                <ImageView
-                    android:id="@+id/game_cell_img"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@null" />
-
-            </androidx.cardview.widget.CardView>
-
-            <RelativeLayout
+            <TextView
+                android:id="@+id/game_cell_category"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginEnd="30dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    tools:ignore="UselessParent">
-
-                    <TextView
-                        android:id="@+id/game_cell_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/roboto_bold"
-                        android:maxLines="1"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/game_cell_position"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/roboto_bold"
-                        android:gravity="center_vertical"
-                        android:maxLines="1"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-            </RelativeLayout>
+                android:fontFamily="@font/gilroy_light"
+                android:text="Celeste IL"
+                android:textColor="@color/on_background"
+                android:textSize="@dimen/game_cell_text_name_category" />
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/game_cell_space_between_name_category_info_category">
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/game_cell_info"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/gilroy_light"
+                android:text="9 catégories • #75"
+                android:textColor="@color/on_surface"
+                android:layout_marginBottom="@dimen/game_cell_bottom"
+                android:textSize="@dimen/game_cell_text_details_category" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

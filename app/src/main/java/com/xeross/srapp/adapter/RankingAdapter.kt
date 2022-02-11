@@ -37,7 +37,7 @@ class RankingAdapter(context: Context, objectList: ArrayList<Ranking>) :
         holder.difference.text = "Diff Best: -3s / PB: +6s"
         holder.name.text = dObject.name
         holder.time.text = "Temps: " +dObject.time
-        holder.position.text ="." +  dObject.position.toString()
+        holder.position.text = dObject.position.toString() + "."
         //   holder.position.text = context.getString(R.string.game_position, dObject.position)
         glide.load(dObject.profileImage).into(holder.profileImage)
     }

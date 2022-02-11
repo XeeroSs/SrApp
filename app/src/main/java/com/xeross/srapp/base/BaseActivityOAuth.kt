@@ -10,15 +10,13 @@ import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.services.sheets.v4.SheetsScopes
 
-abstract class BaseActivityOAuth : AppCompatActivity() {
+abstract class BaseActivityOAuth : BaseActivity() {
     
     private val REQUEST_ACCOUNT_PICKER = 1
     private val REQUEST_GOOGLE_PLAY_SERVICES = 2
     val REQUEST_AUTHORIZATION = 3
     private val PREF_ACCOUNT_NAME = "name"
     private var authorization: MutableLiveData<Boolean>? = null
-    
-    abstract fun getFragmentId(): Int
     
     var credential: GoogleAccountCredential? = null
     private val SCOPES = listOf(SheetsScopes.SPREADSHEETS_READONLY)
@@ -33,7 +31,6 @@ abstract class BaseActivityOAuth : AppCompatActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getFragmentId())
         
         this.authorization = MutableLiveData()
         

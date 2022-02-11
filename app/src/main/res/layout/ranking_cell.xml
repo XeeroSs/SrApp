@@ -37,7 +37,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="@dimen/ranking_cell_image_size_width"
             android:layout_height="@dimen/ranking_cell_image_size_height"
-            app:cardElevation="10dp"
+            app:cardElevation="5dp"
             app:cardCornerRadius="10dp">
 
             <ImageView

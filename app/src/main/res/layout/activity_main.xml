@@ -7,148 +7,39 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/header_height_with_status_bar"
+        android:layout_height="@dimen/main_activity_header_height_with_status_bar"
         android:layout_alignParentTop="true"
         android:background="@drawable/shape_header"
         android:elevation="10dp"
         app:layout_constraintTop_toTopOf="parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/header_content_top_with_status_bar">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="@dimen/header_content_start"
-                android:layout_toStartOf="@+id/activity_game_details_content_buttons_next_previous"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <RelativeLayout
-                    android:id="@+id/activity_game_details_content_image_header"
-                    android:layout_width="@dimen/header_image_size"
-                    android:layout_height="@dimen/header_image_size"
-                    android:background="@drawable/shape_image_header"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/activity_game_details_image_header"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:contentDescription="@string/game_details_content_image_description"
-                        android:scaleType="centerCrop" />
-
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/header_text_start"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/activity_game_details_text_name_level"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/gilroy_light"
-                        android:maxLines="1"
-                        android:text="@string/game_details_header_level_name"
-                        android:textColor="@color/on_surface_header"
-                        android:textSize="@dimen/header_text_size_title" />
-
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/header_space_between_texts" />
-
-                    <TextView
-                        android:id="@+id/activity_game_details_text_category"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/gilroy_light"
-                        android:maxLines="1"
-                        android:text="@string/game_details_header_category_name"
-                        android:textColor="@color/on_surface_header_variant"
-                        android:textSize="@dimen/header_text_size_label" />
-
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/header_space_between_texts" />
-
-                    <TextView
-                        android:id="@+id/activity_game_details_text_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/gilroy_light"
-                        android:maxLines="1"
-                        android:text="@string/game_details_header_time_personnel_best"
-                        android:textColor="@color/on_surface_header_variant"
-                        android:textSize="@dimen/header_text_size_label" />
-
-                </LinearLayout>
+            android:layout_marginTop="@dimen/activity_game_details_header_content_top_with_status_bar"
+            android:gravity="center">
 
 
-            </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/activity_game_details_content_buttons_next_previous"
+            <TextView
+                android:id="@+id/main_activity_text_name_level"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true">
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/gilroy_light"
+                android:maxLines="1"
+                android:text="@string/main_activity_header_text_games"
+                android:textColor="@color/on_surface_header"
+                android:textSize="@dimen/main_activity_header_text_games_size" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="@dimen/header_content_top_with_status_bar"
-                    android:layout_marginEnd="@dimen/header_buttons_end"
-                    android:layout_marginBottom="@dimen/header_content_bottom"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/activity_game_details_button_previous"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/previous"
-                        android:src="@drawable/ic_arrow_previous"
-                        android:tint="@color/on_primary"
-                        app:backgroundTint="@color/primary"
-                        app:fabCustomSize="@dimen/header_fab_size"
-                        app:maxImageSize="@dimen/header_fab_icon_size"
-                        app:tint="@color/on_primary" />
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/activity_game_details_button_next"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/next"
-                        android:src="@drawable/ic_arrow_next"
-                        app:backgroundTint="@color/primary"
-                        app:fabCustomSize="@dimen/header_fab_size"
-                        app:maxImageSize="@dimen/header_fab_icon_size"
-                        app:tint="@color/on_primary" />
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
-        </RelativeLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/header_height_with_status_bar"
+        android:layout_marginTop="@dimen/main_activity_header_height_with_status_bar"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -167,19 +58,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/activity_game_start_text"
                     android:fontFamily="@font/gilroy_light"
-                    android:text="@string/game_details_your_stats"
+                    android:text="@string/main_activity_your_categories"
                     android:textColor="@color/on_background"
                     android:textSize="@dimen/activity_game_text_size" />
 
                 <TextView
-                    android:id="@+id/activity_game_details_text_your_stats"
+                    android:id="@+id/main_activity_text_your_categories"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/activity_game_start_text_clickable"
                     android:background="@drawable/shape_dashed_underline"
                     android:fontFamily="@font/gilroy_light"
                     android:layerType="software"
-                    android:text="@string/game_details_text_stats"
+                    android:text="@string/main_activity_text_categories"
                     android:textColor="@color/primary"
                     android:textSize="@dimen/activity_game_text_size" />
 
@@ -193,124 +84,26 @@
 
 
                 <ImageButton
-                    android:id="@+id/activity_game_details_button_add_your_stats"
+                    android:id="@+id/main_activity_button_add_your_categories"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                     android:layout_width="@dimen/activity_game_button_add_size"
                     android:layout_height="@dimen/activity_game_button_add_size"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="10dp"
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/next"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_plus"
                     android:tint="@color/primary" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/activity_game_details_button_list_your_stats"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:contentDescription="@string/next"
-                    android:src="@drawable/ic_menu_burger"
-                    app:backgroundTint="@color/primary"
-                    app:fabCustomSize="@dimen/header_fab_size"
-                    app:maxImageSize="@dimen/header_fab_icon_size"
-                    app:tint="@color/on_primary" />
 
             </LinearLayout>
 
         </RelativeLayout>
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/main_activity_list_categories"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/surface">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/activity_game_details_recyclerview_stats"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/activity_game_space_stats_cell"
-                android:layout_marginBottom="@dimen/activity_game_space_stats_cell" />
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_game_size_text_plus_and_fab">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/activity_game_start_text"
-                    android:fontFamily="@font/gilroy_light"
-                    android:text="@string/game_details_ranking"
-                    android:textColor="@color/on_background"
-                    android:textSize="@dimen/activity_game_text_size" />
-
-                <TextView
-                    android:id="@+id/activity_game_details_text_ranking"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/activity_game_start_text_clickable"
-                    android:background="@drawable/shape_dashed_underline"
-                    android:fontFamily="@font/gilroy_light"
-                    android:layerType="software"
-                    android:text="@string/game_details_text_ranking"
-                    android:textColor="@color/primary"
-                    android:textSize="@dimen/activity_game_text_size" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:gravity="center_vertical">
-
-
-                <ImageButton
-                    android:id="@+id/activity_game_details_button_add_ranking"
-                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                    android:layout_width="@dimen/activity_game_button_add_size"
-                    android:layout_height="@dimen/activity_game_button_add_size"
-                    android:layout_marginEnd="8dp"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/next"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_plus"
-                    android:tint="@color/primary" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/activity_game_details_button_list_ranking"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:contentDescription="@string/next"
-                    android:src="@drawable/ic_menu_burger"
-                    app:backgroundTint="@color/primary"
-                    app:fabCustomSize="@dimen/header_fab_size"
-                    app:maxImageSize="@dimen/header_fab_icon_size"
-                    app:tint="@color/on_primary" />
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/surface">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/activity_game_details_recyclerview_ranking"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
