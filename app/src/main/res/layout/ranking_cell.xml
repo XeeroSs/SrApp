@@ -22,7 +22,6 @@
             android:fontFamily="@font/gilroy_light"
             android:gravity="bottom"
             android:maxLines="1"
-            android:text="1."
             android:textColor="@color/on_background"
             android:textSize="@dimen/ranking_cell_text_position_size" />
 
@@ -37,8 +36,8 @@
         <androidx.cardview.widget.CardView
             android:layout_width="@dimen/ranking_cell_image_size_width"
             android:layout_height="@dimen/ranking_cell_image_size_height"
-            app:cardElevation="5dp"
-            app:cardCornerRadius="10dp">
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp">
 
             <ImageView
                 android:id="@+id/ranking_cell_profile_image"
@@ -89,7 +88,6 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/gilroy_light"
                 android:maxLines="1"
-                android:text="Zkad"
                 android:textColor="@color/on_surface"
                 android:textSize="@dimen/ranking_cell_text_name_size" />
 
@@ -104,7 +102,6 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/gilroy_light"
                 android:maxLines="1"
-                android:text="Temps: 27:56.322"
                 android:textColor="@color/on_surface_variant"
                 android:textSize="@dimen/ranking_cell_text_time_size" />
 
@@ -119,7 +116,6 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/gilroy_light"
                 android:maxLines="1"
-                android:text="Diff Best: -3s / PB: +6s"
                 android:textColor="@color/on_surface"
                 android:textSize="@dimen/ranking_cell_text_difference_size" />
 

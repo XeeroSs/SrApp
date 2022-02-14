@@ -14,12 +14,11 @@ import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
 import com.xeross.srapp.adapter.DividerItemDecoration
-import com.xeross.srapp.adapter.RankingAdapter
+import com.xeross.srapp.adapter.LeaderBoardAdapter
 import com.xeross.srapp.adapter.StatisticAdapter
 import com.xeross.srapp.base.BaseActivityOAuth
-import com.xeross.srapp.controller.celeste.level.*
 import com.xeross.srapp.injection.ViewModelFactory
-import com.xeross.srapp.model.Ranking
+import com.xeross.srapp.model.LeaderBoard
 import com.xeross.srapp.model.Statistic
 import kotlinx.android.synthetic.main.activity_celeste.*
 import kotlinx.android.synthetic.main.activity_celeste.bottom_navigation_menu
@@ -33,6 +32,14 @@ class CelesteActivity : BaseActivityOAuth() {
     
     fun getSheetsName() = "Forsaken City"
     
+    private lateinit var statisticAdapter: StatisticAdapter
+    private val stats = ArrayList<Statistic>()
+    
+    private lateinit var leaderBoardAdapter: LeaderBoardAdapter
+    private val leaderBoards = ArrayList<LeaderBoard>()
+    
+    private var viewModel: CelesteViewModel? = null
+    
     @SuppressWarnings("unchecked")
     private fun configureViewModel(): CelesteViewModel {
         val factory = ViewModelFactory(this)
@@ -41,7 +48,7 @@ class CelesteActivity : BaseActivityOAuth() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    
+        
         statisticAdapter = StatisticAdapter(this, stats).also { a ->
             activity_game_details_recyclerview_stats.let {
                 val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -55,7 +62,8 @@ class CelesteActivity : BaseActivityOAuth() {
                 it.adapter = a
             }
         }
-        rankingAdapter = RankingAdapter(this, rankings).also { a ->
+        // TODO("Get my own time from sheets")
+        leaderBoardAdapter = LeaderBoardAdapter(this, leaderBoards, 56, 60).also { a ->
             activity_game_details_recyclerview_ranking.let {
                 val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
                 it.setHasFixedSize(true)
@@ -68,19 +76,17 @@ class CelesteActivity : BaseActivityOAuth() {
                 it.adapter = a
             }
         }
-    
+        
         credential?.let { credential ->
             viewModel = configureViewModel().also {
                 it.build(getSheetsName(), credential, this)
             }
-        
+            
             getAuthorization()?.observe(this, {
                 if (it == null || !it) return@observe
-                getDataWithGoogleSheet()
+                getLeaderBoards()
             })
         }
-    
-        getGames()
         
         handleUI()
     }
@@ -88,76 +94,52 @@ class CelesteActivity : BaseActivityOAuth() {
     override fun build() {
     }
     
-    private fun getDataWithGoogleSheet() {
-        viewModel?.getAnyWRLeaderBoard()?.observe(this, {
-            // TODO("")
-        })
-    }
-    
-    private lateinit var statisticAdapter: StatisticAdapter
-    private val stats = ArrayList<Statistic>()
-    
-    private lateinit var rankingAdapter: RankingAdapter
-    private val rankings = ArrayList<Ranking>()
-    
-    private var viewModel: CelesteViewModel? = null
-    
     private fun handleUI() {
-        // Reduce size image based on content shape size for create a border
+        
         // Method View::post allows to call the Thread for UI
         activity_game_details_image_header.post {
             
-            val image = activity_game_details_image_header
-            val imageContent = activity_game_details_content_image_header
-            
-            // Get new height and width for image
-            val borderSize = resources.getDimension(R.dimen.activity_game_details_header_image_border_size)
-            val height: Int = (imageContent.height - borderSize.toInt())
-            val width: Int = (imageContent.width - borderSize.toInt())
-            
-            // Set image size
-            val params: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(height, width)
-            image.layoutParams = params
-            image.requestLayout()
-            
-            // Set image to image header with glide. Also allows rounded image
-            // TODO("Images customs")
-            Glide.with(this).load(R.drawable.im_celeste)
-                .centerCrop() // scale image to fill the entire ImageView
-                .circleCrop().into(image)
+            setHeaderImage()
             
             // Add margin bottom to recyclerview for this one don't hide by bottom navigation menu
             val paramsRecyclerViewRanking = activity_game_details_recyclerview_ranking.layoutParams as ViewGroup.MarginLayoutParams
             paramsRecyclerViewRanking.bottomMargin = bottom_navigation_menu.measuredHeight
         }
         
-        // Graphics
-/*        val graphic = activity_game_details_graphic as GraphView
-        val colorGraphic = resources.getColor(R.color.blue_graphic)
-        val series = LineGraphSeries(arrayOf(DataPoint(0.0, 1.0),
-            DataPoint(1.0, 5.0),
-            DataPoint(2.0, 3.0),
-            DataPoint(3.0, 2.0),
-            DataPoint(4.0, 6.0)))
-        graphic.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.NONE
-        graphic.gridLabelRenderer.isVerticalLabelsVisible = false
-        graphic.gridLabelRenderer.isHorizontalLabelsVisible = false
-        graphic.gridLabelRenderer.labelHorizontalHeight = 2
-        series.backgroundColor = colorGraphic
-        series.isDrawBackground = true
-        graphic.addSeries(series)*/
+        setGraphics()
         
+        handleStatusBar()
         
-        // Status bar transparent
-        window.apply {
-            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            statusBarColor = Color.TRANSPARENT
-        }
+        setPlaceHolder()
         
+        handleBottomNavigationMenu()
+    }
+    
+    /**
+     * Reduce size image based on content shape size for create a border
+     */
+    private fun setHeaderImage() {
+        val image = activity_game_details_image_header
+        val imageContent = activity_game_details_content_image_header
         
-        // Set text underline
+        // Get new height and width for image
+        val borderSize = resources.getDimension(R.dimen.activity_game_details_header_image_border_size)
+        val height: Int = (imageContent.height - borderSize.toInt())
+        val width: Int = (imageContent.width - borderSize.toInt())
+        
+        // Set image size
+        val params: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(height, width)
+        image.layoutParams = params
+        image.requestLayout()
+        
+        // Set image to image header with glide. Also allows rounded image
+        // TODO("Images customs")
+        Glide.with(this).load(R.drawable.im_celeste)
+            .centerCrop() // scale image to fill the entire ImageView
+            .circleCrop().into(image)
+    }
+    
+    private fun setPlaceHolder() {
         val stats = activity_game_details_text_your_stats
         val ranking = activity_game_details_text_ranking
         
@@ -167,8 +149,35 @@ class CelesteActivity : BaseActivityOAuth() {
         
         stats.text = resStats
         ranking.text = resRanking
-        
-        handleBottomNavigationMenu()
+    }
+    
+    private fun handleStatusBar() {
+        // TODO("Add in base activity")
+        // Status bar transparent
+        window.apply {
+            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            statusBarColor = Color.TRANSPARENT
+        }
+    }
+    
+    private fun setGraphics() {
+        // Graphics
+        /*        val graphic = activity_game_details_graphic as GraphView
+                val colorGraphic = resources.getColor(R.color.blue_graphic)
+                val series = LineGraphSeries(arrayOf(DataPoint(0.0, 1.0),
+                    DataPoint(1.0, 5.0),
+                    DataPoint(2.0, 3.0),
+                    DataPoint(3.0, 2.0),
+                    DataPoint(4.0, 6.0)))
+                graphic.gridLabelRenderer.gridStyle = GridLabelRenderer.GridStyle.NONE
+                graphic.gridLabelRenderer.isVerticalLabelsVisible = false
+                graphic.gridLabelRenderer.isHorizontalLabelsVisible = false
+                graphic.gridLabelRenderer.labelHorizontalHeight = 2
+                series.backgroundColor = colorGraphic
+                series.isDrawBackground = true
+                graphic.addSeries(series)*/
     }
     
     private fun handleBottomNavigationMenu() {
@@ -187,24 +196,12 @@ class CelesteActivity : BaseActivityOAuth() {
         })
     }
     
-    private fun getGames() {
-        // TEST
-        stats.add(Statistic("11", "Total des runs"))
-        stats.add(Statistic("12:322", "Best"))
-        stats.add(Statistic("45:936", "Worst"))
-        stats.add(Statistic("42:152", "Average"))
-        statisticAdapter.notifyDataSetChanged()
-        
-        rankings.add(Ranking("Zkad", "23:23.222", R.drawable.im_celeste_level_1, 1))
-        rankings.add(Ranking("Marlin", "24:33.124", R.drawable.im_celeste_result, 2))
-        rankings.add(Ranking("Buhbai", "25:42.568", R.drawable.im_celeste_level_5, 3))
-        rankingAdapter.notifyDataSetChanged()
-
-/*        viewModel?.getCeleste(this)?.observe(this, {
-            it?.let { game ->
-                games.add(game)
-                adapter.notifyDataSetChanged()
+    private fun getLeaderBoards() {
+        viewModel?.getLeaderBoard()?.observe(this, { leaderBoardOrNull ->
+            leaderBoardOrNull?.let { leaderBoards ->
+                this.leaderBoards.addAll(leaderBoards)
+                leaderBoardAdapter.notifyDataSetChanged()
             }
-        })*/
+        })
     }
 }

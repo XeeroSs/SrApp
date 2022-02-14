@@ -30,7 +30,13 @@ class GameAdapter(context: Context, objectList: ArrayList<Game>, clickListener: 
     
     override fun onClick(holder: ViewHolder, dObject: Game) {
         holder.item.setOnClickListener {
+            holder.image.performClick()
             clickListener?.onClick(dObject)
+        }
+    
+        holder.item.setOnLongClickListener {
+            clickListener?.onLongClick(dObject)
+            return@setOnLongClickListener true
         }
     }
     

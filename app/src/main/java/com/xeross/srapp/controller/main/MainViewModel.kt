@@ -10,29 +10,32 @@ import com.xeross.srapp.helper.http.NetworkCallHelper
 import com.xeross.srapp.helper.http.RetrofitHelper
 import com.xeross.srapp.helper.http.SrcApiService
 import com.xeross.srapp.model.Game
-import com.xeross.srapp.model.SpeedrunType
+import com.xeross.srapp.model.types.SpeedrunType
 
 class MainViewModel : ViewModel() {
-
+    
+    companion object {
+        private const val NAME_SPEED_RUNNER = "XeroSs"
+        private const val NAME_GAME = "Celeste"
+        private const val CATEGORY_ID = "7kjpl1gk"
+    }
+    
     private var api: SrcApiService? = null
     private var networkCallHelper = NetworkCallHelper()
-
-    @Suppress("SpellCheckingInspection")
-    private val nameSpeedrunner = "XeroSs"
-
-    @Suppress("SpellCheckingInspection")
-    private val nameSpeedrun = "Celeste"
-
+    
     fun build() {
         api = RetrofitHelper.getClient().create(SrcApiService::class.java)
     }
-
+    
     fun getCeleste(context: Context): LiveData<Game> {
         val celeste = MutableLiveData<Game>()
         api?.let {
-            networkCallHelper.getHTTPRequest(it.getPBByGame(nameSpeedrunner, nameSpeedrun)).observe((context as AppCompatActivity), { data ->
+            networkCallHelper.getHTTPRequest(it.getPBByGame(NAME_SPEED_RUNNER, NAME_GAME)).observe((context as AppCompatActivity), { data ->
                 if (data.data == null || data.data.isEmpty()) return@observe
-                celeste.postValue(Game(SpeedrunType.CELESTE, "Celeste", R.drawable.im_celeste, data.data[0].place))
+                data.data.filter { runs -> runs.run.category == CATEGORY_ID }.singleOrNull { run ->
+                    celeste.postValue(Game(SpeedrunType.CELESTE, "Celeste", R.drawable.im_celeste_level_6, run.place))
+                    return@observe
+                }
             })
         }
         return celeste

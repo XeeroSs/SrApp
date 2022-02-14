@@ -1,4 +1,4 @@
-package com.xeross.srapp.model
+package com.xeross.srapp.model.types
 
 enum class SpeedrunType {
     CELESTE()

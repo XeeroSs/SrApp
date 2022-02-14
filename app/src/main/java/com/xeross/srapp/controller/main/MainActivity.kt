@@ -14,7 +14,7 @@ import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.controller.celeste.CelesteActivity
 import com.xeross.srapp.listener.ClickListener
 import com.xeross.srapp.model.Game
-import com.xeross.srapp.model.SpeedrunType
+import com.xeross.srapp.model.types.SpeedrunType
 import kotlinx.android.synthetic.main.activity_celeste.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.bottom_navigation_menu
@@ -45,7 +45,7 @@ class MainActivity : BaseActivity(), ClickListener<Game> {
         
         handleUI()
         
-        test()
+        getCategories()
     }
     
     private fun handleUI() {
@@ -86,15 +86,16 @@ class MainActivity : BaseActivity(), ClickListener<Game> {
         })
     }
     
-    private fun test() {
-        categories.add(Game(SpeedrunType.CELESTE, "Celeste IL", R.drawable.im_celeste, 2))
-        categories.add(Game(SpeedrunType.CELESTE, "Banjo Kazooie", R.drawable.im_celeste_level_1, 75))
-        categories.add(Game(SpeedrunType.CELESTE, "Super Mario 75", R.drawable.im_celeste_level_2, 3))
-        categories.add(Game(SpeedrunType.CELESTE, "Ocarina Of Time", R.drawable.im_celeste_level_3, 222))
-        categories.add(Game(SpeedrunType.CELESTE, "SMB3", R.drawable.im_celeste_level_4, 1))
-        categories.add(Game(SpeedrunType.CELESTE, "Majora's Maks", R.drawable.im_celeste_level_5, 3335))
-        categories.add(Game(SpeedrunType.CELESTE, "Celeste", R.drawable.im_celeste_level_6, 52))
-        adapter.notifyDataSetChanged()
+    private fun getCategories() {
+        
+        viewModel?.getCeleste(this)?.observe(this, {
+    
+            it?.let { game ->
+                categories.add(game)
+                adapter.notifyDataSetChanged()
+            }
+    
+        })
     }
     
     override fun onClick(o: Game) {

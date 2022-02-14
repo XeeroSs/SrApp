@@ -127,7 +127,7 @@ class GoogleSheetHelper(private val nameGSClass: String) {
                             mutableLiveData.postValue(KeyResults.zip(valueResults).toMap())
                         } catch (e: UserRecoverableAuthIOException) {
                             // Trigger intent to have the user authorize
-                            activity.startActivityForResult(e.intent, activity.REQUEST_AUTHORIZATION);
+                            activity.startActivityForResult(e.intent, activity.REQUEST_AUTHORIZATION)
                             return false;
                         } catch (e: IOException) {
                             e.printStackTrace()
@@ -151,6 +151,7 @@ class GoogleSheetHelper(private val nameGSClass: String) {
      * @throws IOException If the credentials.json file cannot be found.
      */
     @Throws(IOException::class)
+    @Deprecated("")
     private fun getCredentials(HTTP_TRANSPORT: NetHttpTransport, context: Context): Credential {
         
         // Load client secrets.

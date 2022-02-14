@@ -36,7 +36,7 @@ abstract class BaseActivityOAuth : BaseActivity() {
         
         credential = GoogleAccountCredential.usingOAuth2(this, SCOPES).also {
             val settings = getPreferences(MODE_PRIVATE)
-            it.selectedAccountName = settings.getString("user", null)
+            it.selectedAccountName = settings.getString(PREF_ACCOUNT_NAME, null)
         }
         
         chooseAccount()
