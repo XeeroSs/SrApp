@@ -33,6 +33,7 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
         
+        // Start coroutines
         CoroutineScope(Dispatchers.Main).launch {
             delay(SPLASH_DELAY)
             
