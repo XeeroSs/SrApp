@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.xeross.srapp.R
-import com.xeross.srapp.helper.http.NetworkCallHelper
+import com.xeross.srapp.helper.http.NetworkRequestHelper
 import com.xeross.srapp.helper.http.RetrofitHelper
 import com.xeross.srapp.helper.http.SrcApiService
 import com.xeross.srapp.model.Game
@@ -21,7 +21,7 @@ class MainViewModel : ViewModel() {
     }
     
     private var api: SrcApiService? = null
-    private var networkCallHelper = NetworkCallHelper()
+    private var networkCallHelper = NetworkRequestHelper()
     
     fun build() {
         api = RetrofitHelper.getClient().create(SrcApiService::class.java)

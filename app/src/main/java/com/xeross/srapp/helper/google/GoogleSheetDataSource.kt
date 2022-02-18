@@ -21,6 +21,7 @@ import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
 import com.xeross.srapp.base.BaseActivityOAuth
 import com.xeross.srapp.base.BaseAsyncTask
+import io.reactivex.rxjava3.observers.DisposableObserver
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileNotFoundException
@@ -30,7 +31,7 @@ import java.util.concurrent.Callable
 
 
 @Suppress("PrivatePropertyName", "LocalVariableName")
-class GoogleSheetHelper(private val nameGSClass: String) {
+class GoogleSheetDataSource() {
     
     private val APPLICATION_NAME = "SrApp"
     private val JSON_FACTORY: JsonFactory = GsonFactory.getDefaultInstance()
@@ -47,7 +48,7 @@ class GoogleSheetHelper(private val nameGSClass: String) {
     private val SCOPES = listOf(SheetsScopes.SPREADSHEETS_READONLY)
     private val CREDENTIALS_FILE_PATH = "/credentials.json"
     
-    fun build(viewModel: ViewModel, context: Context, credential: GoogleAccountCredential): GoogleSheetHelper {
+    fun build(viewModel: ViewModel, context: Context, credential: GoogleAccountCredential): GoogleSheetDataSource {
         // Build a new authorized API client service.
         //  val HTTP_TRANSPORT = NetHttpTransport()
         this.viewModel = viewModel
@@ -57,7 +58,7 @@ class GoogleSheetHelper(private val nameGSClass: String) {
             val HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport()
             
             service = getServiceWithAuthorization(HTTP_TRANSPORT, credential)
-            this@GoogleSheetHelper
+            this@GoogleSheetDataSource
         }
     }
     
@@ -69,7 +70,7 @@ class GoogleSheetHelper(private val nameGSClass: String) {
         }
     }
     
-    fun getValueToString(case: String): LiveData<String?> {
+    fun getValueToString(nameGSClass: String, case: String): LiveData<String?> {
         val mutableLiveData = MutableLiveData<String?>()
         service?.let { sheets ->
             viewModel?.viewModelScope?.launch {
@@ -84,8 +85,9 @@ class GoogleSheetHelper(private val nameGSClass: String) {
         return mutableLiveData
     }
     
-    fun getValuesToString(rangeFrom: String, rangTo: String): LiveData<List<String>?> {
+    fun getValuesToString(nameGSClass: String, rangeFrom: String, rangTo: String): LiveData<List<String>?> {
         val mutableLiveData = MutableLiveData<List<String>?>()
+        
         service?.let { sheets ->
             viewModel?.viewModelScope?.launch {
                 val range = "$nameGSClass!$rangeFrom:$rangTo"
@@ -99,7 +101,7 @@ class GoogleSheetHelper(private val nameGSClass: String) {
         return mutableLiveData
     }
     
-    fun getValuesToStringMap(baseActivityOAuth: BaseActivityOAuth?, keyRangeFrom: String, keyRangTo: String, valueRangeFrom: String, valueRangTo: String): LiveData<Map<String, String>?> {
+    fun getValuesToStringMap(nameGSClass: String, baseActivityOAuth: BaseActivityOAuth?, keyRangeFrom: String, keyRangTo: String, valueRangeFrom: String, valueRangTo: String): LiveData<Map<String, String>?> {
         val mutableLiveData = MutableLiveData<Map<String, String>?>()
         baseActivityOAuth?.let { activity ->
             service?.let { sheets ->
@@ -155,7 +157,7 @@ class GoogleSheetHelper(private val nameGSClass: String) {
     private fun getCredentials(HTTP_TRANSPORT: NetHttpTransport, context: Context): Credential {
         
         // Load client secrets.
-        val resource = GoogleSheetHelper::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
+        val resource = GoogleSheetDataSource::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
             ?: throw FileNotFoundException("Resource not found: $CREDENTIALS_FILE_PATH")
         val clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, InputStreamReader(resource))
         

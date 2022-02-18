@@ -12,7 +12,7 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.client.util.store.FileDataStoreFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
-import com.xeross.srapp.helper.google.GoogleSheetHelper
+import com.xeross.srapp.helper.google.GoogleSheetDataSource
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -95,7 +95,7 @@ object SheetsQuickstart {
     private fun getCredentials(HTTP_TRANSPORT: NetHttpTransport): Credential {
 
         // Load client secrets.
-        val resource = GoogleSheetHelper::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
+        val resource = GoogleSheetDataSource::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
                 ?: throw FileNotFoundException("Resource not found: $CREDENTIALS_FILE_PATH")
         val clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, InputStreamReader(resource))
 

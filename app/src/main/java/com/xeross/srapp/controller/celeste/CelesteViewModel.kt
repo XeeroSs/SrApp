@@ -7,59 +7,55 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.xeross.srapp.base.BaseActivityOAuth
-import com.xeross.srapp.helper.google.CelesteSheetsHelper
+import com.xeross.srapp.helper.google.CelesteSheetsRepository
 import com.xeross.srapp.model.LeaderBoard
+import com.xeross.srapp.model.src.users.SrcUser
 import java.lang.ref.WeakReference
 
 class CelesteViewModel(private val context: WeakReference<Context>) : ViewModel() {
     
+    // To call before to make network request
+    private val cacheSrcRunners = HashMap<String, SrcUser>()
+    private val cacheSheetRunners = HashMap<String, ArrayList<LeaderBoard>>()
     
-    private var nSheets = ""
-    private var celesteSheetHelper: CelesteSheetsHelper? = null
-    
-    fun build(nSheets: String, credential: GoogleAccountCredential, baseActivityOAuth: BaseActivityOAuth) {
-        this.nSheets = nSheets
-        celesteSheetHelper = context.get()?.let { CelesteSheetsHelper(this, nSheets, it, credential).build(baseActivityOAuth) }
+    private fun addToCacheRunnerFromSRC(runnerId: String, srcUser: SrcUser) {
+        cacheSrcRunners[runnerId] = srcUser
     }
     
-    fun getCelesteSheets() = celesteSheetHelper
-
-/*    fun getAnyWRLeaderBoard(): LiveData<ArrayList<LeaderBoard>> {
-        val leaderBoards = MutableLiveData<ArrayList<LeaderBoard>>()
-        getCelesteSheets()?.let { helper ->
-            
-            (context.get() as? LifecycleOwner)?.let { context ->
-                
-                getSRNameAnyPercentRunsWordRecord(helper, context).observe(context, { result ->
-                    if (result == null) return@observe
+    private fun addToCacheRunnersFromSheet(categoryId: String, runners: ArrayList<LeaderBoard>) {
+        cacheSheetRunners[categoryId] = runners
+    }
     
-                    val data = ArrayList<LeaderBoard>()
     
-                    for (i in result.entries.indices) {
-                        val place = result.values.toList()[i]
-                        val name = result.values.toList()[i]
-                        val time = result.values.toList()[i]
-                        val differenceInTime = result.values.toList()[i]
-                        data.add(LeaderBoard(name, place, time, differenceInTime))
-                    }
+    private var nSheets = ""
+    private var celesteSheetRepository: CelesteSheetsRepository? = null
     
-                    leaderBoards.postValue(data)
-                })
-            }
-            
-        }
-        return leaderBoards
-    }*/
+    fun build(credential: GoogleAccountCredential, baseActivityOAuth: BaseActivityOAuth) {
+        this.nSheets = nSheets
+        celesteSheetRepository = context.get()?.let { CelesteSheetsRepository(this, it, credential).build(baseActivityOAuth) }
+    }
     
-    fun getLeaderBoard(): LiveData<ArrayList<LeaderBoard>> {
+    private fun getCelesteSheets() = celesteSheetRepository
+    
+    private fun getSheetFromCache(nameGSClass: String): ArrayList<LeaderBoard>? {
+        return cacheSheetRunners[nameGSClass]
+    }
+    
+    fun getLeaderBoard(nameGSClass: String): LiveData<ArrayList<LeaderBoard>> {
         val liveDataLeaderBoards = MutableLiveData<ArrayList<LeaderBoard>>()
+        
+        getSheetFromCache(nameGSClass)?.let {
+            liveDataLeaderBoards.value = it
+            return liveDataLeaderBoards
+        }
+        
         getCelesteSheets()?.let { helper ->
             
             (context.get() as? LifecycleOwner)?.let { context ->
                 
-                getTimeAnyRunsWorldRecord(helper, context).observe(context, { mapTimes ->
+                getTimeAnyRunsWorldRecord(nameGSClass, helper, context).observe(context, { mapTimes ->
                     mapTimes?.let { times ->
-                        getSRNameAnyRunsWorldRecord(helper, context).observe(context, { mapNames ->
+                        getSRNameAnyRunsWorldRecord(nameGSClass, helper, context).observe(context, { mapNames ->
                             mapNames?.let { names ->
                 
                                 val leaderBoards = arrayListOf<LeaderBoard>()
@@ -87,17 +83,17 @@ class CelesteViewModel(private val context: WeakReference<Context>) : ViewModel(
         return liveDataLeaderBoards
     }
     
-    private fun getTimeAnyRunsWorldRecord(helper: CelesteSheetsHelper, context: LifecycleOwner): LiveData<Map<String, String>?> {
+    private fun getTimeAnyRunsWorldRecord(nameGSClass: String, repository: CelesteSheetsRepository, context: LifecycleOwner): LiveData<Map<String, String>?> {
         val leaderBoards = MutableLiveData<Map<String, String>?>()
-        helper.fetchAnyPercentRunsWordRecord().observe(context, { it1 ->
+        repository.fetchAnyPercentRunsWordRecord(nameGSClass).observe(context, { it1 ->
             leaderBoards.postValue(it1)
         })
         return leaderBoards
     }
     
-    private fun getSRNameAnyRunsWorldRecord(helper: CelesteSheetsHelper, context: LifecycleOwner): LiveData<Map<String, String>?> {
+    private fun getSRNameAnyRunsWorldRecord(nameGSClass: String, repository: CelesteSheetsRepository, context: LifecycleOwner): LiveData<Map<String, String>?> {
         val leaderBoards = MutableLiveData<Map<String, String>?>()
-        helper.fetchSRNameAnyPercentRunsWordRecord().observe(context, { it1 ->
+        repository.fetchSRNameAnyPercentRunsWordRecord(nameGSClass).observe(context, { it1 ->
             leaderBoards.postValue(it1)
         })
         return leaderBoards

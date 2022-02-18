@@ -39,8 +39,8 @@ class LeaderBoardAdapter(context: Context, objectList: ArrayList<LeaderBoard>, p
     }
     
     override fun updateItem(holder: ViewHolder, dObject: LeaderBoard) {
-        
-        getDifferenceString(dObject.time, holder)
+    
+        getDifferenceText(dObject.time, holder)
         holder.position.text = context.getString(R.string.game_details_ranking_position, dObject.place)
         holder.name.text = dObject.name
         holder.time.text = context.getString(R.string.game_details_ranking_runner_time, dObject.time)
@@ -53,7 +53,7 @@ class LeaderBoardAdapter(context: Context, objectList: ArrayList<LeaderBoard>, p
         glide.load(dObject.profileImage).into(holder.profileImage)*/
     }
     
-    private fun getDifferenceString(timeOpponentInString: String, holder: ViewHolder) {
+    private fun getDifferenceText(timeOpponentInString: String, holder: ViewHolder) {
         
         val timeInSecondsOpponent = timeOpponentInString.convertTimeToSeconds()
         
@@ -63,13 +63,13 @@ class LeaderBoardAdapter(context: Context, objectList: ArrayList<LeaderBoard>, p
         val differenceTypeBest = getDifferenceType(differenceBetweenBest)
         val differenceTypePB = getDifferenceType(differenceBetweenPB)
         
-        val differencePBToString = getDifferenceWithColorInHtmlFormat(differenceTypePB, differenceBetweenPB)
-        val differenceBestToString = getDifferenceWithColorInHtmlFormat(differenceTypeBest, differenceBetweenBest)
+        val differencePBToString = getDifferenceTextWithColorInHtmlFormat(differenceTypePB, differenceBetweenPB)
+        val differenceBestToString = getDifferenceTextWithColorInHtmlFormat(differenceTypeBest, differenceBetweenBest)
         
         holder.difference.text = Html.fromHtml(context.resources.getString(R.string.game_details_ranking_difference, differencePBToString, differenceBestToString), HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
     
-    private fun getDifferenceWithColorInHtmlFormat(differenceType: DifferenceType, difference: Long): String {
+    private fun getDifferenceTextWithColorInHtmlFormat(differenceType: DifferenceType, difference: Long): String {
         return differenceType.resColor?.let { resColor ->
             val builder = StringBuilder().apply {
                 append("<font color='")

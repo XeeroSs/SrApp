@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.RelativeLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,12 +18,15 @@ import com.xeross.srapp.adapter.DividerItemDecoration
 import com.xeross.srapp.adapter.LeaderBoardAdapter
 import com.xeross.srapp.adapter.StatisticAdapter
 import com.xeross.srapp.base.BaseActivityOAuth
+import com.xeross.srapp.extensions.UtilsExtensions.getNextOrNull
+import com.xeross.srapp.extensions.UtilsExtensions.getPreviousOrNull
 import com.xeross.srapp.injection.ViewModelFactory
 import com.xeross.srapp.model.LeaderBoard
 import com.xeross.srapp.model.Statistic
+import com.xeross.srapp.model.src.users.SrcUser
+import com.xeross.srapp.model.types.CelesteILType
 import kotlinx.android.synthetic.main.activity_celeste.*
-import kotlinx.android.synthetic.main.activity_celeste.bottom_navigation_menu
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.collections.ArrayList
 
 class CelesteActivity : BaseActivityOAuth() {
     
@@ -30,7 +34,7 @@ class CelesteActivity : BaseActivityOAuth() {
     
     override fun getViewModelClass() = CelesteViewModel::class.java
     
-    fun getSheetsName() = "Forsaken City"
+    private lateinit var level: CelesteILType
     
     private lateinit var statisticAdapter: StatisticAdapter
     private val stats = ArrayList<Statistic>()
@@ -77,14 +81,16 @@ class CelesteActivity : BaseActivityOAuth() {
             }
         }
         
+        this.level = CelesteILType.FORSAKEN_CITY
+        
         credential?.let { credential ->
             viewModel = configureViewModel().also {
-                it.build(getSheetsName(), credential, this)
+                it.build(credential, this)
             }
             
             getAuthorization()?.observe(this, {
                 if (it == null || !it) return@observe
-                getLeaderBoards()
+                getLevel(CelesteILType.FORSAKEN_CITY)
             })
         }
         
@@ -94,7 +100,25 @@ class CelesteActivity : BaseActivityOAuth() {
     override fun build() {
     }
     
+    private fun getLevel(level: CelesteILType) {
+        this.level = level
+        getHeader()
+        getLeaderBoards()
+    }
+    
     private fun handleUI() {
+        
+        activity_game_details_button_previous.setOnClickListener {
+            CelesteILType::class.java.getPreviousOrNull(level)?.let { previousLevel ->
+                getLevel(previousLevel)
+            }
+        }
+        
+        activity_game_details_button_next.setOnClickListener {
+            CelesteILType::class.java.getNextOrNull(level)?.let { nextLevel ->
+                getLevel(nextLevel)
+            }
+        }
         
         // Method View::post allows to call the Thread for UI
         activity_game_details_image_header.post {
@@ -197,11 +221,23 @@ class CelesteActivity : BaseActivityOAuth() {
     }
     
     private fun getLeaderBoards() {
-        viewModel?.getLeaderBoard()?.observe(this, { leaderBoardOrNull ->
+        this.leaderBoards.clear()
+        leaderBoardAdapter.notifyDataSetChanged()
+        val levelName = level.levelName
+        viewModel?.getLeaderBoard(levelName)?.observe(this, { leaderBoardOrNull ->
             leaderBoardOrNull?.let { leaderBoards ->
-                this.leaderBoards.addAll(leaderBoards)
-                leaderBoardAdapter.notifyDataSetChanged()
+                addAllToLeaderBoards(leaderBoards)
             }
         })
+    }
+    
+    private fun getHeader() {
+        activity_game_details_text_name_level.text = resources.getString(R.string.game_details_header_level_name, level.levelName)
+    }
+    
+    private fun addAllToLeaderBoards(leaderBoards: ArrayList<LeaderBoard>) {
+        this.leaderBoards.clear()
+        this.leaderBoards.addAll(leaderBoards)
+        leaderBoardAdapter.notifyDataSetChanged()
     }
 }
