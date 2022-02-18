@@ -1,11 +1,14 @@
 package com.xeross.srapp.controller.splash
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.graphics.Shader.TileMode
 import android.os.Bundle
+import android.transition.Transition
+import android.util.Pair
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -29,11 +32,19 @@ class SplashScreenActivity : AppCompatActivity() {
         private const val TAG = "SplashScreenActivity"
     }
     
+    private var endActivity = false
+    
+    override fun onStop() {
+        super.onStop()
+        // Finish the activity after the transition is done
+        if(endActivity) finish()
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
         
-        // Start coroutines
+        // Start task with coroutines
         CoroutineScope(Dispatchers.Main).launch {
             delay(SPLASH_DELAY)
             
@@ -71,8 +82,15 @@ class SplashScreenActivity : AppCompatActivity() {
     
     private fun sleep() {
         val intent = Intent(applicationContext, MainActivity::class.java)
-        startActivity(intent)
-        finish()
+        
+        // Transition animation
+        val pair = Pair<View, String>(app_name, "header")
+        val options = ActivityOptions.makeSceneTransitionAnimation(this, pair)
+        
+        // start transition animation
+        startActivity(intent, options.toBundle())
+        
+        endActivity = true
     }
     
     

@@ -80,4 +80,7 @@
     <!-- Bottom navigation menu -->
     <dimen name="bottom_navigation_menu_size_height">50dp</dimen>
 
+    <!-- Splash Screen -->
+    <dimen name="splash_screen_app_name">70sp</dimen>
+
 </resources>

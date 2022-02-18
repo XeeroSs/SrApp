@@ -6,9 +6,11 @@
     android:background="@color/background">
 
     <RelativeLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_game_details_header_height_with_status_bar"
         android:layout_alignParentTop="true"
+        android:transitionName="app_name"
         android:background="@drawable/shape_header"
         android:elevation="10dp"
         app:layout_constraintTop_toTopOf="parent">

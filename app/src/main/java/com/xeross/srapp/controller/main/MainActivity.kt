@@ -2,6 +2,7 @@ package com.xeross.srapp.controller.main
 
 import android.content.Intent
 import android.graphics.Color
+import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -29,6 +30,10 @@ class MainActivity : BaseActivity(), ClickListener<Game> {
     private val categories = ArrayList<Game>()
     
     private var viewModel: MainViewModel? = null
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
     
     override fun build() {
         viewModel = (vm as MainViewModel)
