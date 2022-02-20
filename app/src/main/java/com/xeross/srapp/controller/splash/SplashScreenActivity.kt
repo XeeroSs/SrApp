@@ -7,7 +7,6 @@ import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.graphics.Shader.TileMode
 import android.os.Bundle
-import android.transition.Transition
 import android.util.Pair
 import android.view.View
 import android.view.WindowManager
@@ -37,7 +36,7 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         // Finish the activity after the transition is done
-        if(endActivity) finish()
+        if (endActivity) finish()
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +66,7 @@ class SplashScreenActivity : AppCompatActivity() {
         )
         
         val width = app_name.paint.measureText(app_name.text.toString())
+        // Get gradient angle
         val angle = 45f
         val widthAngle = (sin(Math.PI * angle / 180) * width).toFloat()
         val heightAngle = (cos(Math.PI * angle / 180) * width).toFloat()
@@ -84,8 +84,7 @@ class SplashScreenActivity : AppCompatActivity() {
         val intent = Intent(applicationContext, MainActivity::class.java)
         
         // Transition animation
-        val pair = Pair<View, String>(app_name, "header")
-        val options = ActivityOptions.makeSceneTransitionAnimation(this, pair)
+        val options = ActivityOptions.makeSceneTransitionAnimation(this, Pair(app_name, "header"))
         
         // start transition animation
         startActivity(intent, options.toBundle())

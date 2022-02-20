@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.RelativeLayout
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,10 +22,8 @@ import com.xeross.srapp.extensions.UtilsExtensions.getPreviousOrNull
 import com.xeross.srapp.injection.ViewModelFactory
 import com.xeross.srapp.model.LeaderBoard
 import com.xeross.srapp.model.Statistic
-import com.xeross.srapp.model.src.users.SrcUser
 import com.xeross.srapp.model.types.CelesteILType
 import kotlinx.android.synthetic.main.activity_celeste.*
-import kotlin.collections.ArrayList
 
 class CelesteActivity : BaseActivityOAuth() {
     
@@ -52,6 +49,8 @@ class CelesteActivity : BaseActivityOAuth() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        this.level = CelesteILType.FORSAKEN_CITY
         
         statisticAdapter = StatisticAdapter(this, stats).also { a ->
             activity_game_details_recyclerview_stats.let {
@@ -81,8 +80,6 @@ class CelesteActivity : BaseActivityOAuth() {
             }
         }
         
-        this.level = CelesteILType.FORSAKEN_CITY
-        
         credential?.let { credential ->
             viewModel = configureViewModel().also {
                 it.build(credential, this)
@@ -90,11 +87,11 @@ class CelesteActivity : BaseActivityOAuth() {
             
             getAuthorization()?.observe(this, {
                 if (it == null || !it) return@observe
-                getLevel(CelesteILType.FORSAKEN_CITY)
+                getLevel(level)
             })
         }
         
-        handleUI()
+        handleUI(level)
     }
     
     override fun build() {
@@ -104,18 +101,21 @@ class CelesteActivity : BaseActivityOAuth() {
         this.level = level
         getHeader()
         getLeaderBoards()
+        getStatistics()
+        loadImageToHeader(level)
     }
     
-    private fun handleUI() {
+    private fun handleUI(level: CelesteILType) {
+        
         
         activity_game_details_button_previous.setOnClickListener {
-            CelesteILType::class.java.getPreviousOrNull(level)?.let { previousLevel ->
+            CelesteILType::class.java.getPreviousOrNull(this.level)?.let { previousLevel ->
                 getLevel(previousLevel)
             }
         }
         
         activity_game_details_button_next.setOnClickListener {
-            CelesteILType::class.java.getNextOrNull(level)?.let { nextLevel ->
+            CelesteILType::class.java.getNextOrNull(this.level)?.let { nextLevel ->
                 getLevel(nextLevel)
             }
         }
@@ -123,7 +123,7 @@ class CelesteActivity : BaseActivityOAuth() {
         // Method View::post allows to call the Thread for UI
         activity_game_details_image_header.post {
             
-            setHeaderImage()
+            setHeaderImage(level)
             
             // Add margin bottom to recyclerview for this one don't hide by bottom navigation menu
             val paramsRecyclerViewRanking = activity_game_details_recyclerview_ranking.layoutParams as ViewGroup.MarginLayoutParams
@@ -142,7 +142,7 @@ class CelesteActivity : BaseActivityOAuth() {
     /**
      * Reduce size image based on content shape size for create a border
      */
-    private fun setHeaderImage() {
+    private fun setHeaderImage(level: CelesteILType) {
         val image = activity_game_details_image_header
         val imageContent = activity_game_details_content_image_header
         
@@ -158,9 +158,13 @@ class CelesteActivity : BaseActivityOAuth() {
         
         // Set image to image header with glide. Also allows rounded image
         // TODO("Images customs")
-        Glide.with(this).load(R.drawable.im_celeste)
+        loadImageToHeader(level)
+    }
+    
+    private fun loadImageToHeader(level: CelesteILType) {
+        Glide.with(this).load(level.resImage)
             .centerCrop() // scale image to fill the entire ImageView
-            .circleCrop().into(image)
+            .circleCrop().into(activity_game_details_image_header)
     }
     
     private fun setPlaceHolder() {
@@ -186,8 +190,8 @@ class CelesteActivity : BaseActivityOAuth() {
         }
     }
     
+    // TODO("Graphics")
     private fun setGraphics() {
-        // Graphics
         /*        val graphic = activity_game_details_graphic as GraphView
                 val colorGraphic = resources.getColor(R.color.blue_graphic)
                 val series = LineGraphSeries(arrayOf(DataPoint(0.0, 1.0),
@@ -231,13 +235,40 @@ class CelesteActivity : BaseActivityOAuth() {
         })
     }
     
+    private fun getStatistics() {
+        this.stats.clear()
+        statisticAdapter.notifyDataSetChanged()
+        val levelName = level.levelName
+        viewModel?.getStatistics(levelName)?.observe(this, { statOrNull ->
+            statOrNull?.let { stats ->
+                addAllToStatistics(stats)
+            }
+        })
+    }
+    
     private fun getHeader() {
         activity_game_details_text_name_level.text = resources.getString(R.string.game_details_header_level_name, level.levelName)
     }
     
-    private fun addAllToLeaderBoards(leaderBoards: ArrayList<LeaderBoard>) {
+    private fun addAllToLeaderBoards(leaderBoards: Pair<String?, ArrayList<LeaderBoard>>) {
+        
+        leaderBoards.first?.let { name ->
+            if (level.levelName != name) return
+        }
+        
         this.leaderBoards.clear()
-        this.leaderBoards.addAll(leaderBoards)
+        this.leaderBoards.addAll(leaderBoards.second)
         leaderBoardAdapter.notifyDataSetChanged()
+    }
+    
+    private fun addAllToStatistics(stats: Pair<String?, ArrayList<Statistic>>) {
+        
+        stats.first?.let { name ->
+            if (level.levelName != name) return
+        }
+        
+        this.stats.clear()
+        this.stats.addAll(stats.second)
+        statisticAdapter.notifyDataSetChanged()
     }
 }

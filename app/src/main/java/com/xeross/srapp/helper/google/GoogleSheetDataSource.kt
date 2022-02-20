@@ -13,6 +13,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
+import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.JsonFactory
 import com.google.api.client.json.gson.GsonFactory
@@ -21,7 +22,6 @@ import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
 import com.xeross.srapp.base.BaseActivityOAuth
 import com.xeross.srapp.base.BaseAsyncTask
-import io.reactivex.rxjava3.observers.DisposableObserver
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileNotFoundException
@@ -30,13 +30,16 @@ import java.io.InputStreamReader
 import java.util.concurrent.Callable
 
 
-@Suppress("PrivatePropertyName", "LocalVariableName")
+@Suppress("PrivatePropertyName")
 class GoogleSheetDataSource() {
     
-    private val APPLICATION_NAME = "SrApp"
+    companion object {
+        private const val APPLICATION_NAME = "SrApp"
+        private const val TOKENS_DIRECTORY_PATH = "tokens"
+        private const val ID = "1_N10ANx6O4ioiGdYhGLt2742iBGmnfCElvAMRvSQRtE"
+    }
+    
     private val JSON_FACTORY: JsonFactory = GsonFactory.getDefaultInstance()
-    private val TOKENS_DIRECTORY_PATH = "tokens"
-    private val ID = "1_N10ANx6O4ioiGdYhGLt2742iBGmnfCElvAMRvSQRtE"
     private var service: Sheets? = null
     private var viewModel: ViewModel? = null
     private var baseAsyncTask: BaseAsyncTask? = null
@@ -70,16 +73,45 @@ class GoogleSheetDataSource() {
         }
     }
     
-    fun getValueToString(nameGSClass: String, case: String): LiveData<String?> {
+    fun getValueToString(nameGSClass: String, baseActivityOAuth: BaseActivityOAuth?, case: String): LiveData<String?> {
         val mutableLiveData = MutableLiveData<String?>()
-        service?.let { sheets ->
-            viewModel?.viewModelScope?.launch {
-                val range = "$nameGSClass!$case"
-                val response = sheets.spreadsheets().values()[ID, range].execute()
-                val result = response.getValues()
-                if (result == null || result.isEmpty()) return@launch
-                val results = result[0][0].toString()
-                mutableLiveData.postValue(results)
+        baseActivityOAuth?.let { activity ->
+            service?.let { sheets ->
+                baseAsyncTask?.executeAsync(object : Callable<Boolean> {
+                    override fun call(): Boolean {
+                        try {
+                            val range = "$nameGSClass!$case"
+            
+                            // Catch if there are too many requests
+                            val response = try {
+                                sheets.spreadsheets().values()[ID, range].execute()
+                            } catch (e: GoogleJsonResponseException) {
+                                // TODO("Too many request")
+                                return false
+                            }
+            
+                            val result = response.getValues() ?: run {
+                                mutableLiveData.postValue(null)
+                                return false
+                            }
+            
+                            val results = result[0][0].toString()
+            
+                            mutableLiveData.postValue(results)
+                        } catch (e: UserRecoverableAuthIOException) {
+                            // Trigger intent to have the user authorize
+                            activity.startActivityForResult(e.intent, activity.REQUEST_AUTHORIZATION)
+                            return false;
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                            return false;
+                        }
+                        return true
+                    }
+                }, object : BaseAsyncTask.Callback<Boolean> {
+                    override fun onComplete(result: Boolean) {
+                    }
+                })
             }
         }
         return mutableLiveData
@@ -109,24 +141,40 @@ class GoogleSheetDataSource() {
                     override fun call(): Boolean {
                         try {
                             val keyRange = "$nameGSClass!$keyRangeFrom:$keyRangTo"
-                            val keyResponse = sheets.spreadsheets().values()[ID, keyRange].execute()
-                            val keyResult = keyResponse.getValues()
-                            if (keyResult == null) {
+            
+                            // Catch if there are too many requests
+                            val keyResponse = try {
+                                sheets.spreadsheets().values()[ID, keyRange].execute()
+                            } catch (e: GoogleJsonResponseException) {
+                                // TODO("Too many request")
+                                return false
+                            }
+            
+                            val keyResult = keyResponse.getValues() ?: run {
                                 mutableLiveData.postValue(null)
                                 return false
                             }
-                            val KeyResults = keyResult.map { it[0].toString() }
+            
+                            val keyResults = keyResult.map { it[0].toString() }
             
                             val valueRange = "$nameGSClass!$valueRangeFrom:$valueRangTo"
-                            val valueResponse = sheets.spreadsheets().values()[ID, valueRange].execute()
-                            val valueResult = valueResponse.getValues()
-                            if (valueResult == null) {
+            
+                            // Catch if there are too many requests
+                            val valueResponse = try {
+                                sheets.spreadsheets().values()[ID, valueRange].execute()
+                            } catch (e: GoogleJsonResponseException) {
+                                // TODO("Too many request")
+                                return false
+                            }
+            
+                            val valueResult = valueResponse.getValues() ?: run {
                                 mutableLiveData.postValue(null)
                                 return false
                             }
+            
                             val valueResults = valueResult.map { it[0].toString() }
             
-                            mutableLiveData.postValue(KeyResults.zip(valueResults).toMap())
+                            mutableLiveData.postValue(keyResults.zip(valueResults).toMap())
                         } catch (e: UserRecoverableAuthIOException) {
                             // Trigger intent to have the user authorize
                             activity.startActivityForResult(e.intent, activity.REQUEST_AUTHORIZATION)

@@ -24,19 +24,19 @@ class CelesteSheetsRepository(viewModel: ViewModel, context: Context, credential
     }
     
     override fun fetchRunsAverage(nameGSClass: String): LiveData<String?> {
-        return googleSheetDataSource.getValueToString(nameGSClass, GoogleSheetConstants.AVERAGE)
+        return googleSheetDataSource.getValueToString(nameGSClass, baseActivityOAuth, GoogleSheetConstants.AVERAGE)
     }
     
     override fun fetchBestRun(nameGSClass: String): LiveData<String?> {
-        return googleSheetDataSource.getValueToString(nameGSClass, GoogleSheetConstants.BEST)
+        return googleSheetDataSource.getValueToString(nameGSClass, baseActivityOAuth, GoogleSheetConstants.BEST)
     }
     
     override fun fetchWorstRun(nameGSClass: String): LiveData<String?> {
-        return googleSheetDataSource.getValueToString(nameGSClass, GoogleSheetConstants.WORST)
+        return googleSheetDataSource.getValueToString(nameGSClass, baseActivityOAuth, GoogleSheetConstants.WORST)
     }
     
     override fun fetchRunAmount(nameGSClass: String): LiveData<String?> {
-        return googleSheetDataSource.getValueToString(nameGSClass, GoogleSheetConstants.RUNS_AMOUNT)
+        return googleSheetDataSource.getValueToString(nameGSClass, baseActivityOAuth, GoogleSheetConstants.RUNS_AMOUNT)
     }
     
     override fun fetchRunsWordRecord(nameGSClass: String): LiveData<Map<String, String>?> {

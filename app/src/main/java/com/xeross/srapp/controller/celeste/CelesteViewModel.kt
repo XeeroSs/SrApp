@@ -9,21 +9,30 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.xeross.srapp.base.BaseActivityOAuth
 import com.xeross.srapp.helper.google.CelesteSheetsRepository
 import com.xeross.srapp.model.LeaderBoard
+import com.xeross.srapp.model.Statistic
 import com.xeross.srapp.model.src.users.SrcUser
 import java.lang.ref.WeakReference
 
 class CelesteViewModel(private val context: WeakReference<Context>) : ViewModel() {
     
-    // To call before to make network request
+    // Cache
     private val cacheSrcRunners = HashMap<String, SrcUser>()
-    private val cacheSheetRunners = HashMap<String, ArrayList<LeaderBoard>>()
+    private val cacheSheetLeaderboards = HashMap<String, ArrayList<LeaderBoard>>()
+    private val cacheSheetStatistics = HashMap<String, ArrayList<Statistic>>()
     
-    private fun addToCacheRunnerFromSRC(runnerId: String, srcUser: SrcUser) {
+    private val sheetRunners = ArrayList<String>()
+    private val sheetStatistics = ArrayList<String>()
+    
+    private fun addRunnerToCacheFromSRC(runnerId: String, srcUser: SrcUser) {
         cacheSrcRunners[runnerId] = srcUser
     }
     
-    private fun addToCacheRunnersFromSheet(categoryId: String, runners: ArrayList<LeaderBoard>) {
-        cacheSheetRunners[categoryId] = runners
+    private fun addStatisticToCacheFromSheet(categoryId: String, stats: ArrayList<Statistic>) {
+        cacheSheetStatistics[categoryId] = stats
+    }
+    
+    private fun addLeaderboardToCacheFromSheet(categoryId: String, runners: ArrayList<LeaderBoard>) {
+        cacheSheetLeaderboards[categoryId] = runners
     }
     
     
@@ -37,48 +46,95 @@ class CelesteViewModel(private val context: WeakReference<Context>) : ViewModel(
     
     private fun getCelesteSheets() = celesteSheetRepository
     
-    private fun getSheetFromCache(nameGSClass: String): ArrayList<LeaderBoard>? {
-        return cacheSheetRunners[nameGSClass]
+    private fun getLeaderboardFromCache(nameGSClass: String): ArrayList<LeaderBoard>? {
+        return cacheSheetLeaderboards[nameGSClass]
     }
     
-    fun getLeaderBoard(nameGSClass: String): LiveData<ArrayList<LeaderBoard>> {
-        val liveDataLeaderBoards = MutableLiveData<ArrayList<LeaderBoard>>()
+    private fun getStatisticFromCache(nameGSClass: String): ArrayList<Statistic>? {
+        return cacheSheetStatistics[nameGSClass]
+    }
+    
+    fun getStatistics(nameGSClass: String): LiveData<Pair<String?, ArrayList<Statistic>>> {
+        val liveDataStats = MutableLiveData<Pair<String?, ArrayList<Statistic>>>()
         
-        getSheetFromCache(nameGSClass)?.let {
-            liveDataLeaderBoards.value = it
+        getStatisticFromCache(nameGSClass)?.let {
+            liveDataStats.value = Pair(null, it)
+            return liveDataStats
+        }
+        
+        // TODO("Avoid useless requests, to update")
+        if (!sheetStatistics.contains(nameGSClass)) {
+            sheetStatistics.add(nameGSClass)
+            
+            getCelesteSheets()?.let { helper ->
+                (context.get() as? LifecycleOwner)?.let { context ->
+                    getBest(nameGSClass, helper, context).observe(context, { best ->
+                        getWorst(nameGSClass, helper, context).observe(context, { worst ->
+                            getAverage(nameGSClass, helper, context).observe(context, { average ->
+                                getRunCount(nameGSClass, helper, context).observe(context, { count ->
+                
+                                    val stats = arrayListOf<Statistic>()
+                
+                                    stats.add(Statistic(best ?: "00:00:00", "Best"))
+                                    stats.add(Statistic(average ?: "00:00:00", "Average"))
+                                    stats.add(Statistic(worst ?: "00:00:00", "Worst"))
+                                    stats.add(Statistic(count ?: "0", "Total"))
+                
+                                    addStatisticToCacheFromSheet(nameGSClass, stats)
+                
+                                    // TODO("Add screen/widget loading and stop it here")
+                                    liveDataStats.postValue(Pair(nameGSClass, stats))
+                                })
+                            })
+                        })
+                    })
+                }
+            }
+        }
+        return liveDataStats
+    }
+    
+    fun getLeaderBoard(nameGSClass: String): LiveData<Pair<String?, ArrayList<LeaderBoard>>> {
+        val liveDataLeaderBoards = MutableLiveData<Pair<String?, ArrayList<LeaderBoard>>>()
+        
+        getLeaderboardFromCache(nameGSClass)?.let {
+            liveDataLeaderBoards.value = Pair(null, it)
             return liveDataLeaderBoards
         }
         
-        getCelesteSheets()?.let { helper ->
+        // TODO("Avoid useless requests, to update")
+        if (!sheetRunners.contains(nameGSClass)) {
+            sheetRunners.add(nameGSClass)
             
-            (context.get() as? LifecycleOwner)?.let { context ->
+            getCelesteSheets()?.let { helper ->
+                (context.get() as? LifecycleOwner)?.let { context ->
+                    getTimeAnyRunsWorldRecord(nameGSClass, helper, context).observe(context, { mapTimes ->
+                        mapTimes?.let { times ->
+                            getSRNameAnyRunsWorldRecord(nameGSClass, helper, context).observe(context, { mapNames ->
+                                mapNames?.let { names ->
                 
-                getTimeAnyRunsWorldRecord(nameGSClass, helper, context).observe(context, { mapTimes ->
-                    mapTimes?.let { times ->
-                        getSRNameAnyRunsWorldRecord(nameGSClass, helper, context).observe(context, { mapNames ->
-                            mapNames?.let { names ->
+                                    val leaderBoards = arrayListOf<LeaderBoard>()
+                                    val size = names.size
                 
-                                val leaderBoards = arrayListOf<LeaderBoard>()
-                
-                                val size = names.size
-                
-                                for (i in 1..size) {
+                                    for (i in 1..size) {
                     
-                                    val key = "#$i"
+                                        val key = "#$i"
+                                        val name = names[key] ?: continue
+                                        val time = times[key] ?: continue
                     
-                                    val name = names[key] ?: continue
-                                    val time = times[key] ?: continue
-                    
-                                    leaderBoards.add(LeaderBoard(name, i, time))
+                                        leaderBoards.add(LeaderBoard(name, i, time))
+                                    }
+                
+                                    addLeaderboardToCacheFromSheet(nameGSClass, leaderBoards)
+                
+                                    // TODO("Add screen/widget loading and stop it here")
+                                    liveDataLeaderBoards.postValue(Pair(nameGSClass, leaderBoards))
                                 }
-                
-                                liveDataLeaderBoards.postValue(leaderBoards)
-                            }
-                        })
-                    }
-                })
+                            })
+                        }
+                    })
+                }
             }
-            
         }
         return liveDataLeaderBoards
     }
@@ -89,6 +145,41 @@ class CelesteViewModel(private val context: WeakReference<Context>) : ViewModel(
             leaderBoards.postValue(it1)
         })
         return leaderBoards
+    }
+    
+    private fun getBest(nameGSClass: String, repository: CelesteSheetsRepository, context: LifecycleOwner): LiveData<String?> {
+        val best = MutableLiveData<String?>()
+        
+        repository.fetchBestRun(nameGSClass).observe(context, { it1 ->
+            best.postValue(it1)
+        })
+        return best
+    }
+    
+    private fun getWorst(nameGSClass: String, repository: CelesteSheetsRepository, context: LifecycleOwner): LiveData<String?> {
+        val worst = MutableLiveData<String?>()
+        
+        repository.fetchWorstRun(nameGSClass).observe(context, { it1 ->
+            worst.postValue(it1)
+        })
+        return worst
+    }
+    
+    private fun getAverage(nameGSClass: String, repository: CelesteSheetsRepository, context: LifecycleOwner): LiveData<String?> {
+        val average = MutableLiveData<String?>()
+        
+        repository.fetchRunsAverage(nameGSClass).observe(context, { it1 ->
+            average.postValue(it1)
+        })
+        return average
+    }
+    
+    private fun getRunCount(nameGSClass: String, repository: CelesteSheetsRepository, context: LifecycleOwner): LiveData<String?> {
+        val count = MutableLiveData<String?>()
+        repository.fetchRunAmount(nameGSClass).observe(context, { it1 ->
+            count.postValue(it1)
+        })
+        return count
     }
     
     private fun getSRNameAnyRunsWorldRecord(nameGSClass: String, repository: CelesteSheetsRepository, context: LifecycleOwner): LiveData<Map<String, String>?> {
