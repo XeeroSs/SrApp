@@ -15,10 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SrApp">
-        <activity android:name=".controller.celeste.CelesteActivity"/>
-        <activity android:name=".controller.main.MainActivity">
+        <activity android:name=".ui.celeste.CelesteActivity"/>
+        <activity android:name=".ui.main.MainActivity">
         </activity>
-        <activity android:name=".controller.splash.SplashScreenActivity">
+        <activity android:name=".ui.splash.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

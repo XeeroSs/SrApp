@@ -3,8 +3,8 @@ package com.xeross.srapp.injection
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.xeross.srapp.controller.celeste.CelesteViewModel
-import com.xeross.srapp.controller.main.MainViewModel
+import com.xeross.srapp.ui.celeste.CelesteViewModel
+import com.xeross.srapp.ui.main.MainViewModel
 import java.lang.ref.WeakReference
 
 class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
