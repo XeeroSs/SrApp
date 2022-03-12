@@ -1,4 +1,4 @@
-package com.xeross.srapp.listener
+package com.xeross.srapp.ui.adapters.listener
 
 interface ClickListener<T> {
     fun onClick(o: T)

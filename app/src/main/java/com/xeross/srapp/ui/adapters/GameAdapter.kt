@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseAdapter
-import com.xeross.srapp.listener.ClickListener
+import com.xeross.srapp.ui.adapters.listener.ClickListener
 import com.xeross.srapp.data.models.Game
 import kotlinx.android.synthetic.main.game_cell.view.*
 

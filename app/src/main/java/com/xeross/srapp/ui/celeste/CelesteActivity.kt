@@ -19,7 +19,7 @@ import com.xeross.srapp.ui.adapters.StatisticAdapter
 import com.xeross.srapp.base.BaseActivityOAuth
 import com.xeross.srapp.utils.extensions.UtilsExtensions.getNextOrNull
 import com.xeross.srapp.utils.extensions.UtilsExtensions.getPreviousOrNull
-import com.xeross.srapp.injection.ViewModelFactory
+import com.xeross.srapp.utils.injection.ViewModelFactory
 import com.xeross.srapp.data.models.LeaderBoard
 import com.xeross.srapp.data.models.Statistic
 import com.xeross.srapp.data.models.types.CelesteILType

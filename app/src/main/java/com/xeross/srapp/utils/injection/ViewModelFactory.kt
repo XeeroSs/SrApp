@@ -1,4 +1,4 @@
-package com.xeross.srapp.injection
+package com.xeross.srapp.utils.injection
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

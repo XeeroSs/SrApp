@@ -1,4 +1,4 @@
-package com.xeross.srapp.helper.http
+package com.xeross.srapp.network.http
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

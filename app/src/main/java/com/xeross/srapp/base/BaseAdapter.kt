@@ -2,7 +2,7 @@ package com.xeross.srapp.base
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import com.xeross.srapp.listener.ClickListener
+import com.xeross.srapp.ui.adapters.listener.ClickListener
 
 abstract class BaseAdapter<VH : RecyclerView.ViewHolder, T>(protected val context: Context, private val objectList: ArrayList<T>,
                                                             protected val clickListener: ClickListener<T>?) : RecyclerView.Adapter<VH>() {

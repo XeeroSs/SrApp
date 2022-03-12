@@ -13,7 +13,7 @@ import com.xeross.srapp.R
 import com.xeross.srapp.ui.adapters.GameAdapter
 import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.ui.celeste.CelesteActivity
-import com.xeross.srapp.listener.ClickListener
+import com.xeross.srapp.ui.adapters.listener.ClickListener
 import com.xeross.srapp.data.models.Game
 import com.xeross.srapp.data.models.types.SpeedrunType
 import kotlinx.android.synthetic.main.activity_celeste.*

@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.xeross.srapp.base.BaseActivityOAuth
-import com.xeross.srapp.helper.google.CelesteSheetsRepository
+import com.xeross.srapp.network.google.CelesteSheetsRepository
 import com.xeross.srapp.data.models.LeaderBoard
 import com.xeross.srapp.data.models.Statistic
 import com.xeross.srapp.network.src.responses.users.SrcUser

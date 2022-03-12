@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.xeross.srapp.R
-import com.xeross.srapp.helper.http.RetrofitHelper
+import com.xeross.srapp.network.http.RetrofitHelper
 import com.xeross.srapp.network.src.SrcApi
 import com.xeross.srapp.data.models.Game
 import com.xeross.srapp.data.models.types.SpeedrunType
