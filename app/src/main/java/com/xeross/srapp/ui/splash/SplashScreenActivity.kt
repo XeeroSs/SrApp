@@ -3,9 +3,6 @@ package com.xeross.srapp.ui.splash
 import android.app.ActivityOptions
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.LinearGradient
-import android.graphics.Shader
-import android.graphics.Shader.TileMode
 import android.os.Bundle
 import android.util.Pair
 import android.view.View
@@ -14,13 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.xeross.srapp.R
 import com.xeross.srapp.ui.main.MainActivity
+import com.xeross.srapp.utils.extensions.UIExtensions.setGradient
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.cos
-import kotlin.math.sin
 
 
 class SplashScreenActivity : AppCompatActivity() {
@@ -65,26 +61,15 @@ class SplashScreenActivity : AppCompatActivity() {
             ContextCompat.getColor(applicationContext, R.color.blue_gradient),
         )
         
-        val width = app_name.paint.measureText(app_name.text.toString())
-        // Get gradient angle
-        val angle = 45f
-        val widthAngle = (sin(Math.PI * angle / 180) * width).toFloat()
-        val heightAngle = (cos(Math.PI * angle / 180) * width).toFloat()
         
-        val textShader: Shader = LinearGradient(0f, 0f, widthAngle, heightAngle, colors, null, TileMode.CLAMP)
-        
-        // Remove the "white cover" on text
-        app_name.setTextColor(Color.WHITE)
-        
-        // Set gradient on text
-        app_name.paint.shader = textShader
+        logo.setGradient(colors, applicationContext)
     }
     
     private fun sleep() {
         val intent = Intent(applicationContext, MainActivity::class.java)
         
         // Transition animation
-        val options = ActivityOptions.makeSceneTransitionAnimation(this, Pair(app_name, "header"))
+        val options = ActivityOptions.makeSceneTransitionAnimation(this, Pair(logo, "header"))
         
         // start transition animation
         startActivity(intent, options.toBundle())

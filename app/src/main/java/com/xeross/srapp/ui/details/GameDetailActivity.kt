@@ -1,17 +1,45 @@
 package com.xeross.srapp.ui.details
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.xeross.srapp.R
+import com.xeross.srapp.base.BaseActivity
+import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
+import kotlinx.android.synthetic.main.activity_game_details.*
 
-class GameDetailActivity : AppCompatActivity() {
+class GameDetailActivity : BaseActivity() {
     
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_celeste)
+    override fun getViewModelClass() = GameDetailViewModel::class.java
+    override fun getFragmentId() = R.layout.activity_game_details
+    
+    private lateinit var categoryName: String
+    
+    override fun build() {
+        buildUI()
         
+        // Get name from intent extra for header
+        categoryName = intent.getStringExtra(EXTRA_CATEGORY_NAME) ?: "???"
+    }
+    
+    private fun buildUI() {
+        // Header
+        header()
         
+        // Button listener
+        onClick()
+    }
+    
+    private fun onClick() {
+    
+    }
+    
+    private fun header() {
+        // Texts
+        activity_game_details_text_name_level.text = getString(R.string.game_details_header_level_name, categoryName)
+        activity_game_details_text_category.text = getString(R.string.game_details_header_category_name, categoryName)
+        activity_game_details_text_time.text = getString(R.string.game_details_header_time_personnel_best, categoryName)
+        
+        // Image
         
     }
+    
     
 }

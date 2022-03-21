@@ -1,5 +1,8 @@
 package com.xeross.srapp.utils.extensions
 
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import java.lang.String
 
 
@@ -34,6 +37,13 @@ object UtilsExtensions {
         var index: Int = elements.indexOf(element)
         index = (index - 1).takeUnless { it < 0 } ?: return null
         return elements[index]
+    }
+    
+    fun RecyclerView.setRecyclerViewAdapter(adapter: RecyclerView.Adapter<*>, layout: LinearLayoutManager) {
+        setHasFixedSize(true)
+        layoutManager = layout
+        itemAnimator = DefaultItemAnimator()
+        this.adapter = adapter
     }
     
 }

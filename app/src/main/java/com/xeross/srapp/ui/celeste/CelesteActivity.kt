@@ -23,11 +23,11 @@ import com.xeross.srapp.utils.injection.ViewModelFactory
 import com.xeross.srapp.data.models.LeaderBoard
 import com.xeross.srapp.data.models.Statistic
 import com.xeross.srapp.data.models.types.CelesteILType
-import kotlinx.android.synthetic.main.activity_celeste.*
+import kotlinx.android.synthetic.main.activity_game_details.*
 
 class CelesteActivity : BaseActivityOAuth() {
     
-    override fun getFragmentId() = R.layout.activity_celeste
+    override fun getFragmentId() = R.layout.activity_game_details
     
     override fun getViewModelClass() = CelesteViewModel::class.java
     

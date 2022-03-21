@@ -20,7 +20,7 @@ class MainViewModel : ViewModel() {
     }
     
     private var api: SrcApi? = null
-    private var networkCallHelper = NetworkRequestHelper()
+ //   private var networkCallHelper = NetworkRequestHelper()
     
     fun build() {
         api = RetrofitHelper.getClient().create(SrcApi::class.java)
@@ -28,7 +28,7 @@ class MainViewModel : ViewModel() {
     
     fun getCeleste(context: Context): LiveData<Game> {
         val celeste = MutableLiveData<Game>()
-        api?.let {
+/*        api?.let {
             networkCallHelper.getHTTPRequest(it.getPBByGame(NAME_SPEED_RUNNER, NAME_GAME)).observe((context as AppCompatActivity), { data ->
                 if (data.data == null || data.data.isEmpty()) return@observe
                 data.data.filter { runs -> runs.run.category == CATEGORY_ID }.singleOrNull { run ->
@@ -36,7 +36,7 @@ class MainViewModel : ViewModel() {
                     return@observe
                 }
             })
-        }
+        }*/
         return celeste
     }
 }
