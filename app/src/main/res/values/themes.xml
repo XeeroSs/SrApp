@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.SrApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
@@ -14,5 +14,30 @@
 
     <style name="BottomNavigationTheme" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/on_surface</item>
+    </style>
+
+    <style name="TextViewTheme">
+        <item name="android:fontFamily">@font/gilroy_light</item>
+    </style>
+
+    <style name="TexViewAuthHeaderTheme" parent="TextViewTheme">
+        <item name="android:textSize">@dimen/register_screen_auth_text_size</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+    </style>
+
+    <style name="Theme.App.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@color/blue_graphic</item>
+        <item name="colorControlActivated">@color/blue_graphic</item>
+        <item name="colorControlHighlight">@color/blue_graphic</item>
+    </style>
+
+    <style name="TextInputAuth" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">#fff</item>
+        <item name="boxStrokeWidth">2dp</item>
     </style>
 </resources>

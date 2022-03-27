@@ -28,7 +28,12 @@
 
     <color name="blue_graphic">#0BA5FF</color> <!--super dark gray-->
 
-    <color name="super_light_gray">#F1F1F1</color> <!--super light gray-->
+    <color name="super_light_gray">#F1F1F1</color>
+    <color name="black">#000000</color>
+    <color name="light_gray">#A9A9A9</color>
+    <color name="white">#ffffff</color> <!--super light gray-->
+
+    <color name="mtrl_textinput_default_box_stroke_color">#fff</color>
 
 
     <!--    <color name="purple_light">#794de3</color>

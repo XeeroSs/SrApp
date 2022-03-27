@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.xeross.srapp.R
 import com.xeross.srapp.ui.main.MainActivity
-import com.xeross.srapp.utils.extensions.UIExtensions.setGradient
+import com.xeross.srapp.utils.extensions.UIExtensions.setTintGradient
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -62,7 +62,7 @@ class SplashScreenActivity : AppCompatActivity() {
         )
         
         
-        logo.setGradient(colors, applicationContext)
+        logo.setTintGradient(colors, applicationContext)
     }
     
     private fun sleep() {

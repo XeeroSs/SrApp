@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.disposables.Disposable
 
-abstract class BaseFirebaseViewModel<T : AppCompatActivity>(t: T) : ViewModel() {
+abstract class BaseFirebaseViewModel : ViewModel() {
     
     private var disposable: Disposable? = null
     

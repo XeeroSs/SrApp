@@ -36,5 +36,22 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <!--  Auth  -->
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="already_a_member">Already a member ?</string>
+
+    <string name="confirm_password_is_different">Those passwords didn\'t match.</string>
+    <string name="password_too_short">This password is too short (At least 8 characters).</string>
+    <string name="invalid_password">Password must contain at least 1 special character.</string>
+    <string name="invalid_pseudo">Pseudo didn\'t must contain any special characters.</string>
+    <string name="invalid_email">Invalid email address format.</string>
+    <string name="field_is_required">This field is required.</string>
+    <string name="success">Success !</string>
+
 
 </resources>

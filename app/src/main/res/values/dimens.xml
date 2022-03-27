@@ -83,4 +83,19 @@
     <!-- Splash Screen -->
     <dimen name="splash_screen_app_name">70sp</dimen>
 
+    <!-- Register Screen -->
+    <dimen name="register_screen_auth_text_end">45dp</dimen>
+    <dimen name="register_screen_auth_text_bottom">35dp</dimen>
+    <dimen name="register_screen_auth_text_size">15dp</dimen>
+    <dimen name="top_first_edit_text_register_screen">50dp</dimen>
+    <dimen name="space_between_edit_text_register_screen">5dp</dimen>
+    <dimen name="top_button_register_screen">50dp</dimen>
+    <dimen name="bottom_text_for_login_register_screen">40dp</dimen>
+
+    <!-- Auth Screen -->
+    <dimen name="edit_text_width_auth">300dp</dimen>
+    <dimen name="edit_text_height_auth">55dp</dimen>
+
+
+
 </resources>

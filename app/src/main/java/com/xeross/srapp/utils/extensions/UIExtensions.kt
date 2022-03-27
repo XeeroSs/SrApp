@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
+import com.google.android.material.textfield.TextInputLayout
 import com.xeross.srapp.R
 import kotlin.math.cos
 import kotlin.math.sin
@@ -18,7 +19,7 @@ import kotlin.math.sin
 
 object UIExtensions {
     
-    fun TextView.setGradient(colors: IntArray) {
+    fun TextView.setTintGradient(colors: IntArray) {
         val width = this.paint.measureText(this.text.toString())
         // Get gradient angle
         val angle = 45f
@@ -34,7 +35,7 @@ object UIExtensions {
         this.paint.shader = textShader
     }
     
-    fun ImageView.setGradient(colors: IntArray, context: Context, cornerRadius: Float = 0f) {
+    fun ImageView.setTintGradient(colors: IntArray, context: Context, cornerRadius: Float = 0f) {
         val gd = GradientDrawable(
             GradientDrawable.Orientation.TOP_BOTTOM, colors)
         gd.cornerRadius = cornerRadius
@@ -45,6 +46,12 @@ object UIExtensions {
     
     fun ImageView.setTint(@ColorRes colorRes: Int) {
         ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(ContextCompat.getColor(context, colorRes)))
+    }
+    
+    fun TextInputLayout.error(context: Context, resId: Int, vararg formatArgs: String) {
+     //   this.errorContentDescription = context.resources.getString(resId, formatArgs)
+        this.errorIconDrawable = null
+        this.error = context.resources.getString(resId, formatArgs)
     }
     
 }
