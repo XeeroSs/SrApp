@@ -9,15 +9,22 @@ import com.xeross.srapp.ui.auth.register.types.RegisterTextInputTypes
 import com.xeross.srapp.ui.main.MainActivity
 import com.xeross.srapp.utils.extensions.UIExtensions.error
 import kotlinx.android.synthetic.main.activity_register.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class RegisterActivity : BaseActivity() {
     
-    override fun getFragmentId() = R.layout.activity_register
+    companion object {
+        // ~1s
+        private const val BUTTON_REGISTER__DELAY = 1 * 1000L
+    }
     
+    override fun getFragmentId() = R.layout.activity_register
     override fun getViewModelClass() = RegisterViewModel::class.java
     
     private var viewModel: RegisterViewModel? = null
-    
     private val textInputs = HashMap<RegisterTextInputTypes, TextInputLayout>()
     
     override fun build() {
@@ -28,13 +35,11 @@ class RegisterActivity : BaseActivity() {
     
     private fun buildUI() {
         setStatusBarTransparent()
-        
         onClick()
-        
-        editText()
+        setInputText()
     }
     
-    private fun editText() {
+    private fun setInputText() {
         textInputs.apply {
             put(RegisterTextInputTypes.PSEUDO, pseudo_edit_text)
             put(RegisterTextInputTypes.EMAIL, email_edit_text)
@@ -55,14 +60,30 @@ class RegisterActivity : BaseActivity() {
         // TODO("Update icon password")
     }
     
-    private fun errorEditText(registerTextInputTypes: Array<ExceptionRegisterTypes>) {
+    private fun getField(registerTextInputTypes: RegisterTextInputTypes): String? {
+        val inputText = textInputs[registerTextInputTypes] ?: return null
+        val text = inputText.editText?.text?.takeIf { it.isNotBlank() } ?: run {
+            inputText.error(this@RegisterActivity, R.string.field_is_required)
+            return null
+        }
+        return text.toString()
+    }
+    
+    private fun errorEditText(vararg registerTextInputTypes: ExceptionRegisterTypes) {
         registerTextInputTypes.forEach { ex ->
             ex.resId?.let { resId ->
                 ex.textInputTypes?.let {
-                    textInputs[it]?.error(this@RegisterActivity, resId)
+                    textInputs[it]?.let { input ->
+                        input.helperText = null
+                        input.error(this@RegisterActivity, resId)
+                    }
                 }
             }
         }
+    }
+    
+    private fun clearTextInputError() {
+        for (input in textInputs.values) input.error = null
     }
     
     private fun successRegister() {
@@ -70,14 +91,34 @@ class RegisterActivity : BaseActivity() {
     }
     
     private fun register() {
-        viewModel?.register()?.observe(this, { ex ->
+        
+        buttonRegisterAntiSpam()
+        clearTextInputError()
+        
+        val pseudo = getField(RegisterTextInputTypes.PSEUDO) ?: return
+        val email = getField(RegisterTextInputTypes.EMAIL) ?: return
+        val password = getField(RegisterTextInputTypes.PASSWORD) ?: return
+        val confirmPassword = getField(RegisterTextInputTypes.CONFIRM_PASSWORD) ?: return
+        
+        viewModel?.register(pseudo, email, password, confirmPassword)?.observe(this, { ex ->
             ex?.let {
                 when (ExceptionRegisterTypes.SUCCESS) {
                     it[0] -> successRegister()
-                    else -> errorEditText(it)
+                    else -> errorEditText(*it)
                 }
             }
         })
+    }
+    
+    private fun buttonRegisterAntiSpam() {
+        register_button.isEnabled = false
+        
+        // Start task with coroutines
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(BUTTON_REGISTER__DELAY)
+            
+            register_button.isEnabled = true
+        }
     }
     
 }

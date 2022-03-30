@@ -1,15 +1,20 @@
 package com.xeross.srapp.utils.extensions
 
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import java.lang.String
+import java.util.regex.Pattern
 
 
 object UtilsExtensions {
     
     private const val HEX_REG = "#%06X"
     private const val HEX_BASE = 0xFFFFFF
+    
+    // TODO("test regex with unit test")
+    private const val EMAIL_FORMAT = "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\$"
+    
+    //   private const val PASSWORD_FORMAT = "^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,}\$"
+    private const val PASSWORD_FORMAT = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;'_,?/*~\$^+=<>]).{8,}\$"
+    // private const val EMAIL_FORMAT = "/^[^\\W][a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*\\@[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*\\.[a-zA-Z]{2,4}\$/"
+    
     
     fun Int.toHexColorString(): kotlin.String = String.format(HEX_REG, HEX_BASE and this)
     
@@ -39,11 +44,16 @@ object UtilsExtensions {
         return elements[index]
     }
     
-    fun RecyclerView.setRecyclerViewAdapter(adapter: RecyclerView.Adapter<*>, layout: LinearLayoutManager) {
-        setHasFixedSize(true)
-        layoutManager = layout
-        itemAnimator = DefaultItemAnimator()
-        this.adapter = adapter
+    fun String.isFormatEmail(): Boolean {
+        val pattern = Pattern.compile(EMAIL_FORMAT, Pattern.CASE_INSENSITIVE)
+        val matcher = pattern.matcher(this)
+        return matcher.matches()
+    }
+    
+    fun String.isValidPassword(): Boolean {
+        val pattern = Pattern.compile(PASSWORD_FORMAT, Pattern.CASE_INSENSITIVE)
+        val matcher = pattern.matcher(this)
+        return matcher.matches()
     }
     
 }

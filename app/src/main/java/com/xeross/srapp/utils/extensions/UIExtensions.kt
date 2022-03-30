@@ -11,6 +11,9 @@ import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
 import com.xeross.srapp.R
 import kotlin.math.cos
@@ -52,6 +55,13 @@ object UIExtensions {
      //   this.errorContentDescription = context.resources.getString(resId, formatArgs)
         this.errorIconDrawable = null
         this.error = context.resources.getString(resId, formatArgs)
+    }
+    
+    fun RecyclerView.setRecyclerViewAdapter(adapter: RecyclerView.Adapter<*>, layout: LinearLayoutManager) {
+        setHasFixedSize(true)
+        layoutManager = layout
+        itemAnimator = DefaultItemAnimator()
+        this.adapter = adapter
     }
     
 }
