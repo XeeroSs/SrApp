@@ -30,7 +30,7 @@ class RegisterViewModel() : BaseFirebaseViewModel() {
         
         if (exceptions.isEmpty()) {
             exceptions.add(ExceptionRegisterTypes.SUCCESS)
-            // TODO("Call db")
+            // TODO("Register / Call db")
         }
         
         mutableLiveData.postValue(exceptions.toTypedArray())

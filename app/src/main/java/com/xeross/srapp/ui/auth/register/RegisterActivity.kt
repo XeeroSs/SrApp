@@ -1,31 +1,18 @@
 package com.xeross.srapp.ui.auth.register
 
-import com.google.android.material.textfield.TextInputLayout
 import com.xeross.srapp.R
-import com.xeross.srapp.base.BaseActivity
-import com.xeross.srapp.ui.auth.login.LoginActivity
+import com.xeross.srapp.ui.auth.BaseAuthActivity
 import com.xeross.srapp.ui.auth.register.exceptions.ExceptionRegisterTypes
-import com.xeross.srapp.ui.auth.register.types.RegisterTextInputTypes
+import com.xeross.srapp.ui.auth.types.AuthTextInputTypes
 import com.xeross.srapp.ui.main.MainActivity
-import com.xeross.srapp.utils.extensions.UIExtensions.error
 import kotlinx.android.synthetic.main.activity_register.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-class RegisterActivity : BaseActivity() {
-    
-    companion object {
-        // ~1s
-        private const val BUTTON_REGISTER__DELAY = 1 * 1000L
-    }
+class RegisterActivity : BaseAuthActivity() {
     
     override fun getFragmentId() = R.layout.activity_register
     override fun getViewModelClass() = RegisterViewModel::class.java
     
     private var viewModel: RegisterViewModel? = null
-    private val textInputs = HashMap<RegisterTextInputTypes, TextInputLayout>()
     
     override fun build() {
         viewModel = (vm as RegisterViewModel)
@@ -34,23 +21,29 @@ class RegisterActivity : BaseActivity() {
     }
     
     private fun buildUI() {
-        setStatusBarTransparent()
         onClick()
         setInputText()
     }
     
     private fun setInputText() {
         textInputs.apply {
-            put(RegisterTextInputTypes.PSEUDO, pseudo_edit_text)
-            put(RegisterTextInputTypes.EMAIL, email_edit_text)
-            put(RegisterTextInputTypes.PASSWORD, password_edit_text)
-            put(RegisterTextInputTypes.CONFIRM_PASSWORD, confirm_password_edit_text)
+            add(AuthTextInputTypes.PSEUDO, pseudo_edit_text)
+            add(AuthTextInputTypes.EMAIL, email_edit_text)
+            add(AuthTextInputTypes.PASSWORD, password_edit_text)
+            add(AuthTextInputTypes.CONFIRM_PASSWORD, confirm_password_edit_text)
         }
     }
     
     private fun onClick() {
         login_text_button.setOnClickListener {
-            goToActivity<LoginActivity>()
+/*            val intent = Intent(this, LoginActivity::class.java).also {
+                it.sendExtra(pseudo_edit_text, PSEUDO_EXTRA_REGISTER)
+                it.sendExtra(email_edit_text, EMAIL_EXTRA_REGISTER)
+                it.sendExtra(password_edit_text, PASSWORD_EXTRA_REGISTER)
+                it.sendExtra(confirm_password_edit_text, CONFIRM_PASSWORD_EXTRA_REGISTER)
+            }*/
+            
+            finish()
         }
         
         register_button.setOnClickListener {
@@ -60,45 +53,19 @@ class RegisterActivity : BaseActivity() {
         // TODO("Update icon password")
     }
     
-    private fun getField(registerTextInputTypes: RegisterTextInputTypes): String? {
-        val inputText = textInputs[registerTextInputTypes] ?: return null
-        val text = inputText.editText?.text?.takeIf { it.isNotBlank() } ?: run {
-            inputText.error(this@RegisterActivity, R.string.field_is_required)
-            return null
-        }
-        return text.toString()
-    }
-    
-    private fun errorEditText(vararg registerTextInputTypes: ExceptionRegisterTypes) {
-        registerTextInputTypes.forEach { ex ->
-            ex.resId?.let { resId ->
-                ex.textInputTypes?.let {
-                    textInputs[it]?.let { input ->
-                        input.helperText = null
-                        input.error(this@RegisterActivity, resId)
-                    }
-                }
-            }
-        }
-    }
-    
-    private fun clearTextInputError() {
-        for (input in textInputs.values) input.error = null
-    }
-    
     private fun successRegister() {
         goToActivity<MainActivity>()
     }
     
     private fun register() {
         
-        buttonRegisterAntiSpam()
+        register_button.antiSpam()
         clearTextInputError()
         
-        val pseudo = getField(RegisterTextInputTypes.PSEUDO) ?: return
-        val email = getField(RegisterTextInputTypes.EMAIL) ?: return
-        val password = getField(RegisterTextInputTypes.PASSWORD) ?: return
-        val confirmPassword = getField(RegisterTextInputTypes.CONFIRM_PASSWORD) ?: return
+        val pseudo = getField(AuthTextInputTypes.PSEUDO) ?: return
+        val email = getField(AuthTextInputTypes.EMAIL) ?: return
+        val password = getField(AuthTextInputTypes.PASSWORD) ?: return
+        val confirmPassword = getField(AuthTextInputTypes.CONFIRM_PASSWORD) ?: return
         
         viewModel?.register(pseudo, email, password, confirmPassword)?.observe(this, { ex ->
             ex?.let {
@@ -109,16 +76,4 @@ class RegisterActivity : BaseActivity() {
             }
         })
     }
-    
-    private fun buttonRegisterAntiSpam() {
-        register_button.isEnabled = false
-        
-        // Start task with coroutines
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(BUTTON_REGISTER__DELAY)
-            
-            register_button.isEnabled = true
-        }
-    }
-    
 }

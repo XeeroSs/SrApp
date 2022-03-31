@@ -40,10 +40,10 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
     
-    protected inline fun <reified T : AppCompatActivity> goToActivity() {
+    protected inline fun <reified T : AppCompatActivity> goToActivity(finishActivity: Boolean = true) {
         val intent = Intent(this, T::class.java)
         startActivity(intent)
-        finish()
+        if (finishActivity) finish()
     }
     
 }

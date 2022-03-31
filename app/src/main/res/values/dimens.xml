@@ -93,6 +93,10 @@
     <dimen name="bottom_text_for_login_register_screen">30dp</dimen>
     <dimen name="edit_text_content_margin_auth">20dp</dimen>
 
+    <!-- Register Screen -->
+    <dimen name="google_login_button_screen">40dp</dimen>
+    <dimen name="image_google_login_button_screen">20dp</dimen>
+
     <!-- Auth Screen -->
     <dimen name="edit_text_width_auth">300dp</dimen>
     <dimen name="edit_text_height_auth">55dp</dimen>
