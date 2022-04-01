@@ -1,17 +1,14 @@
 package com.xeross.srapp.ui.main
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.xeross.srapp.R
+import com.xeross.srapp.base.BaseFirebaseViewModel
+import com.xeross.srapp.data.models.Game
 import com.xeross.srapp.network.http.RetrofitHelper
 import com.xeross.srapp.network.src.SrcApi
-import com.xeross.srapp.data.models.Game
-import com.xeross.srapp.data.models.types.SpeedrunType
 
-class MainViewModel : ViewModel() {
+class MainViewModel : BaseFirebaseViewModel() {
     
     companion object {
         private const val NAME_SPEED_RUNNER = "XeroSs"
@@ -20,9 +17,10 @@ class MainViewModel : ViewModel() {
     }
     
     private var api: SrcApi? = null
- //   private var networkCallHelper = NetworkRequestHelper()
+    //   private var networkCallHelper = NetworkRequestHelper()
     
-    fun build() {
+    fun buildViewModel() {
+        build()
         api = RetrofitHelper.getClient().create(SrcApi::class.java)
     }
     

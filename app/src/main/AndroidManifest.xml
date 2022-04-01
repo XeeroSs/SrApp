@@ -16,22 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SrApp">
         <activity android:name=".ui.auth.register.RegisterActivity" />
-        <activity android:name=".ui.auth.login.LoginActivity">
+        <activity android:name=".ui.auth.login.LoginActivity" />
+        <activity android:name=".ui.celeste.CelesteActivity" />
+        <activity android:name=".ui.main.MainActivity" />
+        <activity android:name=".ui.splash.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".ui.celeste.CelesteActivity" />
-        <activity android:name=".ui.main.MainActivity" />
-        <activity android:name=".ui.splash.SplashScreenActivity">
-
-            <!--      TODO("to change")      <intent-filter>
-                            <action android:name="android.intent.action.MAIN" />
-
-                            <category android:name="android.intent.category.LAUNCHER" />
-                        </intent-filter>-->
         </activity>
     </application>
 

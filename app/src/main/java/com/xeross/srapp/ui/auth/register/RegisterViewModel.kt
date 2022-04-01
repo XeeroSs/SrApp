@@ -2,6 +2,7 @@ package com.xeross.srapp.ui.auth.register
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.xeross.srapp.base.BaseFirebaseViewModel
 import com.xeross.srapp.ui.auth.register.exceptions.ExceptionRegisterTypes
 import com.xeross.srapp.utils.extensions.UtilsExtensions.isFormatEmail
@@ -28,13 +29,24 @@ class RegisterViewModel() : BaseFirebaseViewModel() {
             exceptions.add(ExceptionRegisterTypes.CONFIRM_PASSWORD_IS_DIFFERENT)
         }
         
-        if (exceptions.isEmpty()) {
-            exceptions.add(ExceptionRegisterTypes.SUCCESS)
-            // TODO("Register / Call db")
+        if (exceptions.isNotEmpty()) {
+            mutableLiveData.postValue(exceptions.toTypedArray())
+            return mutableLiveData
         }
         
-        mutableLiveData.postValue(exceptions.toTypedArray())
-        
+        getAuth().createUserWithEmailAndPassword(email, password).addOnSuccessListener {
+            when {
+                it.user == null -> exceptions.add(ExceptionRegisterTypes.AUTH_FAILED)
+                else -> exceptions.add(ExceptionRegisterTypes.SUCCESS)
+            }
+            mutableLiveData.postValue(exceptions.toTypedArray())
+        }.addOnFailureListener {
+            when (it) {
+                is FirebaseAuthUserCollisionException -> exceptions.add(ExceptionRegisterTypes.EMAIL_ALREADY_USE)
+                else -> exceptions.add(ExceptionRegisterTypes.AUTH_FAILED)
+            }
+            mutableLiveData.postValue(exceptions.toTypedArray())
+        }
         
         return mutableLiveData
     }

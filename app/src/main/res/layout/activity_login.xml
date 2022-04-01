@@ -128,6 +128,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
+                android:id="@+id/forgot_password_button_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -180,6 +181,7 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="@dimen/google_login_button_screen"
+            android:id="@+id/google_button_cardview"
             android:layout_height="@dimen/google_login_button_screen"
             android:clickable="true"
             android:textAppearance="@style/TextStyle"
@@ -213,7 +215,7 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/login_text_button"
+                android:id="@+id/register_text_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"

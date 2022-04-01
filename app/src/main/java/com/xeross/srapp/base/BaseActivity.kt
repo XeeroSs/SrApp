@@ -42,8 +42,9 @@ abstract class BaseActivity : AppCompatActivity() {
     
     protected inline fun <reified T : AppCompatActivity> goToActivity(finishActivity: Boolean = true) {
         val intent = Intent(this, T::class.java)
-        startActivity(intent)
+        if (finishActivity) intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         if (finishActivity) finish()
+        startActivity(intent)
     }
     
 }

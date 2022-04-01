@@ -36,7 +36,7 @@ class LoginActivity : BaseAuthActivity() {
     }
     
     private fun onClick() {
-        login_text_button.setOnClickListener {
+        register_text_button.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             
             startActivity(intent)
@@ -53,14 +53,22 @@ class LoginActivity : BaseAuthActivity() {
         goToActivity<MainActivity>()
     }
     
-    private fun login() {
+    private fun getFieldOrNull(authTextInputTypes: AuthTextInputTypes): String? {
+        val field = getField(authTextInputTypes)
+        if (field != null) return field
         login_button.antiSpam()
+        return null
+    }
+    
+    private fun login() {
+        login_button.isEnabled = false
         clearTextInputError()
         
-        val email = getField(AuthTextInputTypes.EMAIL) ?: return
-        getField(AuthTextInputTypes.PASSWORD) ?: return
+        val email = getFieldOrNull(AuthTextInputTypes.EMAIL) ?: return
+        val password = getFieldOrNull(AuthTextInputTypes.PASSWORD) ?: return
         
-        viewModel?.login(email)?.observe(this, { ex ->
+        viewModel?.login(email, password)?.observe(this, { ex ->
+            login_button.antiSpam()
             ex?.let {
                 when (ExceptionRegisterTypes.SUCCESS) {
                     it[0] -> successLogin()

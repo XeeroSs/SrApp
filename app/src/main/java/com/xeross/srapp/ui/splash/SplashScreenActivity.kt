@@ -7,9 +7,10 @@ import android.os.Bundle
 import android.util.Pair
 import android.view.View
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.xeross.srapp.R
+import com.xeross.srapp.base.BaseActivity
+import com.xeross.srapp.ui.auth.login.LoginActivity
 import com.xeross.srapp.ui.main.MainActivity
 import com.xeross.srapp.utils.extensions.UIExtensions.setTintGradient
 import kotlinx.android.synthetic.main.activity_splash_screen.*
@@ -19,7 +20,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class SplashScreenActivity : AppCompatActivity() {
+class SplashScreenActivity : BaseActivity() {
+    
+    override fun getFragmentId() = R.layout.activity_splash_screen
+    override fun getViewModelClass() = SplashViewModel::class.java
     
     companion object {
         // ~2s
@@ -28,6 +32,41 @@ class SplashScreenActivity : AppCompatActivity() {
     }
     
     private var endActivity = false
+    
+    private var viewModel: SplashViewModel? = null
+    
+    override fun build() {
+        viewModel = (vm as SplashViewModel)
+        viewModel?.build()
+        buildUI()
+    }
+    
+    private fun buildUI() {
+        // Start task with coroutines
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(SPLASH_DELAY)
+            
+            // Start main activity et stop this activity
+            sleep()
+        }
+        
+        // Status bar transparent
+        window.apply {
+            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            statusBarColor = Color.TRANSPARENT
+        }
+        
+        val colors = intArrayOf(
+            ContextCompat.getColor(applicationContext, R.color.pink_gradient),
+            ContextCompat.getColor(applicationContext, R.color.purple_gradient),
+            ContextCompat.getColor(applicationContext, R.color.blue_gradient),
+        )
+        
+        
+        logo.setTintGradient(colors, applicationContext)
+    }
     
     override fun onStop() {
         super.onStop()
@@ -66,7 +105,10 @@ class SplashScreenActivity : AppCompatActivity() {
     }
     
     private fun sleep() {
-        val intent = Intent(applicationContext, MainActivity::class.java)
+        
+        val intentIfAuth = if (viewModel?.isAuth() == true) MainActivity::class.java else LoginActivity::class.java
+        
+        val intent = Intent(applicationContext, intentIfAuth)
         
         // Transition animation
         val options = ActivityOptions.makeSceneTransitionAnimation(this, Pair(logo, "header"))

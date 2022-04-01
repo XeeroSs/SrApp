@@ -9,6 +9,7 @@ import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.ui.auth.register.exceptions.ExceptionRegisterTypes
 import com.xeross.srapp.ui.auth.types.AuthTextInputTypes
 import com.xeross.srapp.utils.extensions.UIExtensions.error
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,8 +31,7 @@ abstract class BaseAuthActivity : BaseActivity() {
     }
     
     protected fun MaterialButton.antiSpam() {
-        this.isEnabled = false
-        
+        //this.isEnabled = false
         // Start task with coroutines
         CoroutineScope(Dispatchers.Main).launch {
             delay(BUTTON_REGISTER_DELAY)

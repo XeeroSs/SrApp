@@ -53,21 +53,36 @@ class RegisterActivity : BaseAuthActivity() {
         // TODO("Update icon password")
     }
     
+    private fun getFieldOrNull(authTextInputTypes: AuthTextInputTypes): String? {
+        val field = getField(authTextInputTypes)
+        if (field != null) return field
+        register_button.antiSpam()
+        return null
+    }
+    
     private fun successRegister() {
         goToActivity<MainActivity>()
+/*        val intent = Intent(applicationContext, MainActivity::class.java)
+*//*        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.putExtra("EXIT", true)
+        startActivity(intent)
+        finish()*/
     }
     
     private fun register() {
         
-        register_button.antiSpam()
+        register_button.isEnabled = false
         clearTextInputError()
         
-        val pseudo = getField(AuthTextInputTypes.PSEUDO) ?: return
-        val email = getField(AuthTextInputTypes.EMAIL) ?: return
-        val password = getField(AuthTextInputTypes.PASSWORD) ?: return
-        val confirmPassword = getField(AuthTextInputTypes.CONFIRM_PASSWORD) ?: return
+        val pseudo = getFieldOrNull(AuthTextInputTypes.PSEUDO) ?: return
+        val email = getFieldOrNull(AuthTextInputTypes.EMAIL) ?: return
+        val password = getFieldOrNull(AuthTextInputTypes.PASSWORD) ?: return
+        val confirmPassword = getFieldOrNull(AuthTextInputTypes.CONFIRM_PASSWORD) ?: return
         
         viewModel?.register(pseudo, email, password, confirmPassword)?.observe(this, { ex ->
+            register_button.antiSpam()
             ex?.let {
                 when (ExceptionRegisterTypes.SUCCESS) {
                     it[0] -> successRegister()

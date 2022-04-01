@@ -12,9 +12,9 @@ import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.data.models.Game
-import com.xeross.srapp.data.models.types.SpeedrunType
 import com.xeross.srapp.ui.adapters.GameAdapter
 import com.xeross.srapp.ui.adapters.listener.ClickListener
+import com.xeross.srapp.ui.auth.login.LoginActivity
 import com.xeross.srapp.ui.celeste.CelesteActivity
 import com.xeross.srapp.ui.details.GameDetailActivity
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
@@ -37,7 +37,7 @@ class MainActivity : BaseActivity(), ClickListener<Game> {
     
     override fun build() {
         viewModel = (vm as MainViewModel)
-        viewModel?.build()
+        viewModel?.buildViewModel()
         adapter = GameAdapter(this, categories, this).also { a ->
             main_activity_list_categories.let {
                 val linearLayoutManager = GridLayoutManager(this, 2)
@@ -84,6 +84,10 @@ class MainActivity : BaseActivity(), ClickListener<Game> {
                 R.id.menu_home -> {
                     val intent = Intent(this, CelesteActivity::class.java)
                     startActivity(intent)
+                }
+                R.id.menu_settings -> {
+                    viewModel?.disconnect()
+                    goToActivity<LoginActivity>()
                 }
             }
             // return false allows don't show color after selected item

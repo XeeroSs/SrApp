@@ -55,6 +55,9 @@
     <string name="password_too_short">This password is too short (At least 8 characters).</string>
     <string name="invalid_password">Password must contain at least 1 special character, 1 digit and 8 characters.</string>
     <string name="invalid_pseudo">Pseudo didn\'t must contain any special characters.</string>
+    <string name="email_or_password_incorrect">The email address or password you entered is incorrect or the account does not exist.</string>
+    <string name="auth_failed">An unexpected error occurred. Please try logging in again.</string>
+    <string name="email_is_already_in_use_by_another_account">The email address is already in use by another account.</string>
     <string name="invalid_email">Invalid email address format.</string>
     <string name="field_is_required">This field is required.</string>
     <string name="success">Success !</string>
