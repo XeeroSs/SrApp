@@ -2,17 +2,19 @@ package com.xeross.srapp.ui.auth.register
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.xeross.srapp.base.BaseFirebaseViewModel
+import com.xeross.srapp.data.models.User
 import com.xeross.srapp.ui.auth.register.exceptions.ExceptionRegisterTypes
+import com.xeross.srapp.utils.Constants.DATABASE_COLLECTION_USERS
 import com.xeross.srapp.utils.extensions.UtilsExtensions.isFormatEmail
 import com.xeross.srapp.utils.extensions.UtilsExtensions.isValidPassword
 
-class RegisterViewModel() : BaseFirebaseViewModel() {
+class RegisterViewModel : BaseFirebaseViewModel() {
     
-    companion object {
-        private const val MIN_PASSWORD_CHARACTERS = 8
-        private const val PASSWORD_ = "^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\\d]){1,})(?=(.*[\\W]){1,})(?!.*\\s).{8,}\$"
+    private fun createUserToDatabase(id: String, pseudo: String): Task<Void> {
+        return insertDocument(getCollection(DATABASE_COLLECTION_USERS), User(id, pseudo, null), id)
     }
     
     fun register(pseudo: String, email: String, password: String, confirmPassword: String): LiveData<Array<ExceptionRegisterTypes>> {
@@ -35,11 +37,22 @@ class RegisterViewModel() : BaseFirebaseViewModel() {
         }
         
         getAuth().createUserWithEmailAndPassword(email, password).addOnSuccessListener {
-            when {
-                it.user == null -> exceptions.add(ExceptionRegisterTypes.AUTH_FAILED)
-                else -> exceptions.add(ExceptionRegisterTypes.SUCCESS)
+            when (it.user) {
+                null -> {
+                    exceptions.add(ExceptionRegisterTypes.AUTH_FAILED)
+                    mutableLiveData.postValue(exceptions.toTypedArray())
+                }
+                else -> {
+                    createUserToDatabase(it.user!!.uid, pseudo).addOnSuccessListener {
+                        exceptions.add(ExceptionRegisterTypes.SUCCESS)
+                        mutableLiveData.postValue(exceptions.toTypedArray())
+                    }.addOnFailureListener { _ ->
+                        exceptions.add(ExceptionRegisterTypes.AUTH_FAILED)
+                        it.user?.delete()
+                        mutableLiveData.postValue(exceptions.toTypedArray())
+                    }
+                }
             }
-            mutableLiveData.postValue(exceptions.toTypedArray())
         }.addOnFailureListener {
             when (it) {
                 is FirebaseAuthUserCollisionException -> exceptions.add(ExceptionRegisterTypes.EMAIL_ALREADY_USE)

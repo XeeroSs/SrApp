@@ -4,9 +4,8 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.xeross.srapp.base.BaseFirebaseViewModel
-import com.xeross.srapp.data.models.Game
-import com.xeross.srapp.network.http.RetrofitHelper
-import com.xeross.srapp.network.src.SrcApi
+import com.xeross.srapp.data.models.Category
+import com.xeross.srapp.utils.Constants.DATABASE_COLLECTION_CATEGORIES
 
 class MainViewModel : BaseFirebaseViewModel() {
     
@@ -16,16 +15,27 @@ class MainViewModel : BaseFirebaseViewModel() {
         private const val CATEGORY_ID = "7kjpl1gk"
     }
     
-    private var api: SrcApi? = null
+    // private var api: SrcApi? = null
     //   private var networkCallHelper = NetworkRequestHelper()
     
     fun buildViewModel() {
         build()
-        api = RetrofitHelper.getClient().create(SrcApi::class.java)
+        //     api = RetrofitHelper.getClient().create(SrcApi::class.java)
     }
     
-    fun getCeleste(context: Context): LiveData<Game> {
-        val celeste = MutableLiveData<Game>()
+    fun getCeleste(context: Context): LiveData<Category> {
+        val celeste = MutableLiveData<Category>()
+        
+        val collection = getCollection(DATABASE_COLLECTION_CATEGORIES) ?: return celeste
+        val uid = getUserId() ?: return celeste
+        
+        getDocument(collection, uid).addOnSuccessListener {
+            it
+        }.addOnFailureListener {
+            it
+        }
+
+
 /*        api?.let {
             networkCallHelper.getHTTPRequest(it.getPBByGame(NAME_SPEED_RUNNER, NAME_GAME)).observe((context as AppCompatActivity), { data ->
                 if (data.data == null || data.data.isEmpty()) return@observe
