@@ -1,11 +1,11 @@
 package com.xeross.srapp.ui.main
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.xeross.srapp.base.BaseFirebaseViewModel
 import com.xeross.srapp.data.models.Category
 import com.xeross.srapp.utils.Constants.DATABASE_COLLECTION_CATEGORIES
+import com.xeross.srapp.utils.Constants.DATABASE_COLLECTION_USERS_CATEGORIES
 
 class MainViewModel : BaseFirebaseViewModel() {
     
@@ -23,28 +23,29 @@ class MainViewModel : BaseFirebaseViewModel() {
         //     api = RetrofitHelper.getClient().create(SrcApi::class.java)
     }
     
-    fun getCeleste(context: Context): LiveData<Category> {
-        val celeste = MutableLiveData<Category>()
+    fun getCategories(): LiveData<ArrayList<Category>> {
+        val categories = ArrayList<Category>()
+        val mutableLiveData = MutableLiveData<ArrayList<Category>>()
         
-        val collection = getCollection(DATABASE_COLLECTION_CATEGORIES) ?: return celeste
-        val uid = getUserId() ?: return celeste
+        val collection = getCollection(DATABASE_COLLECTION_USERS_CATEGORIES)
+        val uid = getUserId()
         
-        getDocument(collection, uid).addOnSuccessListener {
-            it
-        }.addOnFailureListener {
-            it
+        if (uid == null) {
+            mutableLiveData.postValue(categories)
+            return mutableLiveData
         }
-
-
-/*        api?.let {
-            networkCallHelper.getHTTPRequest(it.getPBByGame(NAME_SPEED_RUNNER, NAME_GAME)).observe((context as AppCompatActivity), { data ->
-                if (data.data == null || data.data.isEmpty()) return@observe
-                data.data.filter { runs -> runs.run.category == CATEGORY_ID }.singleOrNull { run ->
-                    celeste.postValue(Game(SpeedrunType.CELESTE, "Celeste", R.drawable.im_celeste_level_6, run.place))
-                    return@observe
-                }
-            })
-        }*/
-        return celeste
+        
+        collection.document(uid).collection(DATABASE_COLLECTION_CATEGORIES).get().addOnSuccessListener {
+            
+            it.toObjects(Category::class.java).let { data ->
+                categories.addAll(data)
+            }
+            
+            mutableLiveData.postValue(categories)
+        }.addOnFailureListener {
+            mutableLiveData.postValue(categories)
+        }
+        
+        return mutableLiveData
     }
 }
