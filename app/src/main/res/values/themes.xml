@@ -49,4 +49,12 @@
     <style name="TextStyle" parent="@android:style/TextAppearance">
         <item name="android:fontFamily">@font/gilroy_light</item>
     </style>
+
+    <style name="MaterialButtonStyle" parent="">
+        <item name="backgroundTint">@color/pink_button</item>
+    </style>
+
+    <style name="MaterialButtonOutlinesStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="backgroundTint">@color/pink_button</item>
+    </style>
 </resources>

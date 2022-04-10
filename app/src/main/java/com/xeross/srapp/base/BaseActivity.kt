@@ -15,12 +15,17 @@ abstract class BaseActivity : AppCompatActivity() {
     abstract fun getFragmentId(): Int
     abstract fun getViewModelClass(): Class<*>
     abstract fun build()
+    abstract fun ui()
+    abstract fun onClick()
+    
     protected var vm: ViewModel? = null
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getFragmentId())
         vm = provideViewModel()
+        ui()
+        onClick()
         build()
     }
     

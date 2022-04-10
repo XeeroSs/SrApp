@@ -11,10 +11,10 @@ import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.data.models.Category
-import com.xeross.srapp.data.models.Game
 import com.xeross.srapp.ui.adapters.CategoryAdapter
 import com.xeross.srapp.ui.adapters.listener.ClickListener
 import com.xeross.srapp.ui.auth.login.LoginActivity
+import com.xeross.srapp.ui.categoryform.CategoryFormActivity
 import com.xeross.srapp.ui.celeste.CelesteActivity
 import com.xeross.srapp.ui.details.GameDetailActivity
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
@@ -34,6 +34,11 @@ class MainActivity : BaseActivity(), ClickListener<Category> {
     override fun build() {
         viewModel = (vm as MainViewModel)
         viewModel?.buildViewModel()
+        
+        getCategories()
+    }
+    
+    override fun ui() {
         adapter = CategoryAdapter(this, categories, this).also { a ->
             main_activity_list_categories.let {
                 val linearLayoutManager = GridLayoutManager(this, 2)
@@ -43,13 +48,6 @@ class MainActivity : BaseActivity(), ClickListener<Category> {
                 it.adapter = a
             }
         }
-        
-        handleUI()
-        
-        getCategories()
-    }
-    
-    private fun handleUI() {
         
         main_activity_list_categories.post {
             // Add margin bottom to recyclerview for this one don't hide by bottom navigation menu
@@ -68,6 +66,12 @@ class MainActivity : BaseActivity(), ClickListener<Category> {
         }
         
         handleBottomNavigationMenu()
+    }
+    
+    override fun onClick() {
+        main_activity_button_add_your_categories.setOnClickListener {
+            goToActivity<CategoryFormActivity>(false)
+        }
     }
     
     // TODO("Set in BaseActivity")
@@ -105,13 +109,6 @@ class MainActivity : BaseActivity(), ClickListener<Category> {
         intent.putExtra(EXTRA_CATEGORY_NAME, o.name)
         startActivity(intent)
         return
-/*        when (o.idSRC) {
-            SpeedrunType.CELESTE -> {
-                val intent = Intent(this, CelesteActivity::class.java)
-                startActivity(intent)
-                return
-            }
-        }*/
     }
     
     override fun onLongClick(o: Category) {}

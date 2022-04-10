@@ -154,6 +154,7 @@
         <!-- TODO("Add colors gradient to button")-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/login_button"
+            style="@style/MaterialButtonStyle"
             android:layout_width="@dimen/edit_text_width_auth"
             android:layout_height="@dimen/edit_text_height_auth"
             android:fontFamily="@font/gilroy_light"
@@ -180,8 +181,8 @@
             android:textSize="15sp" />
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="@dimen/google_login_button_screen"
             android:id="@+id/google_button_cardview"
+            android:layout_width="@dimen/google_login_button_screen"
             android:layout_height="@dimen/google_login_button_screen"
             android:clickable="true"
             android:textAppearance="@style/TextStyle"

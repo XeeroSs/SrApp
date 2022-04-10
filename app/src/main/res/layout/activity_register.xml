@@ -206,6 +206,7 @@
         <!-- TODO("Add colors gradient to button")-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/register_button"
+            style="@style/MaterialButtonStyle"
             android:layout_width="@dimen/edit_text_width_auth"
             android:layout_height="@dimen/edit_text_height_auth"
             android:fontFamily="@font/gilroy_light"

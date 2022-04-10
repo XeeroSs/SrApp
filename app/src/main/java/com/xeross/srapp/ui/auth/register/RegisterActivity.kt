@@ -17,12 +17,6 @@ class RegisterActivity : BaseAuthActivity() {
     override fun build() {
         viewModel = (vm as RegisterViewModel)
         viewModel?.build()
-        buildUI()
-    }
-    
-    private fun buildUI() {
-        onClick()
-        setInputText()
     }
     
     private fun setInputText() {
@@ -34,7 +28,11 @@ class RegisterActivity : BaseAuthActivity() {
         }
     }
     
-    private fun onClick() {
+    override fun ui() {
+        setInputText()
+    }
+    
+    override fun onClick() {
         login_text_button.setOnClickListener {
 /*            val intent = Intent(this, LoginActivity::class.java).also {
                 it.sendExtra(pseudo_edit_text, PSEUDO_EXTRA_REGISTER)

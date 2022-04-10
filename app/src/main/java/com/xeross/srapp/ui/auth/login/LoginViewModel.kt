@@ -32,7 +32,7 @@ class LoginViewModel : BaseFirebaseViewModel() {
                 else -> {
                     val uid = it.user!!.uid
                     getDocument(getCollection(Constants.DATABASE_COLLECTION_USERS), uid).addOnSuccessListener { document ->
-                        if (document == null) {
+                        if (!document.exists()) {
                             createUserIfNotExistToDatabase(it.user!!.uid, it.user!!.displayName ?: "").addOnSuccessListener {
                                 exceptions.add(ExceptionRegisterTypes.SUCCESS)
                                 mutableLiveData.postValue(exceptions.toTypedArray())

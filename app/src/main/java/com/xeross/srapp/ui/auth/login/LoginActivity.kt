@@ -33,8 +33,10 @@ class LoginActivity : BaseAuthActivity() {
         viewModel?.build()
         
         setUpGoogle()
-        
-        buildUI()
+    }
+    
+    override fun ui() {
+        setInputText()
     }
     
     private fun setUpGoogle() {
@@ -51,11 +53,6 @@ class LoginActivity : BaseAuthActivity() {
             add(AuthTextInputTypes.EMAIL, email_edit_text)
             add(AuthTextInputTypes.PASSWORD, password_edit_text)
         }
-    }
-    
-    private fun buildUI() {
-        onClick()
-        setInputText()
     }
     
     
@@ -98,7 +95,7 @@ class LoginActivity : BaseAuthActivity() {
         }
     }
     
-    private fun onClick() {
+    override fun onClick() {
         register_text_button.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             

@@ -44,7 +44,7 @@ abstract class BaseFirebaseViewModel : ViewModel() {
         }?.dispose()
     }
     
-    protected fun getUserId(): String? {
+    fun getUserId(): String? {
         return getUser()?.uid
     }
     

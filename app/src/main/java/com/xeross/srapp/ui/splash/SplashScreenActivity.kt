@@ -38,10 +38,12 @@ class SplashScreenActivity : BaseActivity() {
     override fun build() {
         viewModel = (vm as SplashViewModel)
         viewModel?.build()
-        buildUI()
     }
     
-    private fun buildUI() {
+    override fun onClick() {
+    }
+    
+    override fun ui() {
         // Start task with coroutines
         CoroutineScope(Dispatchers.Main).launch {
             delay(SPLASH_DELAY)

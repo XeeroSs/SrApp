@@ -62,5 +62,26 @@
     <string name="field_is_required">This field is required.</string>
     <string name="success">Success !</string>
 
+    <!--  Category form  -->
+    <string name="category">Category</string>
+    <string name="add_your_categories_title">Add your categories</string>
+    <string name="add_your_categories_label">Ajouter vos popres catégories, vous pourrez par la suite ajouter des sous-catégories à celle-ci.</string>
+    <string name="add_your_categories_name_title">AJOUTER UN NOM</string>
+    <string name="add_your_categories_name_label">Ajouter un nom à votre catégorie celle-ci pourra être changer dans le futur.</string>
+    <string name="add_your_categories_image_title">AJOUTER UNE IMAGE</string>
+    <string name="add_your_categories_image_label">Ceci-ci n’est pas obligatoire, cliquer simplement sur suivant ci-dessous pour passer.</string>
+    <string name="add_your_subcategories_title">Add your subcategories</string>
+    <string name="add_your_subcategories_label">Ajouter une sous-catégorie, vos temps seront enregistrés ici. </string>
+    <string name="add_your_subcategories_name_title">AJOUTER UN NOM</string>
+    <string name="add_your_subcategories_name_label">Ajouter un nom à votre sous-catégorie celle-ci pourra être changer dans le futur.</string>
+    <string name="add_your_subcategories_image_title">AJOUTER UNE IMAGE</string>
+    <string name="add_your_subcategories_image_label">Ceci-ci n’est pas obligatoire, cliquer simplement sur suivant ci-dessous pour passer.</string>
+    <string name="name_of_category">Nom de catégorie</string>
+    <string name="name_of_subcategory">Nom de sous-catégorie</string>
+    <string name="name">Name</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
+
 
 </resources>

@@ -13,16 +13,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
-import com.xeross.srapp.ui.adapters.DividerItemDecoration
-import com.xeross.srapp.ui.adapters.LeaderBoardAdapter
-import com.xeross.srapp.ui.adapters.StatisticAdapter
 import com.xeross.srapp.base.BaseActivityOAuth
-import com.xeross.srapp.utils.extensions.UtilsExtensions.getNextOrNull
-import com.xeross.srapp.utils.extensions.UtilsExtensions.getPreviousOrNull
-import com.xeross.srapp.utils.injection.ViewModelFactory
 import com.xeross.srapp.data.models.LeaderBoard
 import com.xeross.srapp.data.models.Statistic
 import com.xeross.srapp.data.models.types.CelesteILType
+import com.xeross.srapp.ui.adapters.DividerItemDecoration
+import com.xeross.srapp.ui.adapters.LeaderBoardAdapter
+import com.xeross.srapp.ui.adapters.StatisticAdapter
+import com.xeross.srapp.utils.extensions.UtilsExtensions.getNextOrNull
+import com.xeross.srapp.utils.extensions.UtilsExtensions.getPreviousOrNull
+import com.xeross.srapp.utils.injection.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_game_details.*
 
 class CelesteActivity : BaseActivityOAuth() {
@@ -45,6 +45,15 @@ class CelesteActivity : BaseActivityOAuth() {
     private fun configureViewModel(): CelesteViewModel {
         val factory = ViewModelFactory(this)
         return ViewModelProvider(this, factory).get(CelesteViewModel::class.java)
+    }
+    
+    override fun ui() {
+    
+    
+    }
+    
+    override fun onClick() {
+    
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -219,7 +228,7 @@ class CelesteActivity : BaseActivityOAuth() {
                     startActivity(intent)
                 }
             }
-            
+    
             // return false allows don't show color after selected item
             return@OnItemSelectedListener false
         })

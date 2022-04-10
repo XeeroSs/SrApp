@@ -12,22 +12,17 @@ class GameDetailActivity : BaseActivity() {
     
     private lateinit var categoryName: String
     
+    override fun ui() {
+        // Header
+        header()
+    }
+    
     override fun build() {
-        buildUI()
-        
         // Get name from intent extra for header
         categoryName = intent.getStringExtra(EXTRA_CATEGORY_NAME) ?: "???"
     }
     
-    private fun buildUI() {
-        // Header
-        header()
-        
-        // Button listener
-        onClick()
-    }
-    
-    private fun onClick() {
+    override fun onClick() {
     
     }
     
