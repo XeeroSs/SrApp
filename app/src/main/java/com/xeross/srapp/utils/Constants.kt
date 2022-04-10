@@ -3,6 +3,7 @@ package com.xeross.srapp.utils
 object Constants {
     
     const val EXTRA_CATEGORY_NAME = "EXTRA_CATEGORY_NAME"
+    const val EXTRA_CATEGORY_ID = "EXTRA_CATEGORY_ID"
     
     const val DATABASE_COLLECTION_USERS = "users"
     const val DATABASE_COLLECTION_USERS_CATEGORIES = "users_categories"

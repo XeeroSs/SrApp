@@ -51,7 +51,7 @@ class CategoryFormUploadImageFragment : BaseCategoryFormFragment() {
     
     override fun getExtra(): Pair<String, String>? {
         // TODO("upload image")
-        return Pair(extra ?: return null, "test")
+        return Pair(extra ?: return null, "")
     }
     
     override fun hasExtra() = true

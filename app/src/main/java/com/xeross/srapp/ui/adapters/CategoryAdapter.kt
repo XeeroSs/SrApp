@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseAdapter
 import com.xeross.srapp.data.models.Category
-import com.xeross.srapp.ui.adapters.listener.ClickListener
+import com.xeross.srapp.listener.ClickListener
 import kotlinx.android.synthetic.main.category_cell.view.*
 
 class CategoryAdapter(context: Context, objectList: ArrayList<Category>, clickListener: ClickListener<Category>) :
@@ -41,11 +41,14 @@ class CategoryAdapter(context: Context, objectList: ArrayList<Category>, clickLi
     }
     
     override fun updateItem(holder: ViewHolder, dObject: Category) {
-        holder.info.text = "9 catégories • #$dObject.id"
+        holder.info.text = "9 catégories • #6"
         holder.category.text = dObject.name
         
         dObject.imageURL?.takeIf { it.isNotBlank() }?.let { url ->
             glide.load(url).into(holder.image)
+        } ?: run {
+            holder.image.scaleType = ImageView.ScaleType.CENTER_INSIDE
+            glide.load(R.drawable.ill_gaming_amico).into(holder.image)
         }
     }
     

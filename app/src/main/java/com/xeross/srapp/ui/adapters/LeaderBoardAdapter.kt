@@ -18,9 +18,10 @@ import com.xeross.srapp.utils.extensions.TimeExtensions.convertTimeToSeconds
 import com.xeross.srapp.utils.extensions.UtilsExtensions.toHexColorString
 import com.xeross.srapp.data.models.LeaderBoard
 import com.xeross.srapp.data.models.types.DifferenceType
+import com.xeross.srapp.listener.TimeListener
 import kotlinx.android.synthetic.main.ranking_cell.view.*
 
-class LeaderBoardAdapter(context: Context, objectList: ArrayList<LeaderBoard>, private val timeInSecondsPB: Long, private val timeInSecondsBest: Long) :
+class LeaderBoardAdapter(context: Context, objectList: ArrayList<LeaderBoard>, private val timeListener: TimeListener) :
     BaseAdapter<LeaderBoardAdapter.ViewHolder, LeaderBoard>(context, objectList, null) {
     
     private val glide = Glide.with(context)
@@ -57,8 +58,11 @@ class LeaderBoardAdapter(context: Context, objectList: ArrayList<LeaderBoard>, p
         
         val timeInSecondsOpponent = timeOpponentInString.convertTimeToSeconds()
         
-        val differenceBetweenBest = (timeInSecondsBest - timeInSecondsOpponent)
-        val differenceBetweenPB = (timeInSecondsPB - timeInSecondsOpponent)
+        val personnelBestTime = timeListener.onPersonnelBestTime()
+        val bestTime = timeListener.onBestTime()
+        
+        val differenceBetweenBest = (bestTime - timeInSecondsOpponent)
+        val differenceBetweenPB = (personnelBestTime - timeInSecondsOpponent)
         
         val differenceTypeBest = getDifferenceType(differenceBetweenBest)
         val differenceTypePB = getDifferenceType(differenceBetweenPB)

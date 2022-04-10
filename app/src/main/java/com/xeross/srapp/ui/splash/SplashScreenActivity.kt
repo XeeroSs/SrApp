@@ -26,8 +26,8 @@ class SplashScreenActivity : BaseActivity() {
     override fun getViewModelClass() = SplashViewModel::class.java
     
     companion object {
-        // ~2s
-        private const val SPLASH_DELAY = 2 * 1000L
+        // ~1.2s
+        private const val SPLASH_DELAY = 1 * 1200L
         private const val TAG = "SplashScreenActivity"
     }
     
@@ -35,7 +35,7 @@ class SplashScreenActivity : BaseActivity() {
     
     private var viewModel: SplashViewModel? = null
     
-    override fun build() {
+    override fun setUp() {
         viewModel = (vm as SplashViewModel)
         viewModel?.build()
     }

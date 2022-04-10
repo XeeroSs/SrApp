@@ -14,7 +14,7 @@ class RegisterActivity : BaseAuthActivity() {
     
     private var viewModel: RegisterViewModel? = null
     
-    override fun build() {
+    override fun setUp() {
         viewModel = (vm as RegisterViewModel)
         viewModel?.build()
     }

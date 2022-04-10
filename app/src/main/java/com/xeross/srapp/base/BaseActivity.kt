@@ -14,7 +14,7 @@ abstract class BaseActivity : AppCompatActivity() {
     
     abstract fun getFragmentId(): Int
     abstract fun getViewModelClass(): Class<*>
-    abstract fun build()
+    abstract fun setUp()
     abstract fun ui()
     abstract fun onClick()
     
@@ -24,9 +24,9 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(getFragmentId())
         vm = provideViewModel()
+        setUp()
         ui()
         onClick()
-        build()
     }
     
     @Suppress("UNCHECKED_CAST")

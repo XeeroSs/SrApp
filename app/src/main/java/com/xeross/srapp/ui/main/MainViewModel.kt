@@ -27,7 +27,6 @@ class MainViewModel : BaseFirebaseViewModel() {
         val categories = ArrayList<Category>()
         val mutableLiveData = MutableLiveData<ArrayList<Category>>()
         
-        val collection = getCollection(DATABASE_COLLECTION_USERS_CATEGORIES)
         val uid = getUserId()
         
         if (uid == null) {
@@ -35,7 +34,9 @@ class MainViewModel : BaseFirebaseViewModel() {
             return mutableLiveData
         }
         
-        collection.document(uid).collection(DATABASE_COLLECTION_CATEGORIES).get().addOnSuccessListener {
+        val categoryCollection = getCollection("$DATABASE_COLLECTION_CATEGORIES/$uid/$DATABASE_COLLECTION_USERS_CATEGORIES")
+        
+        categoryCollection.get().addOnSuccessListener {
             
             it.toObjects(Category::class.java).let { data ->
                 categories.addAll(data)

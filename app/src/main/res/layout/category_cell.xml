@@ -20,12 +20,11 @@
 
             <ImageView
                 android:id="@+id/category_cell_image"
-                android:background="?attr/selectableItemBackground"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/im_celeste_level_7" />
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="centerCrop" />
 
         </androidx.cardview.widget.CardView>
 
@@ -62,10 +61,10 @@
                 android:id="@+id/category_cell_info"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/game_cell_bottom"
                 android:fontFamily="@font/gilroy_light"
                 android:text="9 catégories • #75"
                 android:textColor="@color/on_surface"
-                android:layout_marginBottom="@dimen/game_cell_bottom"
                 android:textSize="@dimen/game_cell_text_details_category" />
 
         </LinearLayout>

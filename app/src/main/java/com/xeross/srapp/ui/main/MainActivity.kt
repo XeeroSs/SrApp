@@ -1,27 +1,29 @@
 package com.xeross.srapp.ui.main
 
 import android.content.Intent
-import android.graphics.Color
-import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.data.models.Category
+import com.xeross.srapp.listener.ClickListener
 import com.xeross.srapp.ui.adapters.CategoryAdapter
-import com.xeross.srapp.ui.adapters.listener.ClickListener
 import com.xeross.srapp.ui.auth.login.LoginActivity
 import com.xeross.srapp.ui.categoryform.CategoryFormActivity
 import com.xeross.srapp.ui.celeste.CelesteActivity
 import com.xeross.srapp.ui.details.GameDetailActivity
+import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : BaseActivity(), ClickListener<Category> {
+    
+    companion object {
+        const val RC_CREATE_NEW_CATEGORY = 25
+    }
     
     override fun getViewModelClass() = MainViewModel::class.java
     override fun getFragmentId() = R.layout.activity_main
@@ -31,7 +33,7 @@ class MainActivity : BaseActivity(), ClickListener<Category> {
     
     private var viewModel: MainViewModel? = null
     
-    override fun build() {
+    override fun setUp() {
         viewModel = (vm as MainViewModel)
         viewModel?.buildViewModel()
         
@@ -56,21 +58,20 @@ class MainActivity : BaseActivity(), ClickListener<Category> {
         }
         
         
-        // TODO("Set in BaseActivity")
-        // Status bar transparent
-        window.apply {
-            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            statusBarColor = Color.TRANSPARENT
-        }
-        
+        setStatusBarTransparent()
         handleBottomNavigationMenu()
     }
     
     override fun onClick() {
         main_activity_button_add_your_categories.setOnClickListener {
             goToActivity<CategoryFormActivity>(false)
+        }
+    }
+    
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RC_CREATE_NEW_CATEGORY) {
+            getCategories()
         }
     }
     
@@ -97,6 +98,7 @@ class MainActivity : BaseActivity(), ClickListener<Category> {
     }
     
     private fun getCategories() {
+        categories.clear()
         viewModel?.getCategories()?.observe(this, {
             if (it == null) return@observe
             categories.addAll(it)
@@ -107,6 +109,7 @@ class MainActivity : BaseActivity(), ClickListener<Category> {
     override fun onClick(o: Category) {
         val intent = Intent(this, GameDetailActivity::class.java)
         intent.putExtra(EXTRA_CATEGORY_NAME, o.name)
+        intent.putExtra(EXTRA_CATEGORY_ID, o.id)
         startActivity(intent)
         return
     }

@@ -74,20 +74,6 @@ class CelesteActivity : BaseActivityOAuth() {
                 it.adapter = a
             }
         }
-        // TODO("Get my own time from sheets")
-        leaderBoardAdapter = LeaderBoardAdapter(this, leaderBoards, 56, 60).also { a ->
-            activity_game_details_recyclerview_ranking.let {
-                val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-                it.setHasFixedSize(true)
-                it.layoutManager = linearLayoutManager
-                //    val dd = DividerItemDecoration(this, 20, R.drawable.shape_divider, LinearLayoutManager.HORIZONTAL)
-                val dd = DividerItemDecoration(this, 0, R.drawable.shape_divider_vertical, LinearLayoutManager.VERTICAL)
-                it.addItemDecoration(dd)
-                //   it.addItemDecoration(androidx.recyclerview.widget.DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL))
-                it.itemAnimator = DefaultItemAnimator()
-                it.adapter = a
-            }
-        }
         
         credential?.let { credential ->
             viewModel = configureViewModel().also {
@@ -103,7 +89,7 @@ class CelesteActivity : BaseActivityOAuth() {
         handleUI(level)
     }
     
-    override fun build() {
+    override fun setUp() {
     }
     
     private fun getLevel(level: CelesteILType) {

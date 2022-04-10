@@ -1,3 +1,5 @@
 package com.xeross.srapp.data.models
 
-data class SubCategory(val id: String, var name: String, var imageURL: String?)
+import java.util.*
+
+data class SubCategory(val id: String, var position: Int, var name: String, var imageURL: String?, var date: Date)

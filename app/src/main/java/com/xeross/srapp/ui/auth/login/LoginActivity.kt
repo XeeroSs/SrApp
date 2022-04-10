@@ -28,7 +28,7 @@ class LoginActivity : BaseAuthActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     
     private var viewModel: LoginViewModel? = null
-    override fun build() {
+    override fun setUp() {
         viewModel = (vm as LoginViewModel)
         viewModel?.build()
         

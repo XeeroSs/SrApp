@@ -6,6 +6,7 @@ import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.ui.categoryform.adapters.CategoryFormPageAdapter
 import com.xeross.srapp.ui.categoryform.fragment.base.BaseCategoryFormFragment
 import com.xeross.srapp.ui.categoryform.types.CategoryFormPageType
+import com.xeross.srapp.ui.main.MainActivity.Companion.RC_CREATE_NEW_CATEGORY
 import kotlinx.android.synthetic.main.activity_category_form.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +41,7 @@ class CategoryFormActivity : BaseActivity() {
     private val maxPage = CategoryFormPageType.values().size
     private var adapter: CategoryFormPageAdapter? = null
     
-    override fun build() {
+    override fun setUp() {
         viewModel = vm as CategoryFormViewModel?
         viewModel?.build()
     }
@@ -133,7 +134,7 @@ class CategoryFormActivity : BaseActivity() {
         viewModel?.createCategoryToDatabase(nameCategory, imageCategory, nameSubcategory, imageSubcategory)?.observe(this, {
             if (!it) return@observe
     
-            finish()
+            finishActivity(RC_CREATE_NEW_CATEGORY)
         })
     }
     

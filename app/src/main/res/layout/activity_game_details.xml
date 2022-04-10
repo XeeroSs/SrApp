@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_game_details_header_height_with_status_bar"
         android:layout_alignParentTop="true"
-        android:transitionName="app_name"
         android:background="@drawable/shape_header"
         android:elevation="10dp"
+        android:transitionName="app_name"
         app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
@@ -43,8 +43,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:contentDescription="@string/game_details_content_image_description"
-                        android:scaleType="centerCrop" />
+                        android:contentDescription="@string/game_details_content_image_description" />
 
                 </RelativeLayout>
 
