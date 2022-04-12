@@ -36,4 +36,28 @@ object TimeExtensions {
     
     }
     
+    fun ArrayList<Long>.getBestToSeconds(): Long {
+        var totalSeconds = Long.MIN_VALUE
+        for (time in this) {
+            if (time > totalSeconds) totalSeconds = time
+        }
+        return (totalSeconds * 1000)
+    }
+    
+    fun ArrayList<Long>.getWorstToSeconds(): Long {
+        var totalSeconds = Long.MAX_VALUE
+        for (time in this) {
+            if (time < totalSeconds) totalSeconds = time
+        }
+        return (totalSeconds * 1000)
+    }
+    
+    fun ArrayList<Long>.getAverageToSeconds(): Long {
+        var totalSeconds = 0L
+        for (time in this) {
+            totalSeconds += time
+        }
+        return ((totalSeconds / size) * 1000)
+    }
+    
 }

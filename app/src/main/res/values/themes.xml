@@ -57,4 +57,15 @@
     <style name="MaterialButtonOutlinesStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="backgroundTint">@color/pink_button</item>
     </style>
+
+    <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColorPrimary">@color/pink_gradient</item>
+        <item name="colorControlNormal">@color/transparent</item>
+    </style>
+
+    <style name="WrapEverythingDialog">
+        <item name="windowMinWidthMajor">350dp</item>
+        <item name="windowFixedHeightMajor">500dp</item>
+    </style>
+
 </resources>

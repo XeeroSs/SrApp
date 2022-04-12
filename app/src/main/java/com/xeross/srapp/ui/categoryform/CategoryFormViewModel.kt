@@ -29,7 +29,7 @@ class CategoryFormViewModel : BaseFirebaseViewModel() {
             val subCategoryCollection = categoryCollection.document(idCategory).collection(DATABASE_COLLECTION_SUBCATEGORIES)
             val idSubCategory = subCategoryCollection.document().id
             
-            val subCategory = SubCategory(idSubCategory, 0, nameSubcategory, imageSubcategory, Date())
+            val subCategory = SubCategory(idSubCategory, 0, nameSubcategory, imageSubcategory, 0L)
             
             subCategoryCollection.document(idSubCategory).set(subCategory).addOnSuccessListener {
                 mutableLiveData.postValue(true)
