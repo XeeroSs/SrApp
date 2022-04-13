@@ -51,7 +51,7 @@
     <!-- Stats cell -->
     <dimen name="stats_cell_height">100dp</dimen>
     <dimen name="stats_cell_text_size_category">15sp</dimen>
-    <dimen name="stats_cell_text_size_result">50sp</dimen>
+    <dimen name="stats_cell_text_size_result">30sp</dimen>
     <dimen name="stats_cell_space">10dp</dimen>
 
     <!-- Ranking cell -->

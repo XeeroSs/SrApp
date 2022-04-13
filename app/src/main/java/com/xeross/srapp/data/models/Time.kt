@@ -1,3 +1,5 @@
 package com.xeross.srapp.data.models
 
-data class Time(var time: String)
+import java.util.*
+
+data class Time(var timeId: String = "", var time: Long = 0, var date: Date = Date())

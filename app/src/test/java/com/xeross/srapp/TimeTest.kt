@@ -1,8 +1,8 @@
 package com.xeross.srapp
 
-import com.xeross.srapp.utils.extensions.TimeExtensions.getAverageToSeconds
-import com.xeross.srapp.utils.extensions.TimeExtensions.getBestToSeconds
-import com.xeross.srapp.utils.extensions.TimeExtensions.getWorstToSeconds
+import com.xeross.srapp.utils.extensions.TimeExtensions.getAverageToMilliseconds
+import com.xeross.srapp.utils.extensions.TimeExtensions.getBestToMilliseconds
+import com.xeross.srapp.utils.extensions.TimeExtensions.getWorstToMilliseconds
 import junitparams.JUnitParamsRunner
 import junitparams.naming.TestCaseName
 import org.junit.Assert
@@ -23,30 +23,30 @@ class TimeTest {
     @Test
     @TestCaseName("[{index}] | '{params}'")
     fun `Average time`() {
-        val average = simpleDate.format(dates().getAverageToSeconds())
-        Assert.assertEquals(average, "00:01:27")
+        val average = simpleDate.format(dates().getAverageToMilliseconds())
+        println(dates().getAverageToMilliseconds())
+        Assert.assertEquals(average, "00:30:30")
     }
     
     @Test
     @TestCaseName("[{index}] | '{params}'")
     fun `Worst time`() {
-        val worst = simpleDate.format(dates().getWorstToSeconds())
-        Assert.assertEquals(worst, "00:00:53")
+        val worst = simpleDate.format(dates().getWorstToMilliseconds())
+        Assert.assertEquals(worst, "01:00:00")
     }
     
     @Test
     @TestCaseName("[{index}] | '{params}'")
     fun `Best time`() {
-        val best = simpleDate.format(dates().getBestToSeconds())
-        Assert.assertEquals(best, "00:01:52")
+        val best = simpleDate.format(dates().getBestToMilliseconds())
+        Assert.assertEquals(best, "00:01:00")
     }
     
     
     private fun dates(): ArrayList<Long> {
         return arrayListOf(
-            96, /* 96s */
-            53, /* 53s */
-            112, /* 112s */
+            60000, /* 1m */
+            3600000, /* 1h */
         )
     }
 }

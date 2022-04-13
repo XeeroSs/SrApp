@@ -4,7 +4,7 @@ import com.xeross.srapp.R
 import com.xeross.srapp.ui.auth.BaseAuthActivity
 import com.xeross.srapp.ui.auth.register.exceptions.ExceptionRegisterTypes
 import com.xeross.srapp.ui.auth.types.AuthTextInputTypes
-import com.xeross.srapp.ui.main.MainActivity
+import com.xeross.srapp.ui.category.category.CategoryActivity
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : BaseAuthActivity() {
@@ -59,7 +59,7 @@ class RegisterActivity : BaseAuthActivity() {
     }
     
     private fun successRegister() {
-        goToActivity<MainActivity>()
+        goToActivity<CategoryActivity>()
 /*        val intent = Intent(applicationContext, MainActivity::class.java)
 *//*        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)

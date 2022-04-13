@@ -1,4 +1,4 @@
-package com.xeross.srapp.ui.details
+package com.xeross.srapp.ui.category.subcategory
 
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.NumberPicker
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -18,8 +19,9 @@ import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.data.models.LeaderBoard
-import com.xeross.srapp.data.models.Statistic
 import com.xeross.srapp.data.models.SubCategory
+import com.xeross.srapp.data.models.types.StatisticType
+import com.xeross.srapp.listener.DataListener
 import com.xeross.srapp.listener.TimeListener
 import com.xeross.srapp.ui.adapters.DividerItemDecoration
 import com.xeross.srapp.ui.adapters.LeaderBoardAdapter
@@ -27,19 +29,26 @@ import com.xeross.srapp.ui.adapters.StatisticAdapter
 import com.xeross.srapp.ui.celeste.CelesteActivity
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
-import com.xeross.srapp.utils.extensions.TimeExtensions.getAverageToSeconds
-import com.xeross.srapp.utils.extensions.TimeExtensions.getBestToSeconds
-import com.xeross.srapp.utils.extensions.TimeExtensions.getWorstToSeconds
+import com.xeross.srapp.utils.extensions.TimeExtensions.getAverageToMilliseconds
+import com.xeross.srapp.utils.extensions.TimeExtensions.getBestToMilliseconds
+import com.xeross.srapp.utils.extensions.TimeExtensions.getWorstToMilliseconds
+import com.xeross.srapp.utils.extensions.TimeExtensions.toFormatTime
+import com.xeross.srapp.utils.extensions.UIExtensions.antiSpam
 import kotlinx.android.synthetic.main.activity_game_details.*
+import kotlinx.android.synthetic.main.dialog_add_time.*
 import kotlinx.android.synthetic.main.dialog_add_time.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
-class GameDetailActivity : BaseActivity(), TimeListener {
+class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCategory> {
     
-    override fun getViewModelClass() = GameDetailViewModel::class.java
+    companion object {
+        private const val TAG = "GameDetailActivityTAG"
+    }
+    
+    override fun getViewModelClass() = SubCategoryViewModel::class.java
     override fun getFragmentId() = R.layout.activity_game_details
     
     // Dialogs
@@ -47,15 +56,18 @@ class GameDetailActivity : BaseActivity(), TimeListener {
     private var dialog: AlertDialog? = null
     
     private lateinit var categoryName: String
-    private var categoryId: String? = null
+    private lateinit var categoryId: String
     
     private val subCategories = HashMap<Int, SubCategory>()
     
-    private var personnelBestInSeconds = 0L
-    private var bestInSeconds = 0L
-    private var worstInSeconds = 0L
-    private var averageInSeconds = 0L
+    private val statistics = ArrayList<Pair<StatisticType, String>>()
+    
+    private var bestInMilliseconds = 0L
+    private var worstInMilliseconds = 0L
+    private var averageInMilliseconds = 0L
     private var total = 0
+    
+    private var index = 0
     
     private val times = HashMap<String, ArrayList<Long>>()
     
@@ -64,15 +76,15 @@ class GameDetailActivity : BaseActivity(), TimeListener {
     private var secondsPicker: NumberPicker? = null
     private var millisecondsPicker: NumberPicker? = null
     
-    private lateinit var statisticAdapter: StatisticAdapter
-    private val stats = ArrayList<Statistic>()
+    private var statisticAdapter: StatisticAdapter? = null
     
     private lateinit var leaderBoardAdapter: LeaderBoardAdapter
     private val leaderBoards = ArrayList<LeaderBoard>()
     
+    private var viewModel: SubCategoryViewModel? = null
+    
     override fun ui() {
-        
-        statisticAdapter = StatisticAdapter(this, stats).also { a ->
+        statisticAdapter = StatisticAdapter(this, statistics).also { a ->
             activity_game_details_recyclerview_stats.let {
                 val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 it.setHasFixedSize(true)
@@ -85,7 +97,6 @@ class GameDetailActivity : BaseActivity(), TimeListener {
                 it.adapter = a
             }
         }
-        // TODO("Get my own time from sheets")
         leaderBoardAdapter = LeaderBoardAdapter(this, leaderBoards, this).also { a ->
             activity_game_details_recyclerview_ranking.let {
                 val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -125,12 +136,12 @@ class GameDetailActivity : BaseActivity(), TimeListener {
     private fun setUpDialogs() {
         dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_time, null, false).also {
             hoursPicker = it.findViewById<NumberPicker>(R.id.hour_picker)?.setUpTimePickers(999) ?: return
-            minutesPicker = it.findViewById<NumberPicker>(R.id.minute_picker)?.setUpTimePickers(60)?.also { np ->
+            minutesPicker = it.findViewById<NumberPicker>(R.id.minute_picker)?.setUpTimePickers(59)?.also { np ->
                 np.setFormatter { digit ->
                     if (digit < 10) return@setFormatter "0$digit" else return@setFormatter digit.toString()
                 }
             } ?: return
-            secondsPicker = it.findViewById<NumberPicker>(R.id.second_picker)?.setUpTimePickers(60)?.also { np ->
+            secondsPicker = it.findViewById<NumberPicker>(R.id.second_picker)?.setUpTimePickers(59)?.also { np ->
                 np.setFormatter { digit ->
                     if (digit < 10) return@setFormatter "0$digit" else return@setFormatter digit.toString()
                 }
@@ -147,14 +158,25 @@ class GameDetailActivity : BaseActivity(), TimeListener {
             }
             
             it.findViewById<MaterialButton>(R.id.submit_button)?.setOnClickListener { _ ->
-                
-                getTimeFromDialog(hoursPicker!!.value, minutesPicker!!.value, secondsPicker!!.value, millisecondsPicker!!.value)
-                
-                resetDialogPicker()
-                dialog?.dismiss()
+                dialogView?.submit_button?.isEnabled = false
+                getTimeFromDialog(hoursPicker!!.value, minutesPicker!!.value, secondsPicker!!.value, millisecondsPicker!!.value)?.observe(this, { time ->
+                    dialogView?.submit_button?.isEnabled = true
+                    if (time == null) return@observe
+                    val sc = getSubCategory()
+                    times[sc?.id]?.add(time)
+                    refresh(sc)
+                    resetDialogPicker()
+                    dialog?.dismiss()
+                })
             }
             
             dialog = MaterialAlertDialogBuilder(this, R.style.WrapEverythingDialog).setBackground(ColorDrawable(android.graphics.Color.TRANSPARENT)).setCancelable(true).setView(it).create()
+        }
+    }
+    
+    private fun refresh(subCategory: SubCategory?) {
+        if (index == subCategory?.position) {
+            getLevel(subCategory)
         }
     }
     
@@ -165,12 +187,6 @@ class GameDetailActivity : BaseActivity(), TimeListener {
         millisecondsPicker?.value = 0
     }
     
-    // TODO("Get time from dialog")
-    private fun getTimeFromDialog(hours: Int, minutes: Int, seconds: Int, milliseconds: Int) {
-        Log.i("----------", "$hours:$minutes:$seconds.$milliseconds")
-    }
-    
-    
     private fun NumberPicker.setUpTimePickers(max: Int): NumberPicker {
         return this.apply {
             this.maxValue = max
@@ -180,6 +196,20 @@ class GameDetailActivity : BaseActivity(), TimeListener {
     
     private fun launchDialog() {
         dialog?.show()
+    }
+    
+    // TODO("Get time from dialog")
+    private fun getTimeFromDialog(hours: Int, minutes: Int, seconds: Int, milliseconds: Int): LiveData<Long?>? {
+        Log.i(TAG, "$hours:$minutes:$seconds.$milliseconds")
+        // (milliseconds) + (seconds * 1000) + (minutes * 60 * 1000) + (hours * 60² * 1000)
+        val timeToMilliseconds = (milliseconds) + (seconds * 1000) + (minutes * 60 * 1000) + (hours * 60 * 60 * 1000L)
+/*        val simpleDateFormat = SimpleDateFormat("HH:mm:ss.SSS", Locale.ENGLISH)
+        simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")*/
+        return viewModel?.saveTime(categoryId, getSubCategory()?.id, timeToMilliseconds)
+    }
+    
+    private fun getSubCategory(): SubCategory? {
+        return subCategories[index]
     }
     
     private fun loadImageToHeader(subCategory: SubCategory) {
@@ -248,13 +278,33 @@ class GameDetailActivity : BaseActivity(), TimeListener {
     private fun getLevel(subCategory: SubCategory?) {
         if (subCategory == null) return
         val time = times[subCategory.id] ?: return
-        personnelBestInSeconds = subCategory.timeInSeconds
-        averageInSeconds = time.getAverageToSeconds()
-        worstInSeconds = time.getWorstToSeconds()
-        bestInSeconds = time.getBestToSeconds()
-        total = time.size
+        getStats(time)
         getHeader(subCategory)
         loadImageToHeader(subCategory)
+    }
+    
+    private fun getStats(time: ArrayList<Long>) {
+        statistics.clear()
+        time.getBestToMilliseconds().let {
+            bestInMilliseconds = it
+            statistics.add(Pair(StatisticType.BEST, it.toFormatTime()))
+        }
+        time.getAverageToMilliseconds().let {
+            averageInMilliseconds = it
+            statistics.add(Pair(StatisticType.AVERAGE, it.toFormatTime()))
+        }
+        time.getWorstToMilliseconds().let {
+            worstInMilliseconds = it
+            statistics.add(Pair(StatisticType.WORST, it.toFormatTime()))
+        }
+        time.size.let {
+            total = it
+            statistics.add(Pair(StatisticType.TOTAL, it.toString()))
+        }
+        statisticAdapter?.notifyDataSetChanged()
+    }
+    
+    override fun notifyDataChanged(data: SubCategory) {
     }
     
     /**
@@ -283,12 +333,36 @@ class GameDetailActivity : BaseActivity(), TimeListener {
     private fun getHeader(subCategory: SubCategory) {
         activity_game_details_text_name_level.text = resources.getString(R.string.game_details_header_level_name, subCategory.name)
         activity_game_details_text_category.text = resources.getString(R.string.game_details_header_level_name, categoryName)
+        activity_game_details_text_time.text = resources.getString(R.string.game_details_header_level_name, bestInMilliseconds.toFormatTime())
     }
     
     override fun setUp() {
+        viewModel = (vm as SubCategoryViewModel?)
+        viewModel?.build()
+        
         // Get name from intent extra for header
         categoryName = intent.getStringExtra(EXTRA_CATEGORY_NAME) ?: "???"
-        categoryId = intent.getStringExtra(EXTRA_CATEGORY_ID)
+        categoryId = intent.getStringExtra(EXTRA_CATEGORY_ID) ?: run {
+            finish()
+            return
+        }
+        
+        StatisticType.values().forEach {
+            statistics.add(Pair(it, it.defaultValue))
+        }
+        
+        // Get data
+        viewModel?.let {
+            it.getSubcategories(categoryId).observe(this, { list ->
+                list?.forEach { sc ->
+                    subCategories[sc.position] = sc
+                    it.getSubCategoryTimes(categoryId, sc.id).observe(this, { time ->
+                        times[sc.id] = time
+                        refresh(sc)
+                    })
+                }
+            })
+        }
     }
     
     override fun onClick() {
@@ -297,19 +371,35 @@ class GameDetailActivity : BaseActivity(), TimeListener {
         }
         
         activity_game_details_button_previous.setOnClickListener {
-        
+            activity_game_details_button_previous.antiSpam(500)
+            nextSubCategory()
         }
         
         activity_game_details_button_next.setOnClickListener {
-        
+            activity_game_details_button_next.antiSpam(500)
+            previousSubCategory()
         }
     }
     
+    private fun nextSubCategory() {
+        val i = index + 1
+        if (i >= subCategories.size) return
+        index = i
+        getLevel(getSubCategory())
+    }
+    
+    private fun previousSubCategory() {
+        val i = index - 1
+        if (i < 0) return
+        index = i
+        getLevel(getSubCategory())
+    }
+    
     override fun onPersonnelBestTime(): Long {
-        return personnelBestInSeconds
+        return bestInMilliseconds
     }
     
     override fun onBestTime(): Long {
-        return bestInSeconds
+        return bestInMilliseconds
     }
 }

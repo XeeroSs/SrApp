@@ -1,4 +1,4 @@
-package com.xeross.srapp.ui.main
+package com.xeross.srapp.ui.category.category
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +7,7 @@ import com.xeross.srapp.data.models.Category
 import com.xeross.srapp.utils.Constants.DATABASE_COLLECTION_CATEGORIES
 import com.xeross.srapp.utils.Constants.DATABASE_COLLECTION_USERS_CATEGORIES
 
-class MainViewModel : BaseFirebaseViewModel() {
+class CategoryViewModel : BaseFirebaseViewModel() {
     
     companion object {
         private const val NAME_SPEED_RUNNER = "XeroSs"

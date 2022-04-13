@@ -1,4 +1,4 @@
-package com.xeross.srapp.ui.components
+package com.xeross.srapp.components.ui
 
 import android.content.Context;
 import android.util.AttributeSet;

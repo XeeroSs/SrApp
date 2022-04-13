@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.ui.auth.login.LoginActivity
-import com.xeross.srapp.ui.main.MainActivity
+import com.xeross.srapp.ui.category.category.CategoryActivity
 import com.xeross.srapp.utils.extensions.UIExtensions.setTintGradient
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 import kotlinx.coroutines.CoroutineScope
@@ -108,7 +108,7 @@ class SplashScreenActivity : BaseActivity() {
     
     private fun sleep() {
         
-        val intentIfAuth = if (viewModel?.isAuth() == true) MainActivity::class.java else LoginActivity::class.java
+        val intentIfAuth = if (viewModel?.isAuth() == true) CategoryActivity::class.java else LoginActivity::class.java
         
         val intent = Intent(applicationContext, intentIfAuth)
         

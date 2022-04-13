@@ -7,25 +7,27 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.xeross.srapp.R
-import com.xeross.srapp.base.BaseAdapter
-import com.xeross.srapp.data.models.Statistic
+import com.xeross.srapp.data.models.types.StatisticType
 import kotlinx.android.synthetic.main.stats_cell.view.*
 
-class StatisticAdapter(context: Context, objectList: ArrayList<Statistic>) :
-    BaseAdapter<StatisticAdapter.ViewHolder, Statistic>(context, objectList, null) {
+class StatisticAdapter(private val context: Context, private val data: ArrayList<Pair<StatisticType, String>>) : RecyclerView.Adapter<StatisticAdapter.ViewHolder>() {
     
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val result: TextView = itemView.stats_cell_result
         val category: TextView = itemView.stats_cell_category
     }
     
+    override fun getItemCount() = data.size
     
-    override fun onClick(holder: ViewHolder, dObject: Statistic) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val type = data.getOrNull(position)?.first ?: return
+        val value = data.getOrNull(position)?.second ?: return
+        updateItem(holder, type, value)
     }
     
-    override fun updateItem(holder: ViewHolder, dObject: Statistic) {
-        holder.result.text = dObject.result
-        holder.category.text = dObject.category
+    private fun updateItem(holder: ViewHolder, type: StatisticType, value: String) {
+        holder.result.text = value
+        holder.category.text = context.getString(type.resStringId)
     }
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =

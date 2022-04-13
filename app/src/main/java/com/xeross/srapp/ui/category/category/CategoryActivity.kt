@@ -1,4 +1,4 @@
-package com.xeross.srapp.ui.main
+package com.xeross.srapp.ui.category.category
 
 import android.content.Intent
 import android.view.ViewGroup
@@ -13,28 +13,28 @@ import com.xeross.srapp.ui.adapters.CategoryAdapter
 import com.xeross.srapp.ui.auth.login.LoginActivity
 import com.xeross.srapp.ui.categoryform.CategoryFormActivity
 import com.xeross.srapp.ui.celeste.CelesteActivity
-import com.xeross.srapp.ui.details.GameDetailActivity
+import com.xeross.srapp.ui.category.subcategory.SubCategoryActivity
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : BaseActivity(), ClickListener<Category> {
+class CategoryActivity : BaseActivity(), ClickListener<Category> {
     
     companion object {
         const val RC_CREATE_NEW_CATEGORY = 25
     }
     
-    override fun getViewModelClass() = MainViewModel::class.java
+    override fun getViewModelClass() = CategoryViewModel::class.java
     override fun getFragmentId() = R.layout.activity_main
     
     private lateinit var adapter: CategoryAdapter
     private val categories = ArrayList<Category>()
     
-    private var viewModel: MainViewModel? = null
+    private var viewModel: CategoryViewModel? = null
     
     override fun setUp() {
-        viewModel = (vm as MainViewModel)
+        viewModel = (vm as CategoryViewModel)
         viewModel?.buildViewModel()
         
         getCategories()
@@ -107,7 +107,7 @@ class MainActivity : BaseActivity(), ClickListener<Category> {
     }
     
     override fun onClick(o: Category) {
-        val intent = Intent(this, GameDetailActivity::class.java)
+        val intent = Intent(this, SubCategoryActivity::class.java)
         intent.putExtra(EXTRA_CATEGORY_NAME, o.name)
         intent.putExtra(EXTRA_CATEGORY_ID, o.id)
         startActivity(intent)

@@ -11,7 +11,7 @@ import com.xeross.srapp.ui.auth.BaseAuthActivity
 import com.xeross.srapp.ui.auth.register.RegisterActivity
 import com.xeross.srapp.ui.auth.register.exceptions.ExceptionRegisterTypes
 import com.xeross.srapp.ui.auth.types.AuthTextInputTypes
-import com.xeross.srapp.ui.main.MainActivity
+import com.xeross.srapp.ui.category.category.CategoryActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : BaseAuthActivity() {
@@ -114,7 +114,7 @@ class LoginActivity : BaseAuthActivity() {
     }
     
     private fun successLogin() {
-        goToActivity<MainActivity>()
+        goToActivity<CategoryActivity>()
     }
     
     private fun getFieldOrNull(authTextInputTypes: AuthTextInputTypes): String? {

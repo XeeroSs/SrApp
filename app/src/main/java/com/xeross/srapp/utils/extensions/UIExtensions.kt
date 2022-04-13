@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.graphics.drawable.GradientDrawable
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorRes
@@ -16,6 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
 import com.xeross.srapp.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -52,7 +57,7 @@ object UIExtensions {
     }
     
     fun TextInputLayout.error(context: Context, resId: Int, vararg formatArgs: String) {
-     //   this.errorContentDescription = context.resources.getString(resId, formatArgs)
+        //   this.errorContentDescription = context.resources.getString(resId, formatArgs)
         this.errorIconDrawable = null
         this.error = context.resources.getString(resId, formatArgs)
     }
@@ -62,6 +67,16 @@ object UIExtensions {
         layoutManager = layout
         itemAnimator = DefaultItemAnimator()
         this.adapter = adapter
+    }
+    
+    fun View.antiSpam(delay: Long) {
+        this.isEnabled = false
+        // Start task with coroutines
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(delay)
+            
+            this@antiSpam.isEnabled = true
+        }
     }
     
 }

@@ -61,7 +61,7 @@ class CelesteActivity : BaseActivityOAuth() {
         
         this.level = CelesteILType.FORSAKEN_CITY
         
-        statisticAdapter = StatisticAdapter(this, stats).also { a ->
+/*        statisticAdapter = StatisticAdapter(this, stats).also { a ->
             activity_game_details_recyclerview_stats.let {
                 val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 it.setHasFixedSize(true)
@@ -73,7 +73,7 @@ class CelesteActivity : BaseActivityOAuth() {
                 it.itemAnimator = DefaultItemAnimator()
                 it.adapter = a
             }
-        }
+        }*/
         
         credential?.let { credential ->
             viewModel = configureViewModel().also {
