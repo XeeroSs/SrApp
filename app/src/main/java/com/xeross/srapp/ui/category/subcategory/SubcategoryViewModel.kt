@@ -8,7 +8,7 @@ import com.xeross.srapp.data.models.Time
 import com.xeross.srapp.utils.Constants
 import java.util.*
 
-class SubCategoryViewModel : BaseFirebaseViewModel() {
+class SubcategoryViewModel : BaseFirebaseViewModel() {
     
     fun getSubCategoryTimes(categoryId: String, subcategoryId: String?): LiveData<ArrayList<Long>> {
         val mutableLiveData = MutableLiveData<ArrayList<Long>>()

@@ -33,14 +33,12 @@ import com.xeross.srapp.utils.extensions.TimeExtensions.getAverageToMilliseconds
 import com.xeross.srapp.utils.extensions.TimeExtensions.getBestToMilliseconds
 import com.xeross.srapp.utils.extensions.TimeExtensions.getWorstToMilliseconds
 import com.xeross.srapp.utils.extensions.TimeExtensions.toFormatTime
-import com.xeross.srapp.utils.extensions.UIExtensions.antiSpam
-import kotlinx.android.synthetic.main.activity_game_details.*
+import kotlinx.android.synthetic.main.activity_subcategory.*
 import kotlinx.android.synthetic.main.dialog_add_time.*
 import kotlinx.android.synthetic.main.dialog_add_time.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-
 
 class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCategory> {
     
@@ -48,8 +46,8 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
         private const val TAG = "GameDetailActivityTAG"
     }
     
-    override fun getViewModelClass() = SubCategoryViewModel::class.java
-    override fun getFragmentId() = R.layout.activity_game_details
+    override fun getViewModelClass() = SubcategoryViewModel::class.java
+    override fun getFragmentId() = R.layout.activity_subcategory
     
     // Dialogs
     private var dialogView: View? = null
@@ -81,7 +79,7 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
     private lateinit var leaderBoardAdapter: LeaderBoardAdapter
     private val leaderBoards = ArrayList<LeaderBoard>()
     
-    private var viewModel: SubCategoryViewModel? = null
+    private var viewModel: SubcategoryViewModel? = null
     
     override fun ui() {
         statisticAdapter = StatisticAdapter(this, statistics).also { a ->
@@ -111,15 +109,9 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
             }
         }
         
-        // TEST val subCategory = subCategories[0]
-        val subCategory = SubCategory("id", 0, "Forkasen Cyti", "", 60)
-        
-        getLevel(subCategory)
-        
         // Method View::post allows to call the Thread for UI
         activity_game_details_image_header.post {
             
-            setHeaderImage(subCategory)
             // Add margin bottom to recyclerview for this one don't hide by bottom navigation menu
             val paramsRecyclerViewRanking = activity_game_details_recyclerview_ranking.layoutParams as ViewGroup.MarginLayoutParams
             paramsRecyclerViewRanking.bottomMargin = bottom_navigation_menu.measuredHeight
@@ -277,10 +269,11 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
     
     private fun getLevel(subCategory: SubCategory?) {
         if (subCategory == null) return
+        getHeader(subCategory)
+        setHeaderImage(subCategory)
+        loadImageToHeader(subCategory)
         val time = times[subCategory.id] ?: return
         getStats(time)
-        getHeader(subCategory)
-        loadImageToHeader(subCategory)
     }
     
     private fun getStats(time: ArrayList<Long>) {
@@ -337,7 +330,7 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
     }
     
     override fun setUp() {
-        viewModel = (vm as SubCategoryViewModel?)
+        viewModel = (vm as SubcategoryViewModel?)
         viewModel?.build()
         
         // Get name from intent extra for header
@@ -346,10 +339,10 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
             finish()
             return
         }
-        
-        StatisticType.values().forEach {
+
+/*        StatisticType.values().forEach {
             statistics.add(Pair(it, it.defaultValue))
-        }
+        }*/
         
         // Get data
         viewModel?.let {
@@ -368,16 +361,6 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
     override fun onClick() {
         activity_game_details_button_add_your_stats.setOnClickListener {
             launchDialog()
-        }
-        
-        activity_game_details_button_previous.setOnClickListener {
-            activity_game_details_button_previous.antiSpam(500)
-            nextSubCategory()
-        }
-        
-        activity_game_details_button_next.setOnClickListener {
-            activity_game_details_button_next.antiSpam(500)
-            previousSubCategory()
         }
     }
     

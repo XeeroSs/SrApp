@@ -15,7 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_3"
         android:supportsRtl="true"
         android:theme="@style/Theme.SrApp">
-        <activity android:name=".ui.categoryform.CategoryFormActivity"></activity>
+        <activity android:name=".ui.categoryform.subcategory.SubcategoryFormActivity"></activity>
+        <activity android:name=".ui.category.subcategories.SubcategoriesActivity" />
+        <activity android:name=".ui.categoryform.category.CategoryFormActivity" />
         <activity android:name=".ui.auth.register.RegisterActivity" />
         <activity android:name=".ui.auth.login.LoginActivity" />
         <activity android:name=".ui.celeste.CelesteActivity" />

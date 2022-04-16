@@ -1,4 +1,4 @@
-package com.xeross.srapp.ui.categoryform
+package com.xeross.srapp.ui.categoryform.category
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

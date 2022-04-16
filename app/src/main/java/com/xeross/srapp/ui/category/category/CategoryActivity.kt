@@ -11,12 +11,11 @@ import com.xeross.srapp.data.models.Category
 import com.xeross.srapp.listener.ClickListener
 import com.xeross.srapp.ui.adapters.CategoryAdapter
 import com.xeross.srapp.ui.auth.login.LoginActivity
-import com.xeross.srapp.ui.categoryform.CategoryFormActivity
+import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity
+import com.xeross.srapp.ui.categoryform.category.CategoryFormActivity
 import com.xeross.srapp.ui.celeste.CelesteActivity
-import com.xeross.srapp.ui.category.subcategory.SubCategoryActivity
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
-import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_category.*
 
 
 class CategoryActivity : BaseActivity(), ClickListener<Category> {
@@ -26,7 +25,7 @@ class CategoryActivity : BaseActivity(), ClickListener<Category> {
     }
     
     override fun getViewModelClass() = CategoryViewModel::class.java
-    override fun getFragmentId() = R.layout.activity_main
+    override fun getFragmentId() = R.layout.activity_category
     
     private lateinit var adapter: CategoryAdapter
     private val categories = ArrayList<Category>()
@@ -107,8 +106,8 @@ class CategoryActivity : BaseActivity(), ClickListener<Category> {
     }
     
     override fun onClick(o: Category) {
-        val intent = Intent(this, SubCategoryActivity::class.java)
-        intent.putExtra(EXTRA_CATEGORY_NAME, o.name)
+        val intent = Intent(this, SubcategoriesActivity::class.java)
+        //     intent.putExtra(EXTRA_CATEGORY_NAME, o.name)
         intent.putExtra(EXTRA_CATEGORY_ID, o.id)
         startActivity(intent)
         return

@@ -3,18 +3,21 @@ package com.xeross.srapp.utils.extensions
 import com.xeross.srapp.utils.extensions.types.TimeType
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 
 object TimeExtensions {
     
     // 3599999 = 59m 59s 999ms
     private const val HOUR_TO_MILLISECONDS = 3600000
-    private val simpleDateFormatWithHour = SimpleDateFormat("HH:mm:ss.SSS", Locale.ENGLISH)
-    private val simpleDateFormat = SimpleDateFormat("mm:ss.SSS", Locale.ENGLISH)
+    private val simpleDateFormats = HashMap<TimeType, SimpleDateFormat>()
     
     init {
-        simpleDateFormatWithHour.timeZone = TimeZone.getTimeZone("UTC")
-        simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        TimeType.values().forEach {
+            val simpleDateFormat = SimpleDateFormat(it.format, Locale.ENGLISH)
+            simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")
+            simpleDateFormats[it] = simpleDateFormat
+        }
     }
     
     fun String.convertTimeToSeconds(format: TimeType): Long {
@@ -28,10 +31,13 @@ object TimeExtensions {
     
     fun Long.toFormatTime(): String {
         val format = when {
-            this < HOUR_TO_MILLISECONDS -> simpleDateFormat
-            else -> simpleDateFormatWithHour
+            ((this % 1000) == 0L) -> {
+                if (this < HOUR_TO_MILLISECONDS) simpleDateFormats[TimeType.MINUTE_SECOND] else simpleDateFormats[TimeType.HOUR_MINUTE_SECOND]
+            }
+            this < HOUR_TO_MILLISECONDS -> simpleDateFormats[TimeType.MINUTE_SECOND_MILLISECONDS]
+            else -> simpleDateFormats[TimeType.HOUR_MINUTE_SECOND_MILLISECONDS]
         }
-        return format.format(Date(this))
+        return format?.format(Date(this)) ?: "???"
     }
     
     /**
@@ -39,7 +45,7 @@ object TimeExtensions {
      */
     fun String.convertTimeToSeconds(): Long {
         val calendar = Calendar.getInstance()
-        val date = simpleDateFormat.parse(this) ?: return 0L
+        val date = simpleDateFormats[TimeType.HOUR_MINUTE_SECOND_MILLISECONDS]?.parse(this) ?: return 0L
         calendar.time = date
         return (calendar.timeInMillis / 1000L)
     }

@@ -50,6 +50,10 @@
     <string name="or">Or</string>
     <string name="forgot_password">Forgot password ?</string>
 
+    <!-- Subcategories activity -->
+    <string name="your_subcategories">Your subcategories</string>
+    <string name="subcategories">SUBCATEGORIES</string>
+
 
     <string name="confirm_password_is_different">Those passwords didn\'t match.</string>
     <string name="password_too_short">This password is too short (At least 8 characters).</string>

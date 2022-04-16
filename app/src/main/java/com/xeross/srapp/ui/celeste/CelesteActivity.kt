@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.RelativeLayout
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
@@ -17,17 +15,16 @@ import com.xeross.srapp.base.BaseActivityOAuth
 import com.xeross.srapp.data.models.LeaderBoard
 import com.xeross.srapp.data.models.Statistic
 import com.xeross.srapp.data.models.types.CelesteILType
-import com.xeross.srapp.ui.adapters.DividerItemDecoration
 import com.xeross.srapp.ui.adapters.LeaderBoardAdapter
 import com.xeross.srapp.ui.adapters.StatisticAdapter
 import com.xeross.srapp.utils.extensions.UtilsExtensions.getNextOrNull
 import com.xeross.srapp.utils.extensions.UtilsExtensions.getPreviousOrNull
 import com.xeross.srapp.utils.injection.ViewModelFactory
-import kotlinx.android.synthetic.main.activity_game_details.*
+import kotlinx.android.synthetic.main.activity_subcategory.*
 
 class CelesteActivity : BaseActivityOAuth() {
     
-    override fun getFragmentId() = R.layout.activity_game_details
+    override fun getFragmentId() = R.layout.activity_subcategory
     
     override fun getViewModelClass() = CelesteViewModel::class.java
     
@@ -101,19 +98,6 @@ class CelesteActivity : BaseActivityOAuth() {
     }
     
     private fun handleUI(level: CelesteILType) {
-        
-        
-        activity_game_details_button_previous.setOnClickListener {
-            CelesteILType::class.java.getPreviousOrNull(this.level)?.let { previousLevel ->
-                getLevel(previousLevel)
-            }
-        }
-        
-        activity_game_details_button_next.setOnClickListener {
-            CelesteILType::class.java.getNextOrNull(this.level)?.let { nextLevel ->
-                getLevel(nextLevel)
-            }
-        }
         
         // Method View::post allows to call the Thread for UI
         activity_game_details_image_header.post {
