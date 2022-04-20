@@ -5,7 +5,7 @@ plugins {
     id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
     id 'com.google.secrets_gradle_plugin' version '0.4'
-    id 'dagger.hilt.android.plugin'
+ /*   id 'dagger.hilt.android.plugin'*/
 
     // For build.gradle (Groovy DSL)
 }
@@ -108,6 +108,7 @@ dependencies {
 
     // GRAPH
     implementation 'com.jjoe64:graphview:4.2.2'
+    implementation 'com.github.hadiidbouk:ChartProgressBar-Android:2.0.6'
 
     // Google
     implementation 'com.google.api-client:google-api-client:1.32.2'
@@ -133,7 +134,7 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
 
     // Dagger Core
-    implementation "com.google.dagger:dagger:2.37"
+/*    implementation "com.google.dagger:dagger:2.37"
     kapt "com.google.dagger:dagger-compiler:2.37"
 
     // Dagger Android
@@ -143,7 +144,7 @@ dependencies {
 
     // Dagger - Hilt
     implementation "com.google.dagger:hilt-android:2.37"
-    kapt "com.google.dagger:hilt-android-compiler:2.37"
+    kapt "com.google.dagger:hilt-android-compiler:2.37"*/
 
     // UI
     //  implementation "androidx.cardview:cardview:1.0.0"

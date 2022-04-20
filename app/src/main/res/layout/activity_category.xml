@@ -6,6 +6,7 @@
     android:background="@color/background">
 
     <RelativeLayout
+        android:id="@+id/relative"
         android:layout_width="match_parent"
         android:layout_height="@dimen/main_activity_header_height_with_status_bar"
         android:layout_alignParentTop="true"
@@ -28,7 +29,8 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/gilroy_light"
                 android:maxLines="1"
-                android:text="@string/main_activity_header_text_games"
+                android:text="@string/category"
+                android:textAllCaps="true"
                 android:textColor="@color/on_surface_header"
                 android:textSize="@dimen/main_activity_header_text_games_size" />
 

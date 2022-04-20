@@ -1,4 +1,4 @@
-package com.xeross.srapp.ui.adapters
+package com.xeross.srapp.components
 
 import android.R
 import android.content.Context

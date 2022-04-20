@@ -37,7 +37,7 @@ class SubcategoryFormViewModel : BaseFirebaseViewModel() {
                 }
                 return@addOnSuccessListener
             }
-    
+            
             mutableLiveData.postValue(false)
             
         }.addOnFailureListener {

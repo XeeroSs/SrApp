@@ -87,5 +87,7 @@
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
 
+    <string name="subcategory">Subcategory</string>
+
 
 </resources>

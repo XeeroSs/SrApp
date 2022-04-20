@@ -27,7 +27,8 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/gilroy_light"
                 android:maxLines="1"
-                android:text="@string/main_activity_header_text_games"
+                android:text="@string/subcategory"
+                android:textAllCaps="true"
                 android:textColor="@color/on_surface_header"
                 android:textSize="@dimen/main_activity_header_text_games_size" />
 
@@ -39,7 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/main_activity_header_height_with_status_bar"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation_menu">
 
         <RelativeLayout
             android:layout_width="match_parent"

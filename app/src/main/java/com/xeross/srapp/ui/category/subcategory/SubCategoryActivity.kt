@@ -18,13 +18,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
-import com.xeross.srapp.data.models.LeaderBoard
+import com.xeross.srapp.components.DividerItemDecoration
 import com.xeross.srapp.data.models.SubCategory
 import com.xeross.srapp.data.models.types.StatisticType
 import com.xeross.srapp.listener.DataListener
 import com.xeross.srapp.listener.TimeListener
-import com.xeross.srapp.ui.adapters.DividerItemDecoration
-import com.xeross.srapp.ui.adapters.LeaderBoardAdapter
 import com.xeross.srapp.ui.adapters.StatisticAdapter
 import com.xeross.srapp.ui.celeste.CelesteActivity
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
@@ -75,9 +73,9 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
     private var millisecondsPicker: NumberPicker? = null
     
     private var statisticAdapter: StatisticAdapter? = null
-    
-    private lateinit var leaderBoardAdapter: LeaderBoardAdapter
-    private val leaderBoards = ArrayList<LeaderBoard>()
+
+/*    private lateinit var leaderBoardAdapter: LeaderBoardAdapter
+    private val leaderBoards = ArrayList<LeaderBoard>()*/
     
     private var viewModel: SubcategoryViewModel? = null
     
@@ -95,7 +93,7 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
                 it.adapter = a
             }
         }
-        leaderBoardAdapter = LeaderBoardAdapter(this, leaderBoards, this).also { a ->
+/*        leaderBoardAdapter = LeaderBoardAdapter(this, leaderBoards, this).also { a ->
             activity_game_details_recyclerview_ranking.let {
                 val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
                 it.setHasFixedSize(true)
@@ -107,7 +105,7 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
                 it.itemAnimator = DefaultItemAnimator()
                 it.adapter = a
             }
-        }
+        }*/
         
         // Method View::post allows to call the Thread for UI
         activity_game_details_image_header.post {
@@ -339,10 +337,6 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
             finish()
             return
         }
-
-/*        StatisticType.values().forEach {
-            statistics.add(Pair(it, it.defaultValue))
-        }*/
         
         // Get data
         viewModel?.let {
@@ -362,20 +356,6 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
         activity_game_details_button_add_your_stats.setOnClickListener {
             launchDialog()
         }
-    }
-    
-    private fun nextSubCategory() {
-        val i = index + 1
-        if (i >= subCategories.size) return
-        index = i
-        getLevel(getSubCategory())
-    }
-    
-    private fun previousSubCategory() {
-        val i = index - 1
-        if (i < 0) return
-        index = i
-        getLevel(getSubCategory())
     }
     
     override fun onPersonnelBestTime(): Long {

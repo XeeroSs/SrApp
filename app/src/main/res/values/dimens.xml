@@ -38,7 +38,7 @@
     <dimen name="activity_game_details_header_fab_icon_size">14dp</dimen>
 
     <!-- Activity game details -->
-    <dimen name="activity_game_size_text_plus_and_fab">80dp</dimen>
+    <dimen name="activity_game_size_text_plus_and_fab">70dp</dimen>
     <dimen name="activity_game_details_space">15dp</dimen>
     <dimen name="activity_game_text_size">18sp</dimen>
     <dimen name="activity_game_start_text">18dp</dimen>
