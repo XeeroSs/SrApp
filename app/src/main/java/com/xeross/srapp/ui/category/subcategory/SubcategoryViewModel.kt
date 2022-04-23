@@ -1,9 +1,9 @@
 package com.xeross.srapp.ui.category.subcategory
 
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.xeross.srapp.base.BaseFirebaseViewModel
-import com.xeross.srapp.data.models.SubCategory
 import com.xeross.srapp.data.models.Time
 import com.xeross.srapp.utils.Constants
 import java.util.*
@@ -36,24 +36,37 @@ class SubcategoryViewModel : BaseFirebaseViewModel() {
         return mutableLiveData
     }
     
-    fun getSubcategories(categoryId: String): LiveData<List<SubCategory>> {
-        val mutableLiveData = MutableLiveData<List<SubCategory>>()
+    private fun saveTimeIfBestToSubcategoryDocument(subcategoryId: String, timeToMilliseconds: Long, path: String): LiveData<Boolean> {
+        val mutableLiveData = MutableLiveData<Boolean>()
         
-        val uid = getUserId() ?: return mutableLiveData
+        val timeCollection = getCollection(path)
         
-        val categoryCollection = getCollection(getPathSubCollectionToString(uid, categoryId))
-        categoryCollection.get().addOnSuccessListener { documents ->
-            val document = documents.toObjects(SubCategory::class.java)
-            mutableLiveData.postValue(document)
-            return@addOnSuccessListener
+        timeCollection.document(subcategoryId).update("timeInMilliseconds", timeToMilliseconds).addOnSuccessListener {
+            mutableLiveData.postValue(true)
         }.addOnFailureListener {
-            mutableLiveData.postValue(null)
+            mutableLiveData.postValue(false)
         }
         
         return mutableLiveData
     }
     
-    fun saveTime(categoryId: String?, subcategoryId: String?, timeToMilliseconds: Long): LiveData<Long?> {
+    private fun saveTimeToTimesCollection(subcategoryId: String, timeToMilliseconds: Long, path: String): LiveData<Boolean> {
+        val mutableLiveData = MutableLiveData<Boolean>()
+        
+        val timeCollection = getCollection(path + "/" + subcategoryId + "/" + Constants.DATABASE_COLLECTION_TIME)
+        val timeDocument = timeCollection.document()
+        val idTime = timeDocument.id
+        
+        timeDocument.set(Time(idTime, timeToMilliseconds)).addOnSuccessListener {
+            mutableLiveData.postValue(true)
+        }.addOnFailureListener {
+            mutableLiveData.postValue(false)
+        }
+        
+        return mutableLiveData
+    }
+    
+    fun saveTime(context: LifecycleOwner, categoryId: String?, subcategoryId: String?, timeToMilliseconds: Long, isBest: Boolean): LiveData<Long?> {
         val mutableLiveData = MutableLiveData<Long?>()
         
         if (categoryId == null || subcategoryId == null) {
@@ -62,17 +75,24 @@ class SubcategoryViewModel : BaseFirebaseViewModel() {
         }
         
         val uid = getUserId() ?: return mutableLiveData
+        val path = getPathSubCollectionToString(uid, categoryId)
         
-        val timeCollection = getCollection(getPathSubCollectionToString(uid, categoryId) + "/" + subcategoryId + "/" + Constants.DATABASE_COLLECTION_TIME)
-        val timeDocument = timeCollection.document()
-        val idTime = timeDocument.id
-        
-        timeDocument.set(Time(idTime, timeToMilliseconds, Date())).addOnSuccessListener {
+        saveTimeToTimesCollection(subcategoryId, timeToMilliseconds, path).observe(context, {
+            if (!it) {
+                mutableLiveData.postValue(null)
+                return@observe
+            }
+    
+            if (isBest) {
+                saveTimeIfBestToSubcategoryDocument(subcategoryId, timeToMilliseconds, path).observe(context, {
+                    mutableLiveData.postValue(timeToMilliseconds)
+                })
+                return@observe
+            }
+    
             mutableLiveData.postValue(timeToMilliseconds)
-        }.addOnFailureListener {
-            mutableLiveData.postValue(null)
-        }
-        
+            return@observe
+        })
         return mutableLiveData
     }
     

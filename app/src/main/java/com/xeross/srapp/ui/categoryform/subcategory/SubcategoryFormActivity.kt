@@ -3,6 +3,7 @@ package com.xeross.srapp.ui.categoryform.subcategory
 import androidx.fragment.app.Fragment
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
+import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity.Companion.RC_REFRESH
 import com.xeross.srapp.ui.categoryform.adapters.CategoryFormPageAdapter
 import com.xeross.srapp.ui.categoryform.fragment.base.BaseCategoryFormFragment
 import com.xeross.srapp.ui.categoryform.interfaces.ICategoryFormType
@@ -145,7 +146,7 @@ class SubcategoryFormActivity : BaseActivity() {
             previous_button.isEnabled = true
             if (!it) return@observe
     
-            // TODO("Send extra")
+            setResult(RC_REFRESH)
             finish()
         })
     }

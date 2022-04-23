@@ -24,9 +24,13 @@ import com.xeross.srapp.data.models.types.StatisticType
 import com.xeross.srapp.listener.DataListener
 import com.xeross.srapp.listener.TimeListener
 import com.xeross.srapp.ui.adapters.StatisticAdapter
+import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity.Companion.RC_REFRESH
 import com.xeross.srapp.ui.celeste.CelesteActivity
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
+import com.xeross.srapp.utils.Constants.EXTRA_SUBCATEGORY_ID
+import com.xeross.srapp.utils.Constants.EXTRA_SUBCATEGORY_NAME
+import com.xeross.srapp.utils.Constants.EXTRA_SUBCATEGORY_URL
 import com.xeross.srapp.utils.extensions.TimeExtensions.getAverageToMilliseconds
 import com.xeross.srapp.utils.extensions.TimeExtensions.getBestToMilliseconds
 import com.xeross.srapp.utils.extensions.TimeExtensions.getWorstToMilliseconds
@@ -36,7 +40,7 @@ import kotlinx.android.synthetic.main.dialog_add_time.*
 import kotlinx.android.synthetic.main.dialog_add_time.view.*
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+
 
 class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCategory> {
     
@@ -53,8 +57,7 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
     
     private lateinit var categoryName: String
     private lateinit var categoryId: String
-    
-    private val subCategories = HashMap<Int, SubCategory>()
+    private lateinit var subcategory: SubCategory
     
     private val statistics = ArrayList<Pair<StatisticType, String>>()
     
@@ -65,7 +68,7 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
     
     private var index = 0
     
-    private val times = HashMap<String, ArrayList<Long>>()
+    private val times = ArrayList<Long>()
     
     private var hoursPicker: NumberPicker? = null
     private var minutesPicker: NumberPicker? = null
@@ -125,18 +128,18 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
     
     private fun setUpDialogs() {
         dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_time, null, false).also {
-            hoursPicker = it.findViewById<NumberPicker>(R.id.hour_picker)?.setUpTimePickers(999) ?: return
-            minutesPicker = it.findViewById<NumberPicker>(R.id.minute_picker)?.setUpTimePickers(59)?.also { np ->
+            hoursPicker = it.findViewById<NumberPicker>(R.id.hour_picker)?.setUpNumberPickers(999) ?: return
+            minutesPicker = it.findViewById<NumberPicker>(R.id.minute_picker)?.setUpNumberPickers(59)?.also { np ->
                 np.setFormatter { digit ->
                     if (digit < 10) return@setFormatter "0$digit" else return@setFormatter digit.toString()
                 }
             } ?: return
-            secondsPicker = it.findViewById<NumberPicker>(R.id.second_picker)?.setUpTimePickers(59)?.also { np ->
+            secondsPicker = it.findViewById<NumberPicker>(R.id.second_picker)?.setUpNumberPickers(59)?.also { np ->
                 np.setFormatter { digit ->
                     if (digit < 10) return@setFormatter "0$digit" else return@setFormatter digit.toString()
                 }
             } ?: return
-            millisecondsPicker = it.findViewById<NumberPicker>(R.id.millisecond_picker)?.setUpTimePickers(999)?.also { np ->
+            millisecondsPicker = it.findViewById<NumberPicker>(R.id.millisecond_picker)?.setUpNumberPickers(999)?.also { np ->
                 np.setFormatter { digit ->
                     if (digit < 10) return@setFormatter "00$digit" else if (digit < 100) return@setFormatter "0$digit" else return@setFormatter digit.toString()
                 }
@@ -148,26 +151,41 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
             }
             
             it.findViewById<MaterialButton>(R.id.submit_button)?.setOnClickListener { _ ->
-                dialogView?.submit_button?.isEnabled = false
-                getTimeFromDialog(hoursPicker!!.value, minutesPicker!!.value, secondsPicker!!.value, millisecondsPicker!!.value)?.observe(this, { time ->
-                    dialogView?.submit_button?.isEnabled = true
-                    if (time == null) return@observe
-                    val sc = getSubCategory()
-                    times[sc?.id]?.add(time)
-                    refresh(sc)
-                    resetDialogPicker()
-                    dialog?.dismiss()
-                })
+                // The value inputted by the user is not updated if the user is still in the text input of a NumberPicker (In the case where the user himself inputs the value of the NumberPicker with his keyboard).
+                // However, disabling it before getting its value allows it to be updated.
+                toggleNumberPickers(false)
+                addTime()
+                toggleNumberPickers(true)
             }
             
             dialog = MaterialAlertDialogBuilder(this, R.style.WrapEverythingDialog).setBackground(ColorDrawable(android.graphics.Color.TRANSPARENT)).setCancelable(true).setView(it).create()
         }
     }
     
-    private fun refresh(subCategory: SubCategory?) {
-        if (index == subCategory?.position) {
-            getLevel(subCategory)
-        }
+    private fun toggleNumberPickers(toggle: Boolean) {
+        hoursPicker?.isEnabled = toggle
+        minutesPicker?.isEnabled = toggle
+        secondsPicker?.isEnabled = toggle
+        millisecondsPicker?.isEnabled = toggle
+    }
+    
+    private fun addTime() {
+        dialogView?.submit_button?.isEnabled = false
+        getTimeFromDialog(hoursPicker!!.value, minutesPicker!!.value, secondsPicker!!.value, millisecondsPicker!!.value)?.observe(this, { time ->
+            dialogView?.submit_button?.isEnabled = true
+            if (time == null) return@observe
+            setResult(RC_REFRESH)
+            times.add(time)
+            refresh()
+            resetDialogPicker()
+            dialog?.dismiss()
+        })
+    }
+    
+    private fun refresh() {
+        setHeaderImage()
+        getStats()
+        getHeader()
     }
     
     private fun resetDialogPicker() {
@@ -177,7 +195,7 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
         millisecondsPicker?.value = 0
     }
     
-    private fun NumberPicker.setUpTimePickers(max: Int): NumberPicker {
+    private fun NumberPicker.setUpNumberPickers(max: Int): NumberPicker {
         return this.apply {
             this.maxValue = max
             this.minValue = 0
@@ -193,17 +211,15 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
         Log.i(TAG, "$hours:$minutes:$seconds.$milliseconds")
         // (milliseconds) + (seconds * 1000) + (minutes * 60 * 1000) + (hours * 60² * 1000)
         val timeToMilliseconds = (milliseconds) + (seconds * 1000) + (minutes * 60 * 1000) + (hours * 60 * 60 * 1000L)
+        
+        val isBest = bestInMilliseconds > timeToMilliseconds
 /*        val simpleDateFormat = SimpleDateFormat("HH:mm:ss.SSS", Locale.ENGLISH)
         simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")*/
-        return viewModel?.saveTime(categoryId, getSubCategory()?.id, timeToMilliseconds)
+        return viewModel?.saveTime(this, categoryId, subcategory.id, timeToMilliseconds, isBest)
     }
     
-    private fun getSubCategory(): SubCategory? {
-        return subCategories[index]
-    }
-    
-    private fun loadImageToHeader(subCategory: SubCategory) {
-        subCategory.imageURL?.takeIf {
+    private fun loadImageToHeader() {
+        subcategory.imageURL?.takeIf {
             it.isNotBlank()
         }?.let {
             Glide.with(this).load(it)
@@ -265,30 +281,21 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
         })
     }
     
-    private fun getLevel(subCategory: SubCategory?) {
-        if (subCategory == null) return
-        getHeader(subCategory)
-        setHeaderImage(subCategory)
-        loadImageToHeader(subCategory)
-        val time = times[subCategory.id] ?: return
-        getStats(time)
-    }
-    
-    private fun getStats(time: ArrayList<Long>) {
+    private fun getStats() {
         statistics.clear()
-        time.getBestToMilliseconds().let {
+        times.getBestToMilliseconds().let {
             bestInMilliseconds = it
             statistics.add(Pair(StatisticType.BEST, it.toFormatTime()))
         }
-        time.getAverageToMilliseconds().let {
+        times.getAverageToMilliseconds().let {
             averageInMilliseconds = it
             statistics.add(Pair(StatisticType.AVERAGE, it.toFormatTime()))
         }
-        time.getWorstToMilliseconds().let {
+        times.getWorstToMilliseconds().let {
             worstInMilliseconds = it
             statistics.add(Pair(StatisticType.WORST, it.toFormatTime()))
         }
-        time.size.let {
+        times.size.let {
             total = it
             statistics.add(Pair(StatisticType.TOTAL, it.toString()))
         }
@@ -301,8 +308,7 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
     /**
      * Reduce size image based on content shape size for create a border
      */
-    private fun setHeaderImage(subCategory: SubCategory?) {
-        if (subCategory == null) return
+    private fun setHeaderImage() {
         val image = activity_game_details_image_header
         val imageContent = activity_game_details_content_image_header
         
@@ -318,11 +324,11 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
         
         // Set image to image header with glide. Also allows rounded image
         // TODO("Images customs")
-        loadImageToHeader(subCategory)
+        loadImageToHeader()
     }
     
-    private fun getHeader(subCategory: SubCategory) {
-        activity_game_details_text_name_level.text = resources.getString(R.string.game_details_header_level_name, subCategory.name)
+    private fun getHeader() {
+        activity_game_details_text_name_level.text = resources.getString(R.string.game_details_header_level_name, subcategory.name)
         activity_game_details_text_category.text = resources.getString(R.string.game_details_header_level_name, categoryName)
         activity_game_details_text_time.text = resources.getString(R.string.game_details_header_level_name, bestInMilliseconds.toFormatTime())
     }
@@ -332,6 +338,15 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
         viewModel?.build()
         
         // Get name from intent extra for header
+        val subcategoryName = intent.getStringExtra(EXTRA_SUBCATEGORY_NAME) ?: "???"
+        val subcategoryURL = intent.getStringExtra(EXTRA_SUBCATEGORY_URL) ?: "???"
+        val subcategoryId = intent.getStringExtra(EXTRA_SUBCATEGORY_ID) ?: run {
+            finish()
+            return
+        }
+        
+        subcategory = SubCategory(id = subcategoryId, name = subcategoryName, imageURL = subcategoryURL)
+        
         categoryName = intent.getStringExtra(EXTRA_CATEGORY_NAME) ?: "???"
         categoryId = intent.getStringExtra(EXTRA_CATEGORY_ID) ?: run {
             finish()
@@ -340,14 +355,9 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
         
         // Get data
         viewModel?.let {
-            it.getSubcategories(categoryId).observe(this, { list ->
-                list?.forEach { sc ->
-                    subCategories[sc.position] = sc
-                    it.getSubCategoryTimes(categoryId, sc.id).observe(this, { time ->
-                        times[sc.id] = time
-                        refresh(sc)
-                    })
-                }
+            it.getSubCategoryTimes(categoryId, subcategoryId).observe(this, { time ->
+                times.addAll(time)
+                refresh()
             })
         }
     }

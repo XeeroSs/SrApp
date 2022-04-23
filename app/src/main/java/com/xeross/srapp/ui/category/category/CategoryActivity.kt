@@ -15,6 +15,7 @@ import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity
 import com.xeross.srapp.ui.categoryform.category.CategoryFormActivity
 import com.xeross.srapp.ui.celeste.CelesteActivity
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
+import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
 import kotlinx.android.synthetic.main.activity_category.*
 
 
@@ -109,6 +110,7 @@ class CategoryActivity : BaseActivity(), ClickListener<Category> {
         val intent = Intent(this, SubcategoriesActivity::class.java)
         //     intent.putExtra(EXTRA_CATEGORY_NAME, o.name)
         intent.putExtra(EXTRA_CATEGORY_ID, o.id)
+        intent.putExtra(EXTRA_CATEGORY_NAME, o.name)
         startActivity(intent)
         return
     }

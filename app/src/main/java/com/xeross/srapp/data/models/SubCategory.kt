@@ -1,5 +1,5 @@
 package com.xeross.srapp.data.models
 
-import java.sql.Timestamp
+import com.google.firebase.Timestamp
 
-data class SubCategory(val id: String = "", var position: Int = 0, var name: String = "", var imageURL: String? = null, var timeInSeconds: Long = 0, var createdAt: Timestamp? = null)
+data class SubCategory(val id: String = "", var position: Int = 0, var name: String = "", var imageURL: String? = null, var timeInMilliseconds: Long = 0, var createdAt: Timestamp = Timestamp.now())

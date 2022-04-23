@@ -23,7 +23,7 @@ class SubcategoryFormViewModel : BaseFirebaseViewModel() {
         positionDocumentRequest.get().addOnSuccessListener {
             
             it.takeIf { !it.isEmpty }?.toObjects(SubCategory::class.java)?.let { positionDocument ->
-                val position = positionDocument[0].position
+                val position = (positionDocument[0].position + 1)
                 
                 val idSubcategory = subcategoryCollection.document().id
                 val subcategory = SubCategory(idSubcategory, position, nameSubcategory, imageSubcategory, 0L)
@@ -38,8 +38,18 @@ class SubcategoryFormViewModel : BaseFirebaseViewModel() {
                 return@addOnSuccessListener
             }
             
-            mutableLiveData.postValue(false)
+            val position = 0
             
+            val idSubcategory = subcategoryCollection.document().id
+            val subcategory = SubCategory(idSubcategory, position, nameSubcategory, imageSubcategory, 0L)
+            
+            insertDocument(subcategoryCollection, subcategory, idSubcategory).addOnSuccessListener {
+                
+                mutableLiveData.postValue(true)
+                
+            }.addOnFailureListener {
+                mutableLiveData.postValue(false)
+            }
         }.addOnFailureListener {
             mutableLiveData.postValue(false)
         }

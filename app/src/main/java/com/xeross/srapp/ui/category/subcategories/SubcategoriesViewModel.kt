@@ -2,6 +2,7 @@ package com.xeross.srapp.ui.category.subcategories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.firestore.Query
 import com.xeross.srapp.base.BaseFirebaseViewModel
 import com.xeross.srapp.data.models.SubCategory
 import com.xeross.srapp.utils.Constants
@@ -20,7 +21,7 @@ class SubcategoriesViewModel : BaseFirebaseViewModel() {
         
         val categoryCollection = getCollection(getPathSubCollectionToString(uid, categoryId))
         
-        categoryCollection.get().addOnSuccessListener {
+        categoryCollection.orderBy("createdAt", Query.Direction.ASCENDING).get().addOnSuccessListener {
             
             it?.takeIf { !it.isEmpty }?.toObjects(SubCategory::class.java)?.forEach { sc ->
                 subcategories.add(sc)

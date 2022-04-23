@@ -51,7 +51,7 @@ class SubcategoriesAdapter(context: Context, objectList: ArrayList<SubCategory>,
     
     // TODO("do graphic")
     override fun updateItem(holder: ViewHolder, dObject: SubCategory) {
-        holder.time.text = dObject.timeInSeconds.toFormatTime()
+        holder.time.text = dObject.timeInMilliseconds.toFormatTime()
         holder.name.text = dObject.name
         
         setUpGraphic(holder)
