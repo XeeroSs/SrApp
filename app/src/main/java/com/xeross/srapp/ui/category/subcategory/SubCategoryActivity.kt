@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
 import android.widget.RelativeLayout
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -21,11 +22,11 @@ import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.components.DividerItemDecoration
 import com.xeross.srapp.data.models.SubCategory
 import com.xeross.srapp.data.models.types.StatisticType
-import com.xeross.srapp.listener.DataListener
 import com.xeross.srapp.listener.TimeListener
 import com.xeross.srapp.ui.adapters.StatisticAdapter
 import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity.Companion.RC_REFRESH
 import com.xeross.srapp.ui.celeste.CelesteActivity
+import com.xeross.srapp.ui.times.TimesActivity
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
 import com.xeross.srapp.utils.Constants.EXTRA_SUBCATEGORY_ID
@@ -42,7 +43,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCategory> {
+class SubCategoryActivity : BaseActivity(), TimeListener {
     
     companion object {
         private const val TAG = "GameDetailActivityTAG"
@@ -81,6 +82,13 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
     private val leaderBoards = ArrayList<LeaderBoard>()*/
     
     private var viewModel: SubcategoryViewModel? = null
+    
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RC_REFRESH) {
+            setResult(RC_REFRESH)
+            getTimes()
+        }
+    }
     
     override fun ui() {
         statisticAdapter = StatisticAdapter(this, statistics).also { a ->
@@ -206,13 +214,12 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
         dialog?.show()
     }
     
-    // TODO("Get time from dialog")
     private fun getTimeFromDialog(hours: Int, minutes: Int, seconds: Int, milliseconds: Int): LiveData<Long?>? {
         Log.i(TAG, "$hours:$minutes:$seconds.$milliseconds")
         // (milliseconds) + (seconds * 1000) + (minutes * 60 * 1000) + (hours * 60² * 1000)
-        val timeToMilliseconds = (milliseconds) + (seconds * 1000) + (minutes * 60 * 1000) + (hours * 60 * 60 * 1000L)
+        val timeToMilliseconds = (milliseconds + 0L) + (seconds * 1000L) + (minutes * 60 * 1000L) + (hours * 60L * 60L * 1000L)
         
-        val isBest = bestInMilliseconds > timeToMilliseconds
+        val isBest = if (bestInMilliseconds <= 0) true else bestInMilliseconds > timeToMilliseconds
 /*        val simpleDateFormat = SimpleDateFormat("HH:mm:ss.SSS", Locale.ENGLISH)
         simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")*/
         return viewModel?.saveTime(this, categoryId, subcategory.id, timeToMilliseconds, isBest)
@@ -302,9 +309,6 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
         statisticAdapter?.notifyDataSetChanged()
     }
     
-    override fun notifyDataChanged(data: SubCategory) {
-    }
-    
     /**
      * Reduce size image based on content shape size for create a border
      */
@@ -354,8 +358,14 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
         }
         
         // Get data
+        getTimes()
+    }
+    
+    private fun getTimes() {
+        times.clear()
+        statisticAdapter?.notifyDataSetChanged()
         viewModel?.let {
-            it.getSubCategoryTimes(categoryId, subcategoryId).observe(this, { time ->
+            it.getSubCategoryTimes(categoryId, subcategory.id).observe(this, { time ->
                 times.addAll(time)
                 refresh()
             })
@@ -365,6 +375,15 @@ class SubCategoryActivity : BaseActivity(), TimeListener, DataListener<SubCatego
     override fun onClick() {
         activity_game_details_button_add_your_stats.setOnClickListener {
             launchDialog()
+        }
+        
+        activity_game_details_button_list_your_stats.setOnClickListener {
+            val intent = Intent(this, TimesActivity::class.java)
+            
+            intent.putExtra(EXTRA_CATEGORY_ID, categoryId)
+            intent.putExtra(EXTRA_SUBCATEGORY_ID, subcategory.id)
+            
+            resultLauncher.launch(intent)
         }
     }
     

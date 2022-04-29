@@ -89,5 +89,13 @@
 
     <string name="subcategory">Subcategory</string>
 
+    <string name="times">Times</string>
+    <string name="your_times">Your times</string>
+    <string name="time_ago">%1$d %2$s ago</string>
+    <string name="year">year</string>
+    <string name="day">day</string>
+    <string name="hour">hour</string>
+    <string name="minute">minute</string>
+    <string name="second">second</string>
 
 </resources>

@@ -29,9 +29,6 @@
     <color name="on_surface_header">#FFFFFF</color> <!--super dark gray-->
     <color name="on_surface_header_variant">#A9A9A9</color> <!--gray-->
 
-    <color name="negative">#F86D70</color> <!--super dark gray-->
-    <color name="positive">#57B894</color> <!--super dark gray-->
-
     <color name="blue_graphic">#0BA5FF</color> <!--super dark gray-->
 
     <color name="super_light_gray">#F1F1F1</color>
@@ -40,6 +37,11 @@
     <color name="white">#ffffff</color> <!--super light gray-->
 
     <color name="mtrl_textinput_default_box_stroke_color">#fff</color>
+
+    <color name="worst">#EA4335</color> <!--super dark gray-->
+    <color name="gold">#FBBC05</color> <!--super dark gray-->
+    <color name="negative">#F86D70</color> <!--super dark gray-->
+    <color name="positive">#57B894</color> <!--super dark gray-->
 
 
     <!--    <color name="purple_light">#794de3</color>

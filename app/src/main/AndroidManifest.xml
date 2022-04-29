@@ -22,6 +22,7 @@
         <activity android:name=".ui.auth.login.LoginActivity" />
         <activity android:name=".ui.celeste.CelesteActivity" />
         <activity android:name=".ui.category.category.CategoryActivity" />
+        <activity android:name=".ui.times.TimesActivity" />
         <activity android:name=".ui.category.subcategory.SubCategoryActivity" />
         <activity android:name=".ui.splash.SplashScreenActivity">
             <intent-filter>

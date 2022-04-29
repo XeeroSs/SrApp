@@ -1,7 +1,6 @@
 package com.xeross.srapp.ui.adapters
 
 import android.content.Context
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,16 +8,14 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseAdapter
-import com.xeross.srapp.utils.extensions.TimeExtensions.convertTimeToSeconds
-import com.xeross.srapp.utils.extensions.UtilsExtensions.toHexColorString
 import com.xeross.srapp.data.models.LeaderBoard
 import com.xeross.srapp.data.models.types.DifferenceType
 import com.xeross.srapp.listener.TimeListener
+import com.xeross.srapp.utils.extensions.UtilsExtensions.toHexColorString
 import kotlinx.android.synthetic.main.ranking_cell.view.*
 
 class LeaderBoardAdapter(context: Context, objectList: ArrayList<LeaderBoard>, private val timeListener: TimeListener) :
@@ -40,7 +37,7 @@ class LeaderBoardAdapter(context: Context, objectList: ArrayList<LeaderBoard>, p
     }
     
     override fun updateItem(holder: ViewHolder, dObject: LeaderBoard) {
-    
+        
         getDifferenceText(dObject.time, holder)
         holder.position.text = context.getString(R.string.game_details_ranking_position, dObject.place)
         holder.name.text = dObject.name
@@ -55,8 +52,8 @@ class LeaderBoardAdapter(context: Context, objectList: ArrayList<LeaderBoard>, p
     }
     
     private fun getDifferenceText(timeOpponentInString: String, holder: ViewHolder) {
-        
-        val timeInSecondsOpponent = timeOpponentInString.convertTimeToSeconds()
+
+/*        val timeInSecondsOpponent = timeOpponentInString.convertTimeToSeconds()
         
         val personnelBestTime = timeListener.onPersonnelBestTime()
         val bestTime = timeListener.onBestTime()
@@ -70,7 +67,7 @@ class LeaderBoardAdapter(context: Context, objectList: ArrayList<LeaderBoard>, p
         val differencePBToString = getDifferenceTextWithColorInHtmlFormat(differenceTypePB, differenceBetweenPB)
         val differenceBestToString = getDifferenceTextWithColorInHtmlFormat(differenceTypeBest, differenceBetweenBest)
         
-        holder.difference.text = Html.fromHtml(context.resources.getString(R.string.game_details_ranking_difference, differencePBToString, differenceBestToString), HtmlCompat.FROM_HTML_MODE_LEGACY)
+        holder.difference.text = Html.fromHtml(context.resources.getString(R.string.game_details_ranking_difference, differencePBToString, differenceBestToString), HtmlCompat.FROM_HTML_MODE_LEGACY)*/
     }
     
     private fun getDifferenceTextWithColorInHtmlFormat(differenceType: DifferenceType, difference: Long): String {

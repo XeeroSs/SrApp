@@ -1,14 +1,41 @@
 package com.xeross.srapp
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.xeross.srapp.utils.extensions.UtilsExtensions.isFormatEmail
-import com.xeross.srapp.utils.extensions.UtilsExtensions.isValidPassword
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import android.content.Context
+import android.util.Log
+import androidx.test.platform.app.InstrumentationRegistry
+import com.google.firebase.Timestamp
+import com.xeross.srapp.utils.extensions.TimeExtensions.timeAgoToString
+import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
+import java.util.*
 
-@RunWith(AndroidJUnit4::class)
 class InstrumentedTest {
+    
+    private val TAG = "InstrumentedTest"
+    
+    private lateinit var context: Context
+    
+    @Before
+    fun setUp() {
+        context = InstrumentationRegistry.getInstrumentation().targetContext
+    }
+    
+    @Test
+    fun test() {
+        times().forEach {
+            Log.i(TAG, it.timeAgoToString(context, Date()))
+        }
+    }
+    
+    private fun times(): ArrayList<Long> {
+        return arrayListOf(
+            (Timestamp.now().seconds * 1000),
+            (Timestamp.now().seconds * 1000) - (((1000) * 60)),
+            (Timestamp.now().seconds * 1000) - (((1000) * 60) * 60),
+            (Timestamp.now().seconds * 1000) - (((1000) * 60) * 60) * 24,
+            (Timestamp.now().seconds * 1000) - ((((1000) * 60) * 60) * 24) * 56L,
+            (Timestamp.now().seconds * 1000) - ((((1000) * 60) * 60) * 24) * 365L,
+        )
+    }
     
 }

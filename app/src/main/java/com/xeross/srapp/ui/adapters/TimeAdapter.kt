@@ -1,0 +1,82 @@
+package com.xeross.srapp.ui.adapters
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.checkbox.MaterialCheckBox
+import com.xeross.srapp.R
+import com.xeross.srapp.base.BaseAdapter
+import com.xeross.srapp.data.models.Time
+import com.xeross.srapp.listener.ClickListener
+import com.xeross.srapp.utils.extensions.TimeExtensions.timeAgoToString
+import com.xeross.srapp.utils.extensions.TimeExtensions.toFormatTime
+import kotlinx.android.synthetic.main.time_cell.view.*
+import java.util.*
+import kotlin.collections.ArrayList
+
+class TimeAdapter(context: Context, objectList: ArrayList<Time>, private val current: Date, clickListener: ClickListener<Time>, private val listener: Listener) :
+    BaseAdapter<TimeAdapter.ViewHolder, Time>(context, objectList, clickListener) {
+    
+    private val toggles = ArrayList<Time>()
+    
+    interface Listener {
+        fun average(): Long
+        fun best(): Long
+        fun worst(): Long
+        
+        fun isDeleting(): Boolean
+        fun toggle(toggle: Boolean)
+    }
+    
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val item: RelativeLayout = itemView.item
+        val timeAgo: TextView = itemView.text_days_ago
+        val checkBox: MaterialCheckBox = itemView.check_box
+        val cardview: MaterialCardView = itemView.cardview_time
+        val time: TextView = itemView.text_time
+    }
+    
+    
+    override fun onClick(holder: ViewHolder, dObject: Time) {
+        holder.item.setOnClickListener {
+            clickListener?.onClick(dObject)
+        }
+    }
+    
+    override fun updateItem(holder: ViewHolder, dObject: Time) {
+        holder.timeAgo.text = (dObject.createdAt.seconds * 1000).timeAgoToString(context, current)
+        val time = dObject.time
+        val resColor = when {
+            time == listener.best() -> R.color.gold
+            time == listener.worst() -> R.color.worst
+            time > listener.average() -> R.color.negative
+            else -> R.color.positive
+        }
+        val color = ContextCompat.getColor(context, resColor)
+        holder.time.apply {
+            text = time.toFormatTime()
+            setTextColor(color)
+        }
+        holder.cardview.strokeColor = color
+        
+        holder.checkBox.setOnCheckedChangeListener { _, toggle ->
+            if (listener.isDeleting()) {
+                holder.checkBox.isChecked = !toggle
+                return@setOnCheckedChangeListener
+            }
+            if (toggle) toggles.add(dObject) else toggles.remove(dObject)
+            listener.toggle(toggles.isNotEmpty())
+        }
+    }
+    
+    fun getToggles() = toggles
+    
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ViewHolder(LayoutInflater.from(context).inflate(R.layout.time_cell, parent, false))
+}

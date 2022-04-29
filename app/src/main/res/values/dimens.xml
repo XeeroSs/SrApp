@@ -101,6 +101,6 @@
     <dimen name="edit_text_width_auth">300dp</dimen>
     <dimen name="edit_text_height_auth">55dp</dimen>
 
-
+    <dimen name="trash">50dp</dimen>
 
 </resources>

@@ -24,6 +24,27 @@ class TimeTest {
     
     @Test
     @TestCaseName("[{index}] | '{params}'")
+    fun `Format time`() {
+        timesToFormat().forEach {
+            println(it.toFormatTime())
+            println("")
+            println("-------------------")
+            println("")
+        }
+    }
+    
+    private fun timesToFormat(): ArrayList<Long> {
+        return arrayListOf(
+            2038929, /* idk */
+            1925913, /* idk */
+            1953674, /* idk */
+            2000849, /* idk */
+            3596400000, /* idk */
+        )
+    }
+    
+    @Test
+    @TestCaseName("[{index}] | '{params}'")
     fun `Average time`() {
         val average = simpleDate.format(dates().getAverageToMilliseconds())
         println(dates().getAverageToMilliseconds())
@@ -57,7 +78,6 @@ class TimeTest {
     @TestCaseName("[{index}] | '{params}'")
     fun `to format time without hour`(time: Long) {
         println(time.toFormatTime())
-        
     }
     
     @Test
