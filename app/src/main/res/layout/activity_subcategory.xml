@@ -1,32 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/activity_game_details_header_height_with_status_bar"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="@drawable/shape_header"
         android:elevation="10dp"
+        android:orientation="vertical"
         android:transitionName="app_name"
         app:layout_constraintTop_toTopOf="parent">
 
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/top_toolbar"
+            android:background="@null"
+            app:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/header_subcategory_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@null"
+                app:elevation="0dp"
+                app:navigationIcon="?attr/homeAsUpIndicator"
+                app:navigationIconTint="@color/white" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/activity_game_details_header_content_top_with_status_bar">
+            android:layout_height="120dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="@dimen/activity_game_details_header_content_start"
-                android:layout_toStartOf="@+id/activity_game_details_content_buttons_next_previous"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -101,12 +121,12 @@
             </LinearLayout>
         </RelativeLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_below="@+id/header"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/activity_game_details_header_height_with_status_bar"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -277,6 +297,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
             android:background="@color/surface">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -291,6 +312,7 @@
         android:id="@+id/bottom_navigation_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="@color/surface"
         app:elevation="10dp"
         app:itemRippleColor="@color/on_surface_variant"
@@ -298,4 +320,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_navigation_menu" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

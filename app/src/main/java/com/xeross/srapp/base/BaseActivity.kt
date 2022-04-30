@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.xeross.srapp.utils.injection.ViewModelFactory
+import kotlinx.android.synthetic.main.fragment_header.*
+import java.util.function.Function
 
 abstract class BaseActivity : AppCompatActivity() {
     
@@ -42,6 +44,25 @@ abstract class BaseActivity : AppCompatActivity() {
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             statusBarColor = Color.TRANSPARENT
+        }
+    }
+    
+    protected fun buildHeader(resIdTitle: Int, textSize: Float, function: Function<Void?, Boolean>? = null) {
+        with(header_title) {
+            post {
+                this.textSize = textSize
+            }
+            this.text = resources.getString(resIdTitle)
+        }
+        header_toolbar?.setNavigationOnClickListener { _ ->
+            function?.let { func ->
+                func.apply(null).takeIf { it }?.let { _ ->
+                    finish()
+                }
+                return@setNavigationOnClickListener
+            }
+            
+            finish()
         }
     }
     

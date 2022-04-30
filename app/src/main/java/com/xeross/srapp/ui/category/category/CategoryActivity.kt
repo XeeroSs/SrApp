@@ -41,6 +41,9 @@ class CategoryActivity : BaseActivity(), ClickListener<Category> {
     }
     
     override fun ui() {
+        
+        buildHeader(R.string.category, 35f)
+        
         adapter = CategoryAdapter(this, categories, this).also { a ->
             main_activity_list_categories.let {
                 val linearLayoutManager = GridLayoutManager(this, 2)

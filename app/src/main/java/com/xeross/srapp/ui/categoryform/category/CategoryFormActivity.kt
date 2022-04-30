@@ -36,6 +36,8 @@ class CategoryFormActivity : BaseActivity() {
     
     private val extras = HashMap<String, String>()
     
+    private var isRequest = false
+    
     private var viewModel: CategoryFormViewModel? = null
     
     private var next: String? = null
@@ -52,6 +54,9 @@ class CategoryFormActivity : BaseActivity() {
     }
     
     override fun ui() {
+        
+        buildHeader(R.string.category, 30f) { !isRequest }
+        
         setStatusBarTransparent()
         buildViewPager()
         
@@ -139,11 +144,13 @@ class CategoryFormActivity : BaseActivity() {
         
         next_button.isEnabled = false
         previous_button.isEnabled = false
+        isRequest = true
         
         viewModel?.createCategoryToDatabase(nameCategory, imageCategory, nameSubcategory, imageSubcategory)?.observe(this, {
     
             next_button.isEnabled = true
             previous_button.isEnabled = true
+            isRequest = false
             if (!it) return@observe
     
             // TODO("Send extra")

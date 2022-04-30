@@ -33,6 +33,8 @@ class SubcategoryFormActivity : BaseActivity() {
     
     private var viewModel: SubcategoryFormViewModel? = null
     
+    private var isRequest = false
+    
     private lateinit var categoryId: String
     
     private var next: String? = null
@@ -55,6 +57,9 @@ class SubcategoryFormActivity : BaseActivity() {
     }
     
     override fun ui() {
+        
+        buildHeader(R.string.subcategories, 25f) { !isRequest }
+    
         setStatusBarTransparent()
         buildViewPager()
         
@@ -140,10 +145,13 @@ class SubcategoryFormActivity : BaseActivity() {
         
         next_button.isEnabled = false
         previous_button.isEnabled = false
+    
+        isRequest = true
         
         viewModel?.createSubcategoryToDatabase(categoryId, nameSubcategory, imageSubcategory)?.observe(this, {
             next_button.isEnabled = true
             previous_button.isEnabled = true
+            isRequest = false
             if (!it) return@observe
     
             setResult(RC_REFRESH)

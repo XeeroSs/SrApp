@@ -39,6 +39,7 @@ import com.xeross.srapp.utils.extensions.TimeExtensions.toFormatTime
 import kotlinx.android.synthetic.main.activity_subcategory.*
 import kotlinx.android.synthetic.main.dialog_add_time.*
 import kotlinx.android.synthetic.main.dialog_add_time.view.*
+import kotlinx.android.synthetic.main.fragment_header.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -91,6 +92,11 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
     }
     
     override fun ui() {
+        
+        header_subcategory_toolbar?.setNavigationOnClickListener {
+            finish()
+        }
+        
         statisticAdapter = StatisticAdapter(this, statistics).also { a ->
             activity_game_details_recyclerview_stats.let {
                 val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)

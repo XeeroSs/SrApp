@@ -86,6 +86,8 @@ class TimesActivity : BaseActivity(), TimeAdapter.Listener, ClickListener<Time> 
     
     override fun ui() {
         
+        buildHeader(R.string.times, 35f)
+        
         setStatusBarTransparent()
         setUpDialogs()
         
@@ -94,10 +96,6 @@ class TimesActivity : BaseActivity(), TimeAdapter.Listener, ClickListener<Time> 
                 val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
                 it.setHasFixedSize(true)
                 it.layoutManager = linearLayoutManager
-                //    val dd = DividerItemDecoration(this, 20, R.drawable.shape_divider, LinearLayoutManager.HORIZONTAL)
-/*                val dd = DividerItemDecoration(this, 1, R.drawable.shape_divider_vertical, LinearLayoutManager.VERTICAL)
-                it.addItemDecoration(dd)*/
-                //     it.addItemDecoration(androidx.recyclerview.widget.DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL))
                 it.itemAnimator = DefaultItemAnimator()
                 it.adapter = a
             }

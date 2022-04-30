@@ -62,6 +62,8 @@ class SubcategoriesActivity : BaseActivity(), ClickListener<SubCategory> {
     // TODO("make color gradient")
     override fun ui() {
         
+        buildHeader(R.string.subcategory, 25f)
+        
         handleBottomNavigationMenu()
         setStatusBarTransparent()
         
