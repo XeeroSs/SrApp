@@ -3,7 +3,7 @@
     <item
         android:id="@+id/menu_profile"
         android:enabled="true"
-        android:icon="@drawable/ic_circle_user"
+        android:icon="@drawable/ic_profile"
         android:iconTint="@color/on_surface"
         android:title="@string/menu_profile" />
     <item
@@ -15,6 +15,7 @@
     <item
         android:id="@+id/menu_settings"
         android:enabled="true"
+        
         android:icon="@drawable/ic_settings"
         android:iconTint="@color/on_surface"
         android:title="@string/menu_settings" />

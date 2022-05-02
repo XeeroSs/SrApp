@@ -32,8 +32,8 @@ import com.xeross.srapp.utils.extensions.TimeExtensions.toMinuteFromTimeInMillis
 import com.xeross.srapp.utils.extensions.TimeExtensions.toSecondFromTimeInMilliseconds
 import kotlinx.android.synthetic.main.activity_subcategory.*
 import kotlinx.android.synthetic.main.activity_times.*
-import kotlinx.android.synthetic.main.activity_times.bottom_navigation_menu
 import kotlinx.android.synthetic.main.dialog_add_time.view.*
+import kotlinx.android.synthetic.main.fragment_bottom_navigation_menu.*
 import java.util.*
 import java.util.stream.Collectors
 import kotlin.collections.ArrayList

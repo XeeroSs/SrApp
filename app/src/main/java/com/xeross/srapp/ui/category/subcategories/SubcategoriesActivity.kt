@@ -17,9 +17,9 @@ import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
 import kotlinx.android.synthetic.main.activity_category.*
 import kotlinx.android.synthetic.main.activity_subcategories.*
-import kotlinx.android.synthetic.main.activity_subcategories.bottom_navigation_menu
 import kotlinx.android.synthetic.main.activity_subcategory.*
 import kotlinx.android.synthetic.main.cell_subcategory.*
+import kotlinx.android.synthetic.main.fragment_bottom_navigation_menu.*
 
 class SubcategoriesActivity : BaseActivity(), ClickListener<SubCategory> {
     

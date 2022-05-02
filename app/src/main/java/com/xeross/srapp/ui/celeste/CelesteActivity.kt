@@ -17,10 +17,9 @@ import com.xeross.srapp.data.models.Statistic
 import com.xeross.srapp.data.models.types.CelesteILType
 import com.xeross.srapp.ui.adapters.LeaderBoardAdapter
 import com.xeross.srapp.ui.adapters.StatisticAdapter
-import com.xeross.srapp.utils.extensions.UtilsExtensions.getNextOrNull
-import com.xeross.srapp.utils.extensions.UtilsExtensions.getPreviousOrNull
 import com.xeross.srapp.utils.injection.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_subcategory.*
+import kotlinx.android.synthetic.main.fragment_bottom_navigation_menu.*
 
 class CelesteActivity : BaseActivityOAuth() {
     
@@ -57,7 +56,7 @@ class CelesteActivity : BaseActivityOAuth() {
         super.onCreate(savedInstanceState)
         
         this.level = CelesteILType.FORSAKEN_CITY
-        
+
 /*        statisticAdapter = StatisticAdapter(this, stats).also { a ->
             activity_game_details_recyclerview_stats.let {
                 val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)

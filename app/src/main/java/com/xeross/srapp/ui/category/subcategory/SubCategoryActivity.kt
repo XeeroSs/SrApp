@@ -41,6 +41,7 @@ import com.xeross.srapp.utils.extensions.TimeExtensions.toFormatTimeWithoutMilli
 import kotlinx.android.synthetic.main.activity_subcategory.*
 import kotlinx.android.synthetic.main.dialog_add_time.*
 import kotlinx.android.synthetic.main.dialog_add_time.view.*
+import kotlinx.android.synthetic.main.fragment_bottom_navigation_menu.*
 import kotlinx.android.synthetic.main.fragment_header.*
 import java.util.*
 import kotlin.collections.ArrayList

@@ -15,6 +15,7 @@ import com.xeross.srapp.R
 import com.xeross.srapp.ui.settings.SettingActivity
 import com.xeross.srapp.utils.injection.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_category.*
+import kotlinx.android.synthetic.main.fragment_bottom_navigation_menu.*
 import kotlinx.android.synthetic.main.fragment_header.*
 import kotlinx.android.synthetic.main.fragment_header.header_title
 import java.util.function.Function

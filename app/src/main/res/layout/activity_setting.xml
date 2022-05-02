@@ -173,7 +173,7 @@
                     android:buttonTint="@color/pink_gradient"
                     android:checked="true"
                     android:gravity="center_vertical"
-                    android:src="@drawable/ic_arrow_next"
+                    android:src="@drawable/ic_sign_out"
                     android:tint="@color/on_surface" />
 
             </RelativeLayout>
