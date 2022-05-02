@@ -25,6 +25,7 @@ import com.xeross.srapp.data.models.types.StatisticType
 import com.xeross.srapp.listener.TimeListener
 import com.xeross.srapp.ui.adapters.StatisticAdapter
 import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity.Companion.RC_REFRESH
+import com.xeross.srapp.ui.category.subcategory.types.TimeSortType
 import com.xeross.srapp.ui.celeste.CelesteActivity
 import com.xeross.srapp.ui.times.TimesActivity
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
@@ -63,6 +64,8 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
     
     private val statistics = ArrayList<Pair<StatisticType, String>>()
     
+    private var bestOnAllRunsInMilliseconds = 0L
+    
     private var bestInMilliseconds = 0L
     private var worstInMilliseconds = 0L
     private var averageInMilliseconds = 0L
@@ -78,6 +81,8 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
     private var millisecondsPicker: NumberPicker? = null
     
     private var statisticAdapter: StatisticAdapter? = null
+    
+    private var currentTimeSort = TimeSortType.MONTH
 
 /*    private lateinit var leaderBoardAdapter: LeaderBoardAdapter
     private val leaderBoards = ArrayList<LeaderBoard>()*/
@@ -91,7 +96,20 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
         }
     }
     
+    private fun onClickTimeMenu(view: View) {
+        showMenu(view, R.menu.popup_times_menu).setOnMenuItemClickListener { menu ->
+            TimeSortType.values().find { menu.itemId == it.resId }?.let { type ->
+                currentTimeSort = type
+                setPlaceHolder()
+                getTimes()
+            }
+            return@setOnMenuItemClickListener true
+        }
+    }
+    
     override fun ui() {
+        
+        setPlaceHolder()
         
         header_subcategory_toolbar?.setNavigationOnClickListener {
             finish()
@@ -199,7 +217,6 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
     private fun refresh() {
         setHeaderImage()
         getStats()
-        getHeader()
     }
     
     private fun resetDialogPicker() {
@@ -251,7 +268,7 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
         val ranking = activity_game_details_text_ranking
         
         // TODO("Use cache with sharedPreferences")
-        val resStats = resources.getString(R.string.game_details_text_stats, "all runs")
+        val resStats = resources.getString(R.string.game_details_text_stats, getString(currentTimeSort.resStringId))
         val resRanking = resources.getString(R.string.game_details_text_ranking, "global")
         
         stats.text = resStats
@@ -340,7 +357,7 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
     private fun getHeader() {
         activity_game_details_text_name_level.text = resources.getString(R.string.game_details_header_level_name, subcategory.name)
         activity_game_details_text_category.text = resources.getString(R.string.game_details_header_level_name, categoryName)
-        activity_game_details_text_time.text = resources.getString(R.string.game_details_header_level_name, bestInMilliseconds.toFormatTime())
+        activity_game_details_text_time.text = resources.getString(R.string.game_details_header_level_name, bestOnAllRunsInMilliseconds.toFormatTime())
     }
     
     override fun setUp() {
@@ -371,14 +388,29 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
         times.clear()
         statisticAdapter?.notifyDataSetChanged()
         viewModel?.let {
-            it.getSubCategoryTimes(categoryId, subcategory.id).observe(this, { time ->
+            it.getSubCategoryTimes(categoryId, subcategory.id, currentTimeSort).observe(this, { time ->
                 times.addAll(time)
                 refresh()
+                it.getBestOnAllRuns(categoryId, subcategory.id).observe(this, { sub ->
+                    if (sub != null) {
+                        bestOnAllRunsInMilliseconds = sub
+                        refreshBest()
+                    }
+                })
             })
         }
     }
     
+    private fun refreshBest() {
+        getHeader()
+    }
+    
     override fun onClick() {
+        
+        activity_game_details_text_your_stats.setOnClickListener {
+            onClickTimeMenu(it)
+        }
+        
         activity_game_details_button_add_your_stats.setOnClickListener {
             launchDialog()
         }

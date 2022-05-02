@@ -97,5 +97,9 @@
     <string name="hour">hour</string>
     <string name="minute">minute</string>
     <string name="second">second</string>
+    <string name="week">week</string>
+    <string name="month">month</string>
+    <string name="years">years</string>
+    <string name="all_runs">all runs</string>
 
 </resources>

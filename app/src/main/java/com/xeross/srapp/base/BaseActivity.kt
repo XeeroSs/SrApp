@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.xeross.srapp.utils.injection.ViewModelFactory
@@ -63,6 +64,14 @@ abstract class BaseActivity : AppCompatActivity() {
             }
             
             finish()
+        }
+    }
+    
+    
+    protected fun showMenu(v: View, resMenuId: Int): PopupMenu {
+        return PopupMenu(this, v).also {
+            it.menuInflater.inflate(resMenuId, it.menu)
+            it.show()
         }
     }
     

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.google.android.material.card.MaterialCardView
 import com.xeross.srapp.R
 import com.xeross.srapp.ui.categoryform.fragment.base.BaseCategoryFormFragment
 
@@ -78,6 +79,11 @@ class CategoryFormUploadImageFragment : BaseCategoryFormFragment() {
             val illustrationView = view.findViewById<ImageView>(R.id.form_upload_image)
             illustrationView.setBackgroundResource(it)
         }
+        
+        view.findViewById<MaterialCardView>(R.id.form_upload_image_card)?.setOnClickListener {
+        
+        }
+        
     }
     
 }

@@ -4,13 +4,15 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.xeross.srapp.base.BaseFirebaseViewModel
+import com.xeross.srapp.data.models.SubCategory
 import com.xeross.srapp.data.models.Time
+import com.xeross.srapp.ui.category.subcategory.types.TimeSortType
 import com.xeross.srapp.utils.Constants
 import java.util.*
 
 class SubcategoryViewModel : BaseFirebaseViewModel() {
     
-    fun getSubCategoryTimes(categoryId: String, subcategoryId: String?): LiveData<ArrayList<Long>> {
+    fun getSubCategoryTimes(categoryId: String, subcategoryId: String?, type: TimeSortType): LiveData<ArrayList<Long>> {
         val mutableLiveData = MutableLiveData<ArrayList<Long>>()
         
         if (subcategoryId == null) {
@@ -21,7 +23,8 @@ class SubcategoryViewModel : BaseFirebaseViewModel() {
         val uid = getUserId() ?: return mutableLiveData
         
         val timeCollection = getCollection(getPathSubCollectionToString(uid, categoryId) + "/" + subcategoryId + "/" + Constants.DATABASE_COLLECTION_TIME)
-        timeCollection.get().addOnSuccessListener {
+        
+        getDocumentByTimestamp(timeCollection, type.timeToDays).addOnSuccessListener {
             it.toObjects(Time::class.java).let { timeObject ->
                 val arrayTimes = arrayListOf<Long>()
                 timeObject.forEach { time ->
@@ -31,6 +34,26 @@ class SubcategoryViewModel : BaseFirebaseViewModel() {
             }
         }.addOnFailureListener {
             mutableLiveData.postValue(arrayListOf())
+        }
+        
+        return mutableLiveData
+    }
+    
+    fun getBestOnAllRuns(categoryId: String, subcategoryId: String): LiveData<Long?> {
+        val mutableLiveData = MutableLiveData<Long?>()
+        
+        val uid = getUserId() ?: return mutableLiveData
+        
+        val collection = getCollection(getPathSubCollectionToString(uid, categoryId))
+        
+        collection.document(subcategoryId).get().addOnSuccessListener {
+            it.toObject(SubCategory::class.java)?.let { timeObject ->
+                mutableLiveData.postValue(timeObject.timeInMilliseconds)
+                return@addOnSuccessListener
+            }
+            mutableLiveData.postValue(null)
+        }.addOnFailureListener {
+            mutableLiveData.postValue(null)
         }
         
         return mutableLiveData

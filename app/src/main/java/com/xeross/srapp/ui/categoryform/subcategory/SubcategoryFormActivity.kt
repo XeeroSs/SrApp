@@ -56,6 +56,8 @@ class SubcategoryFormActivity : BaseActivity() {
         }
     }
     
+    
+    
     override fun ui() {
         
         buildHeader(R.string.subcategories, 25f) { !isRequest }

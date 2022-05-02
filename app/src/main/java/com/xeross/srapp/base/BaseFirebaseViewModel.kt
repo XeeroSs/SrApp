@@ -8,9 +8,12 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import io.reactivex.rxjava3.disposables.Disposable
+import java.sql.Timestamp
+import java.util.*
 
 abstract class BaseFirebaseViewModel : ViewModel() {
     
@@ -18,12 +21,14 @@ abstract class BaseFirebaseViewModel : ViewModel() {
     private var auth: FirebaseAuth = Firebase.auth
     private var database = Firebase.firestore
     
-    fun build() {
+    private lateinit var currentAt: Date
     
+    fun build() {
+        currentAt = Date()
     }
     
     protected fun getDisposable(): Disposable? = disposable
-    protected  fun getAuth(): FirebaseAuth = auth
+    protected fun getAuth(): FirebaseAuth = auth
     
     init {
         build()
@@ -75,6 +80,20 @@ abstract class BaseFirebaseViewModel : ViewModel() {
     // CRUD - Delete
     protected fun deleteDocument(collectionReference: CollectionReference, documentPath: String): Task<Void> {
         return collectionReference.document(documentPath).delete()
+    }
+    
+    protected fun getDocumentByTimestamp(collectionReference: CollectionReference, timeToInDays: Int): Task<QuerySnapshot> {
+        
+        if (timeToInDays <= 0) return collectionReference.get()
+        
+        val calendar = Calendar.getInstance()
+        calendar.time = currentAt
+        calendar.add(Calendar.DATE, -timeToInDays)
+        val out = calendar.time
+        
+        val ts = Timestamp(out.time)
+        
+        return collectionReference.whereGreaterThan("createdAt", ts).get()
     }
     
     fun getUser(): FirebaseUser? {
