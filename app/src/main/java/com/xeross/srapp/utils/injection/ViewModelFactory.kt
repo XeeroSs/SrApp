@@ -11,6 +11,7 @@ import com.xeross.srapp.ui.category.subcategory.SubcategoryViewModel
 import com.xeross.srapp.ui.categoryform.category.CategoryFormViewModel
 import com.xeross.srapp.ui.categoryform.subcategory.SubcategoryFormViewModel
 import com.xeross.srapp.ui.celeste.CelesteViewModel
+import com.xeross.srapp.ui.settings.SettingViewModel
 import com.xeross.srapp.ui.splash.SplashViewModel
 import com.xeross.srapp.ui.times.TimesViewModel
 import java.lang.ref.WeakReference
@@ -29,6 +30,7 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory
             getViewModel<CategoryViewModel>(modelClass) -> CategoryViewModel()
             getViewModel<RegisterViewModel>(modelClass) -> RegisterViewModel()
             getViewModel<LoginViewModel>(modelClass) -> LoginViewModel()
+            getViewModel<SettingViewModel>(modelClass) -> SettingViewModel()
             getViewModel<CelesteViewModel>(modelClass) -> CelesteViewModel(WeakReference(context))
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         } as VM

@@ -89,6 +89,7 @@ class TimesActivity : BaseActivity(), TimeAdapter.Listener, ClickListener<Time> 
         buildHeader(R.string.times, 35f)
         
         setStatusBarTransparent()
+        buildBottomNavigationMenu()
         setUpDialogs()
         
         adapter = TimeAdapter(this, times, Date(), this, this).also { a ->

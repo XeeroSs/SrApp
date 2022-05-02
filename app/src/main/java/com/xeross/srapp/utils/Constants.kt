@@ -13,4 +13,6 @@ object Constants {
     const val DATABASE_COLLECTION_CATEGORIES = "categories"
     const val DATABASE_COLLECTION_SUBCATEGORIES = "subcategories"
     const val DATABASE_COLLECTION_TIME = "times"
+    
+    const val KEY_SHARED_PREFERENCES = "KEY_SETTINGS_SHARED_PREFERENCES"
 }

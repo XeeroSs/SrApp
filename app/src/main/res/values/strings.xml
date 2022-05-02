@@ -101,5 +101,6 @@
     <string name="month">month</string>
     <string name="years">years</string>
     <string name="all_runs">all runs</string>
+    <string name="settings">Settings</string>
 
 </resources>

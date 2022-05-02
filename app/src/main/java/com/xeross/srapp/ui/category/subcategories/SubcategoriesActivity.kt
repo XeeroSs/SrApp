@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.data.models.SubCategory
@@ -13,7 +12,6 @@ import com.xeross.srapp.listener.ClickListener
 import com.xeross.srapp.ui.adapters.SubcategoriesAdapter
 import com.xeross.srapp.ui.category.subcategory.SubCategoryActivity
 import com.xeross.srapp.ui.categoryform.subcategory.SubcategoryFormActivity
-import com.xeross.srapp.ui.celeste.CelesteActivity
 import com.xeross.srapp.utils.Constants
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
@@ -63,8 +61,8 @@ class SubcategoriesActivity : BaseActivity(), ClickListener<SubCategory> {
     override fun ui() {
         
         buildHeader(R.string.subcategory, 25f)
-        
-        handleBottomNavigationMenu()
+    
+        buildBottomNavigationMenu()
         setStatusBarTransparent()
         
         adapter = SubcategoriesAdapter(this, subCategories, this).also { a ->
@@ -123,24 +121,6 @@ class SubcategoriesActivity : BaseActivity(), ClickListener<SubCategory> {
         intent.putExtra(Constants.EXTRA_SUBCATEGORY_URL, o.imageURL)
         
         resultLauncher.launch(intent)
-    }
-    
-    // TODO("Put into base activity")
-    private fun handleBottomNavigationMenu() {
-        // unselected the first item (the first item is selected by default when the activity is created)
-        bottom_navigation_menu.menu.getItem(0).isCheckable = false
-        (bottom_navigation_menu as NavigationBarView).setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener {
-            // Test
-            when (it.itemId) {
-                R.id.menu_home -> {
-                    val intent = Intent(this, CelesteActivity::class.java)
-                    startActivity(intent)
-                }
-            }
-    
-            // return false allows don't show color after selected item
-            return@OnItemSelectedListener false
-        })
     }
     
     override fun onLongClick(o: SubCategory) {

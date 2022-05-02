@@ -5,12 +5,18 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.navigation.NavigationBarView
+import com.xeross.srapp.R
+import com.xeross.srapp.ui.settings.SettingActivity
 import com.xeross.srapp.utils.injection.ViewModelFactory
+import kotlinx.android.synthetic.main.activity_category.*
 import kotlinx.android.synthetic.main.fragment_header.*
+import kotlinx.android.synthetic.main.fragment_header.header_title
 import java.util.function.Function
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -65,6 +71,24 @@ abstract class BaseActivity : AppCompatActivity() {
             
             finish()
         }
+    }
+    
+    protected fun buildBottomNavigationMenu(resultIntent: ActivityResultLauncher<Intent>? = null) {
+        // unselected the first item (the first item is selected by default when the activity is created)
+        bottom_navigation_menu.menu.getItem(0).isCheckable = false
+        (bottom_navigation_menu as NavigationBarView).setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener {
+            // Test
+            when (it.itemId) {
+                R.id.menu_home -> {
+                }
+                R.id.menu_settings -> {
+                    val intent = Intent(this, SettingActivity::class.java)
+                    resultIntent?.launch(intent) ?: startActivity(intent)
+                }
+            }
+            // return false allows don't show color after selected item
+            return@OnItemSelectedListener false
+        })
     }
     
     

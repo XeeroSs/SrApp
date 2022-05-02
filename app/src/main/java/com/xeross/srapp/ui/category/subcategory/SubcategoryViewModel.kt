@@ -7,6 +7,7 @@ import com.xeross.srapp.base.BaseFirebaseViewModel
 import com.xeross.srapp.data.models.SubCategory
 import com.xeross.srapp.data.models.Time
 import com.xeross.srapp.ui.category.subcategory.types.TimeSortType
+import com.xeross.srapp.ui.settings.types.SettingType
 import com.xeross.srapp.utils.Constants
 import java.util.*
 
@@ -121,6 +122,10 @@ class SubcategoryViewModel : BaseFirebaseViewModel() {
     
     private fun getPathSubCollectionToString(uid: String, categoryId: String): String {
         return "${Constants.DATABASE_COLLECTION_CATEGORIES}/$uid/${Constants.DATABASE_COLLECTION_USERS_CATEGORIES}/$categoryId/${Constants.DATABASE_COLLECTION_SUBCATEGORIES}"
+    }
+    
+    fun getToggleFromSharedPreferences(settingType: SettingType): Boolean {
+        return getSharedPreferences(settingType)
     }
     
 }

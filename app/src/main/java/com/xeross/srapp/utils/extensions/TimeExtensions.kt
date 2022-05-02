@@ -16,6 +16,33 @@ object TimeExtensions {
     private const val ONE_DAY = ONE_HOUR * 24
     private const val ONE_YEARS = ONE_DAY * 365
     
+    fun Long.toFormatTimeWithoutMilliseconds(): String {
+        val hours = this / (1000L * 60L * 60L)
+        
+        val builder = StringBuilder()
+        
+        if (hours > 0) {
+            if (hours < 10) builder.append("0")
+            builder.append(hours).append(":")
+        }
+        
+        val minutes = (this / (1000L * 60L)) % 60L
+        
+        if (minutes > 0) {
+            if (minutes < 10) builder.append("0")
+            builder.append(minutes).append(":")
+        } else builder.append("00:")
+        
+        val seconds = (this / (1000L)) % 60
+        
+        if (seconds > 0) {
+            if (seconds < 10) builder.append("0")
+            builder.append(seconds)
+        } else builder.append("00")
+        
+        return builder.toString()
+    }
+    
     fun Long.toFormatTime(): String {
         
         val hours = this / (1000L * 60L * 60L)

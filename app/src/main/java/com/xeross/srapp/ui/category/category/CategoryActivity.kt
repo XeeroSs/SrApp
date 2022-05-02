@@ -4,16 +4,13 @@ import android.content.Intent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.data.models.Category
 import com.xeross.srapp.listener.ClickListener
 import com.xeross.srapp.ui.adapters.CategoryAdapter
-import com.xeross.srapp.ui.auth.login.LoginActivity
 import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity
 import com.xeross.srapp.ui.categoryform.category.CategoryFormActivity
-import com.xeross.srapp.ui.celeste.CelesteActivity
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
 import kotlinx.android.synthetic.main.activity_category.*
@@ -62,7 +59,7 @@ class CategoryActivity : BaseActivity(), ClickListener<Category> {
         
         
         setStatusBarTransparent()
-        handleBottomNavigationMenu()
+        buildBottomNavigationMenu()
     }
     
     override fun onClick() {
@@ -76,28 +73,6 @@ class CategoryActivity : BaseActivity(), ClickListener<Category> {
         if (resultCode == RC_CREATE_NEW_CATEGORY) {
             getCategories()
         }
-    }
-    
-    // TODO("Set in BaseActivity")
-    private fun handleBottomNavigationMenu() {
-        // unselected the first item (the first item is selected by default when the activity is created)
-        bottom_navigation_menu.menu.getItem(0).isCheckable = false
-        (bottom_navigation_menu as NavigationBarView).setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener {
-            // Test
-            when (it.itemId) {
-                R.id.menu_home -> {
-                    val intent = Intent(this, CelesteActivity::class.java)
-                    startActivity(intent)
-                }
-                R.id.menu_settings -> {
-                    // TODO("Test")
-                    viewModel?.disconnect()
-                    goToActivity<LoginActivity>()
-                }
-            }
-            // return false allows don't show color after selected item
-            return@OnItemSelectedListener false
-        })
     }
     
     private fun getCategories() {

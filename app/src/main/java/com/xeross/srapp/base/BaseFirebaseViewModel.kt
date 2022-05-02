@@ -1,5 +1,7 @@
 package com.xeross.srapp.base
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -11,6 +13,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.xeross.srapp.listener.ISharedPreferences
 import io.reactivex.rxjava3.disposables.Disposable
 import java.sql.Timestamp
 import java.util.*
@@ -21,10 +24,16 @@ abstract class BaseFirebaseViewModel : ViewModel() {
     private var auth: FirebaseAuth = Firebase.auth
     private var database = Firebase.firestore
     
+    protected var sharedPreferences: SharedPreferences? = null
+    
     private lateinit var currentAt: Date
     
     fun build() {
         currentAt = Date()
+    }
+    
+    fun buildSharedPreferences(context: Context, key: String) {
+        sharedPreferences = context.getSharedPreferences(key, Context.MODE_PRIVATE)
     }
     
     protected fun getDisposable(): Disposable? = disposable
@@ -82,6 +91,33 @@ abstract class BaseFirebaseViewModel : ViewModel() {
         return collectionReference.document(documentPath).delete()
     }
     
+    protected fun <T> applySharedPreferences(iSharedPreferences: ISharedPreferences<T>, t: T) {
+        sharedPreferences?.let { sp ->
+            with(sp.edit() ?: return) {
+                when (t) {
+                    is Boolean -> putBoolean(iSharedPreferences.getKey(), t)
+                    is String -> putString(iSharedPreferences.getKey(), t)
+                    is Int -> putInt(iSharedPreferences.getKey(), t)
+                    else -> throw ClassCastException("String / Int / Boolean")
+                }
+                apply()
+            }
+        } ?: throw Exception("must call buildSharedPreferences()")
+    }
+    
+    protected inline fun <reified T> getSharedPreferences(iSharedPreferences: ISharedPreferences<T>): T {
+        with(sharedPreferences) {
+            if (this == null) throw Exception("must call buildSharedPreferences()")
+            val data = iSharedPreferences.getDefaultValue()
+            return when (data) {
+                is Boolean -> getBoolean(iSharedPreferences.getKey(), data)
+                is String -> getString(iSharedPreferences.getKey(), data)
+                is Int -> getInt(iSharedPreferences.getKey(), data)
+                else -> throw ClassCastException("String / Int / Boolean")
+            } as T
+        }
+    }
+    
     protected fun getDocumentByTimestamp(collectionReference: CollectionReference, timeToInDays: Int): Task<QuerySnapshot> {
         
         if (timeToInDays <= 0) return collectionReference.get()
@@ -104,7 +140,7 @@ abstract class BaseFirebaseViewModel : ViewModel() {
         return true
     }
     
-    fun disconnect() {
+    fun disconnectFromFirebase() {
         auth.signOut()
     }
 }

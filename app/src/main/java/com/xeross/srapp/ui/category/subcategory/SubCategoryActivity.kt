@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.components.DividerItemDecoration
@@ -26,8 +25,9 @@ import com.xeross.srapp.listener.TimeListener
 import com.xeross.srapp.ui.adapters.StatisticAdapter
 import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity.Companion.RC_REFRESH
 import com.xeross.srapp.ui.category.subcategory.types.TimeSortType
-import com.xeross.srapp.ui.celeste.CelesteActivity
+import com.xeross.srapp.ui.settings.types.SettingType
 import com.xeross.srapp.ui.times.TimesActivity
+import com.xeross.srapp.utils.Constants
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
 import com.xeross.srapp.utils.Constants.EXTRA_SUBCATEGORY_ID
@@ -37,6 +37,7 @@ import com.xeross.srapp.utils.extensions.TimeExtensions.getAverageToMilliseconds
 import com.xeross.srapp.utils.extensions.TimeExtensions.getBestToMilliseconds
 import com.xeross.srapp.utils.extensions.TimeExtensions.getWorstToMilliseconds
 import com.xeross.srapp.utils.extensions.TimeExtensions.toFormatTime
+import com.xeross.srapp.utils.extensions.TimeExtensions.toFormatTimeWithoutMilliseconds
 import kotlinx.android.synthetic.main.activity_subcategory.*
 import kotlinx.android.synthetic.main.dialog_add_time.*
 import kotlinx.android.synthetic.main.dialog_add_time.view.*
@@ -153,7 +154,7 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
         setGraphics()
         setStatusBarTransparent()
         setPlaceHolder()
-        handleBottomNavigationMenu()
+        buildBottomNavigationMenu(resultLauncher)
         
         setUpDialogs()
     }
@@ -293,24 +294,6 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
                 graphic.addSeries(series)*/
     }
     
-    // TODO("Put into base activity")
-    private fun handleBottomNavigationMenu() {
-        // unselected the first item (the first item is selected by default when the activity is created)
-        bottom_navigation_menu.menu.getItem(0).isCheckable = false
-        (bottom_navigation_menu as NavigationBarView).setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener {
-            // Test
-            when (it.itemId) {
-                R.id.menu_home -> {
-                    val intent = Intent(this, CelesteActivity::class.java)
-                    startActivity(intent)
-                }
-            }
-    
-            // return false allows don't show color after selected item
-            return@OnItemSelectedListener false
-        })
-    }
-    
     private fun getStats() {
         statistics.clear()
         times.getBestToMilliseconds().let {
@@ -319,7 +302,9 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
         }
         times.getAverageToMilliseconds().let {
             averageInMilliseconds = it
-            statistics.add(Pair(StatisticType.AVERAGE, it.toFormatTime()))
+            statistics.add(Pair(StatisticType.AVERAGE, viewModel?.getToggleFromSharedPreferences(SettingType.DISPLAY_MILLISECONDS)?.let { toggle ->
+                if (!toggle) it.toFormatTimeWithoutMilliseconds() else it.toFormatTime()
+            } ?: it.toFormatTime()))
         }
         times.getWorstToMilliseconds().let {
             worstInMilliseconds = it
@@ -361,8 +346,10 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
     }
     
     override fun setUp() {
-        viewModel = (vm as SubcategoryViewModel?)
-        viewModel?.build()
+        viewModel = (vm as SubcategoryViewModel?)?.also {
+            it.build()
+            it.buildSharedPreferences(this, Constants.KEY_SHARED_PREFERENCES)
+        }
         
         // Get name from intent extra for header
         val subcategoryName = intent.getStringExtra(EXTRA_SUBCATEGORY_NAME) ?: "???"
