@@ -125,8 +125,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_below="@+id/header"
         android:layout_height="match_parent"
+        android:layout_below="@+id/header"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -310,8 +310,21 @@
 
     <include
         layout="@layout/fragment_bottom_navigation_menu"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!--    <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/surface"
+            app:elevation="10dp"
+            app:itemRippleColor="@color/on_surface_variant"
+            app:labelVisibilityMode="unlabeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/bottom_navigation_menu" />-->
 
 </RelativeLayout>

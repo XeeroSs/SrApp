@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:background="@color/surface"
         app:elevation="10dp"
-        app:itemIconSize="20dp"
         app:itemRippleColor="@color/on_surface_variant"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/bottom_navigation_menu" />
