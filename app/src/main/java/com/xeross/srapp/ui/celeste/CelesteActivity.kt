@@ -8,26 +8,22 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.RelativeLayout
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
-import com.xeross.srapp.ui.adapters.DividerItemDecoration
-import com.xeross.srapp.ui.adapters.LeaderBoardAdapter
-import com.xeross.srapp.ui.adapters.StatisticAdapter
 import com.xeross.srapp.base.BaseActivityOAuth
-import com.xeross.srapp.utils.extensions.UtilsExtensions.getNextOrNull
-import com.xeross.srapp.utils.extensions.UtilsExtensions.getPreviousOrNull
-import com.xeross.srapp.injection.ViewModelFactory
 import com.xeross.srapp.data.models.LeaderBoard
 import com.xeross.srapp.data.models.Statistic
 import com.xeross.srapp.data.models.types.CelesteILType
-import kotlinx.android.synthetic.main.activity_celeste.*
+import com.xeross.srapp.ui.adapters.LeaderBoardAdapter
+import com.xeross.srapp.ui.adapters.StatisticAdapter
+import com.xeross.srapp.utils.injection.ViewModelFactory
+import kotlinx.android.synthetic.main.activity_subcategory.*
+import kotlinx.android.synthetic.main.fragment_bottom_navigation_menu.*
 
 class CelesteActivity : BaseActivityOAuth() {
     
-    override fun getFragmentId() = R.layout.activity_celeste
+    override fun getFragmentId() = R.layout.activity_subcategory
     
     override fun getViewModelClass() = CelesteViewModel::class.java
     
@@ -47,12 +43,21 @@ class CelesteActivity : BaseActivityOAuth() {
         return ViewModelProvider(this, factory).get(CelesteViewModel::class.java)
     }
     
+    override fun ui() {
+    
+    
+    }
+    
+    override fun onClick() {
+    
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
         this.level = CelesteILType.FORSAKEN_CITY
-        
-        statisticAdapter = StatisticAdapter(this, stats).also { a ->
+
+/*        statisticAdapter = StatisticAdapter(this, stats).also { a ->
             activity_game_details_recyclerview_stats.let {
                 val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 it.setHasFixedSize(true)
@@ -64,21 +69,7 @@ class CelesteActivity : BaseActivityOAuth() {
                 it.itemAnimator = DefaultItemAnimator()
                 it.adapter = a
             }
-        }
-        // TODO("Get my own time from sheets")
-        leaderBoardAdapter = LeaderBoardAdapter(this, leaderBoards, 56, 60).also { a ->
-            activity_game_details_recyclerview_ranking.let {
-                val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-                it.setHasFixedSize(true)
-                it.layoutManager = linearLayoutManager
-                //    val dd = DividerItemDecoration(this, 20, R.drawable.shape_divider, LinearLayoutManager.HORIZONTAL)
-                val dd = DividerItemDecoration(this, 0, R.drawable.shape_divider_vertical, LinearLayoutManager.VERTICAL)
-                it.addItemDecoration(dd)
-                //   it.addItemDecoration(androidx.recyclerview.widget.DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL))
-                it.itemAnimator = DefaultItemAnimator()
-                it.adapter = a
-            }
-        }
+        }*/
         
         credential?.let { credential ->
             viewModel = configureViewModel().also {
@@ -94,7 +85,7 @@ class CelesteActivity : BaseActivityOAuth() {
         handleUI(level)
     }
     
-    override fun build() {
+    override fun setUp() {
     }
     
     private fun getLevel(level: CelesteILType) {
@@ -106,19 +97,6 @@ class CelesteActivity : BaseActivityOAuth() {
     }
     
     private fun handleUI(level: CelesteILType) {
-        
-        
-        activity_game_details_button_previous.setOnClickListener {
-            CelesteILType::class.java.getPreviousOrNull(this.level)?.let { previousLevel ->
-                getLevel(previousLevel)
-            }
-        }
-        
-        activity_game_details_button_next.setOnClickListener {
-            CelesteILType::class.java.getNextOrNull(this.level)?.let { nextLevel ->
-                getLevel(nextLevel)
-            }
-        }
         
         // Method View::post allows to call the Thread for UI
         activity_game_details_image_header.post {
@@ -219,7 +197,7 @@ class CelesteActivity : BaseActivityOAuth() {
                     startActivity(intent)
                 }
             }
-            
+    
             // return false allows don't show color after selected item
             return@OnItemSelectedListener false
         })

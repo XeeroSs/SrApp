@@ -36,5 +36,71 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <!--  Auth  -->
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="already_a_member">Already a member ?</string>
+
+
+    <string name="dont_have_an_account">Don’t have an account ?</string>
+    <string name="or">Or</string>
+    <string name="forgot_password">Forgot password ?</string>
+
+    <!-- Subcategories activity -->
+    <string name="your_subcategories">Your subcategories</string>
+    <string name="subcategories">SUBCATEGORIES</string>
+
+
+    <string name="confirm_password_is_different">Those passwords didn\'t match.</string>
+    <string name="password_too_short">This password is too short (At least 8 characters).</string>
+    <string name="invalid_password">Password must contain at least 1 special character, 1 digit and 8 characters.</string>
+    <string name="invalid_pseudo">Pseudo didn\'t must contain any special characters.</string>
+    <string name="email_or_password_incorrect">The email address or password you entered is incorrect or the account does not exist.</string>
+    <string name="auth_failed">An unexpected error occurred. Please try logging in again.</string>
+    <string name="email_is_already_in_use_by_another_account">The email address is already in use by another account.</string>
+    <string name="invalid_email">Invalid email address format.</string>
+    <string name="field_is_required">This field is required.</string>
+    <string name="success">Success !</string>
+
+    <!--  Category form  -->
+    <string name="category">Category</string>
+    <string name="add_your_categories_title">Add your categories</string>
+    <string name="add_your_categories_label">Ajouter vos popres catégories, vous pourrez par la suite ajouter des sous-catégories à celle-ci.</string>
+    <string name="add_your_categories_name_title">AJOUTER UN NOM</string>
+    <string name="add_your_categories_name_label">Ajouter un nom à votre catégorie celle-ci pourra être changer dans le futur.</string>
+    <string name="add_your_categories_image_title">AJOUTER UNE IMAGE</string>
+    <string name="add_your_categories_image_label">Ceci-ci n’est pas obligatoire, cliquer simplement sur suivant ci-dessous pour passer.</string>
+    <string name="add_your_subcategories_title">Add your subcategories</string>
+    <string name="add_your_subcategories_label">Ajouter une sous-catégorie, vos temps seront enregistrés ici. </string>
+    <string name="add_your_subcategories_name_title">AJOUTER UN NOM</string>
+    <string name="add_your_subcategories_name_label">Ajouter un nom à votre sous-catégorie celle-ci pourra être changer dans le futur.</string>
+    <string name="add_your_subcategories_image_title">AJOUTER UNE IMAGE</string>
+    <string name="add_your_subcategories_image_label">Ceci-ci n’est pas obligatoire, cliquer simplement sur suivant ci-dessous pour passer.</string>
+    <string name="name_of_category">Nom de catégorie</string>
+    <string name="name_of_subcategory">Nom de sous-catégorie</string>
+    <string name="name">Name</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
+
+    <string name="subcategory">Subcategory</string>
+
+    <string name="times">Times</string>
+    <string name="your_times">Your times</string>
+    <string name="time_ago">%1$d %2$s ago</string>
+    <string name="year">year</string>
+    <string name="day">day</string>
+    <string name="hour">hour</string>
+    <string name="minute">minute</string>
+    <string name="second">second</string>
+    <string name="week">week</string>
+    <string name="month">month</string>
+    <string name="years">years</string>
+    <string name="all_runs">all runs</string>
+    <string name="settings">Settings</string>
 
 </resources>

@@ -1,6 +1,6 @@
 package com.xeross.srapp
 
-import com.xeross.srapp.helper.http.RetrofitHelper
+import com.xeross.srapp.network.http.RetrofitHelper
 import com.xeross.srapp.network.src.SrcApi
 import com.xeross.srapp.network.src.responses.notifications.SrcNotifications
 import com.xeross.srapp.network.src.responses.users.SrcUser

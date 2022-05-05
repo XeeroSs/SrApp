@@ -1,18 +1,86 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.SrApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/on_primary</item>
         <item name="colorOnBackground">@color/on_background</item>
         <item name="android:colorBackground">@color/background</item>
+        <item name="switchStyle">@style/Widget.App.Switch</item>
         <item name="colorSurface">@color/surface</item>
         <item name="colorOnSurface">@color/on_surface</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-
+   <!--     <item name="windowActionBarOverlay">true</item>
+        <item name="android:actionBarStyle">@style/TransparentActionBar</item>-->
         <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="BottomNavigationTheme" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/on_surface</item>
     </style>
+
+    <style name="TextViewTheme">
+        <item name="android:fontFamily">@font/gilroy_light</item>
+    </style>
+
+    <style name="TexViewAuthHeaderTheme" parent="TextViewTheme">
+        <item name="android:textSize">@dimen/register_screen_auth_text_size</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TransparentActionBar"
+        parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+    </style>
+
+    <style name="Theme.App.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@color/blue_graphic</item>
+        <item name="colorControlActivated">@color/blue_graphic</item>
+        <item name="colorControlHighlight">@color/blue_graphic</item>
+    </style>
+
+    <style name="TextInputAuth" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">#fff</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="android:textAppearance">@style/TextStyle</item>
+    </style>
+
+    <style name="CardViewRound">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="TextStyle" parent="@android:style/TextAppearance">
+        <item name="android:fontFamily">@font/gilroy_light</item>
+    </style>
+
+    <style name="MaterialButtonStyle" parent="">
+        <item name="backgroundTint">@color/pink_button</item>
+    </style>
+
+    <style name="MaterialButtonOutlinesStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="backgroundTint">@color/pink_button</item>
+    </style>
+
+    <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColorPrimary">@color/pink_gradient</item>
+        <item name="colorControlNormal">@color/transparent</item>
+    </style>
+
+    <style name="WrapEverythingDialog">
+        <item name="windowMinWidthMajor">350dp</item>
+        <item name="windowFixedHeightMajor">500dp</item>
+    </style>
+
+    <style name="Widget.App.Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Switch</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Switch" parent="">
+        <item name="colorSecondary">@color/pink_gradient</item>
+    </style>
+
 </resources>

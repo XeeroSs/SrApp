@@ -4,20 +4,27 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.NETWORK"/>
-    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.NETWORK" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_3"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_3"
         android:supportsRtl="true"
         android:theme="@style/Theme.SrApp">
-        <activity android:name=".ui.celeste.CelesteActivity"/>
-        <activity android:name=".ui.main.MainActivity">
-        </activity>
+        <activity android:name=".ui.settings.SettingActivity"></activity>
+        <activity android:name=".ui.categoryform.subcategory.SubcategoryFormActivity" />
+        <activity android:name=".ui.category.subcategories.SubcategoriesActivity" />
+        <activity android:name=".ui.categoryform.category.CategoryFormActivity" />
+        <activity android:name=".ui.auth.register.RegisterActivity" />
+        <activity android:name=".ui.auth.login.LoginActivity" />
+        <activity android:name=".ui.celeste.CelesteActivity" />
+        <activity android:name=".ui.category.category.CategoryActivity" />
+        <activity android:name=".ui.times.TimesActivity" />
+        <activity android:name=".ui.category.subcategory.SubCategoryActivity" />
         <activity android:name=".ui.splash.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

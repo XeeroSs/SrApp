@@ -2,9 +2,12 @@
 <resources>
     <dimen name="shape_header_corner">50dp</dimen>
 
+    <dimen name="top_toolbar">45dp</dimen>
+    <dimen name="top_toolbar_text">55dp</dimen>
+
     <!-- Header activity main activity -->
-    <dimen name="main_activity_header_text_games_size">40sp</dimen>
-    <dimen name="main_activity_header_height_with_status_bar">130dp</dimen>
+    <dimen name="main_activity_header_text_games_size">30sp</dimen>
+    <dimen name="main_activity_header_height_with_status_bar">120dp</dimen>
 
     <!-- Game cell -->
     <dimen name="game_cell_height">170dp</dimen>
@@ -23,7 +26,7 @@
 
     <!-- Header activity game details -->
     <dimen name="activity_game_details_header_height_with_status_bar">170dp</dimen>
-    <dimen name="activity_game_details_header_content_start">16dp</dimen>
+    <dimen name="activity_game_details_header_content_start">25dp</dimen>
     <dimen name="activity_game_details_header_content_end">50dp</dimen>
     <dimen name="activity_game_details_header_content_top_with_status_bar">45dp</dimen>
     <dimen name="activity_game_details_header_content_bottom">15dp</dimen>
@@ -38,7 +41,7 @@
     <dimen name="activity_game_details_header_fab_icon_size">14dp</dimen>
 
     <!-- Activity game details -->
-    <dimen name="activity_game_size_text_plus_and_fab">80dp</dimen>
+    <dimen name="activity_game_size_text_plus_and_fab">70dp</dimen>
     <dimen name="activity_game_details_space">15dp</dimen>
     <dimen name="activity_game_text_size">18sp</dimen>
     <dimen name="activity_game_start_text">18dp</dimen>
@@ -51,7 +54,7 @@
     <!-- Stats cell -->
     <dimen name="stats_cell_height">100dp</dimen>
     <dimen name="stats_cell_text_size_category">15sp</dimen>
-    <dimen name="stats_cell_text_size_result">50sp</dimen>
+    <dimen name="stats_cell_text_size_result">30sp</dimen>
     <dimen name="stats_cell_space">10dp</dimen>
 
     <!-- Ranking cell -->
@@ -82,5 +85,25 @@
 
     <!-- Splash Screen -->
     <dimen name="splash_screen_app_name">70sp</dimen>
+
+    <!-- Register Screen -->
+    <dimen name="register_screen_auth_text_end">45dp</dimen>
+    <dimen name="register_screen_auth_text_bottom">35dp</dimen>
+    <dimen name="register_screen_auth_text_size">15dp</dimen>
+    <dimen name="top_first_edit_text_register_screen">50dp</dimen>
+    <dimen name="space_between_edit_text_register_screen">5dp</dimen>
+    <dimen name="top_button_register_screen">50dp</dimen>
+    <dimen name="bottom_text_for_login_register_screen">30dp</dimen>
+    <dimen name="edit_text_content_margin_auth">20dp</dimen>
+
+    <!-- Register Screen -->
+    <dimen name="google_login_button_screen">40dp</dimen>
+    <dimen name="image_google_login_button_screen">20dp</dimen>
+
+    <!-- Auth Screen -->
+    <dimen name="edit_text_width_auth">300dp</dimen>
+    <dimen name="edit_text_height_auth">55dp</dimen>
+
+    <dimen name="trash">50dp</dimen>
 
 </resources>

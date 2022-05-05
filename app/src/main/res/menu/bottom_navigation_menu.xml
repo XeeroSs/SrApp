@@ -3,19 +3,20 @@
     <item
         android:id="@+id/menu_profile"
         android:enabled="true"
-        android:icon="@drawable/ic_circle_user"
+        android:icon="@drawable/ic_user_cercle_thinner"
         android:iconTint="@color/on_surface"
         android:title="@string/menu_profile" />
     <item
         android:id="@+id/menu_home"
         android:enabled="true"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/ic_home_thinner"
         android:iconTint="@color/on_surface"
         android:title="@string/menu_home" />
     <item
         android:id="@+id/menu_settings"
         android:enabled="true"
-        android:icon="@drawable/ic_settings"
+        
+        android:icon="@drawable/ic_settings_thinner"
         android:iconTint="@color/on_surface"
         android:title="@string/menu_settings" />
 </menu>
