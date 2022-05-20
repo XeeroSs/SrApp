@@ -73,7 +73,7 @@
         android:textAppearance="@style/TextStyle"
         android:visibility="gone"
         app:cardBackgroundColor="@color/negative"
-        app:layout_constraintBottom_toBottomOf="@+id/bottom_navigation_menu"
+        app:layout_constraintBottom_toBottomOf="@+id/menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:shapeAppearance="@style/CardViewRound">
@@ -88,6 +88,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <include
+        android:id="@+id/menu"
         layout="@layout/fragment_bottom_navigation_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

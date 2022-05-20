@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
+import com.xeross.srapp.ui.profile.ProfileActivity
 import com.xeross.srapp.ui.settings.SettingActivity
 import com.xeross.srapp.utils.injection.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_category.*
@@ -41,8 +42,8 @@ abstract class BaseActivity : AppCompatActivity() {
     
     @Suppress("UNCHECKED_CAST")
     private fun provideViewModel(): ViewModel {
-        val factory = ViewModelFactory(this)
-        return ViewModelProvider(this, factory).get(getViewModelClass() as Class<ViewModel>)
+        val factory = ViewModelFactory()
+        return ViewModelProvider(this, factory)[getViewModelClass() as Class<ViewModel>]
     }
     
     protected fun setStatusBarTransparent() {
@@ -80,6 +81,10 @@ abstract class BaseActivity : AppCompatActivity() {
         (bottom_navigation_menu as NavigationBarView).setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener {
             // Test
             when (it.itemId) {
+                R.id.menu_profile -> {
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    startActivity(intent)
+                }
                 R.id.menu_home -> {
                 }
                 R.id.menu_settings -> {
@@ -106,5 +111,4 @@ abstract class BaseActivity : AppCompatActivity() {
         if (finishActivity) finish()
         startActivity(intent)
     }
-    
 }

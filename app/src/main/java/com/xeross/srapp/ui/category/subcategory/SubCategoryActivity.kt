@@ -38,6 +38,8 @@ import com.xeross.srapp.utils.extensions.TimeExtensions.getBestToMilliseconds
 import com.xeross.srapp.utils.extensions.TimeExtensions.getWorstToMilliseconds
 import com.xeross.srapp.utils.extensions.TimeExtensions.toFormatTime
 import com.xeross.srapp.utils.extensions.TimeExtensions.toFormatTimeWithoutMilliseconds
+import com.xeross.srapp.utils.livedata.LiveDataPost
+import com.xeross.srapp.utils.livedata.ResultLiveDataType
 import kotlinx.android.synthetic.main.activity_subcategory.*
 import kotlinx.android.synthetic.main.dialog_add_time.*
 import kotlinx.android.synthetic.main.dialog_add_time.view.*
@@ -205,15 +207,32 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
     
     private fun addTime() {
         dialogView?.submit_button?.isEnabled = false
-        getTimeFromDialog(hoursPicker!!.value, minutesPicker!!.value, secondsPicker!!.value, millisecondsPicker!!.value)?.observe(this, { time ->
-            dialogView?.submit_button?.isEnabled = true
-            if (time == null) return@observe
-            setResult(RC_REFRESH)
-            times.add(time)
-            refresh()
-            resetDialogPicker()
-            dialog?.dismiss()
-        })
+        
+        // (milliseconds) + (seconds * 1000) + (minutes * 60 * 1000) + (hours * 60² * 1000)
+        val timeToMilliseconds = (millisecondsPicker!!.value + 0L) + (secondsPicker!!.value * 1000L) + (minutesPicker!!.value * 60 * 1000L) + (hoursPicker!!.value * 60L * 60L * 1000L)
+        
+        val subCategoryId = subcategory.id
+        
+        with(viewModel ?: return) {
+            
+            saveTime(categoryId, subCategoryId, timeToMilliseconds)?.observe(this@SubCategoryActivity, { result ->
+                dialogView?.submit_button?.isEnabled = true
+                if (result.state != ResultLiveDataType.SUCCESS) return@observe
+    
+                val isBest = if (bestInMilliseconds <= 0) true else bestInMilliseconds > timeToMilliseconds
+    
+                if (isBest) saveTimeIfBestToSubcategoryDocument(categoryId, subCategoryId, timeToMilliseconds)?.observe(this@SubCategoryActivity, {})
+                updateUserProfile(isBest)?.observe(this@SubCategoryActivity, {})
+    
+                setResult(RC_REFRESH)
+                times.add(timeToMilliseconds)
+                refresh()
+                resetDialogPicker()
+                dialog?.dismiss()
+            })
+            
+        }
+        
     }
     
     private fun refresh() {
@@ -239,7 +258,7 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
         dialog?.show()
     }
     
-    private fun getTimeFromDialog(hours: Int, minutes: Int, seconds: Int, milliseconds: Int): LiveData<Long?>? {
+    private fun getTimeFromDialog(hours: Int, minutes: Int, seconds: Int, milliseconds: Int): LiveData<LiveDataPost>? {
         Log.i(TAG, "$hours:$minutes:$seconds.$milliseconds")
         // (milliseconds) + (seconds * 1000) + (minutes * 60 * 1000) + (hours * 60² * 1000)
         val timeToMilliseconds = (milliseconds + 0L) + (seconds * 1000L) + (minutes * 60 * 1000L) + (hours * 60L * 60L * 1000L)
@@ -247,7 +266,7 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
         val isBest = if (bestInMilliseconds <= 0) true else bestInMilliseconds > timeToMilliseconds
 /*        val simpleDateFormat = SimpleDateFormat("HH:mm:ss.SSS", Locale.ENGLISH)
         simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")*/
-        return viewModel?.saveTime(this, categoryId, subcategory.id, timeToMilliseconds, isBest)
+        return viewModel?.saveTime(categoryId, subcategory.id, timeToMilliseconds)
     }
     
     private fun loadImageToHeader() {
@@ -375,18 +394,30 @@ class SubCategoryActivity : BaseActivity(), TimeListener {
     private fun getTimes() {
         times.clear()
         statisticAdapter?.notifyDataSetChanged()
-        viewModel?.let {
-            it.getSubCategoryTimes(categoryId, subcategory.id, currentTimeSort).observe(this, { time ->
-                times.addAll(time)
+        
+        val subCategoryId = subcategory.id
+        
+        with(viewModel ?: return) {
+            getSubCategoryTimes(categoryId, subCategoryId, currentTimeSort)?.observe(this@SubCategoryActivity, { resultTimes ->
+                if (resultTimes.state != ResultLiveDataType.SUCCESS) return@observe
+    
+                resultTimes.result!!.forEach { time ->
+                    times.add(time.time)
+                }
+    
                 refresh()
-                it.getBestOnAllRuns(categoryId, subcategory.id).observe(this, { sub ->
-                    if (sub != null) {
-                        bestOnAllRunsInMilliseconds = sub
-                        refreshBest()
-                    }
-                })
+    
+                getBestOnAllRuns(subCategoryId)
             })
         }
+    }
+    
+    private fun SubcategoryViewModel.getBestOnAllRuns(subCategoryId: String) {
+        getBestOnAllRuns(categoryId, subCategoryId)?.observe(this@SubCategoryActivity, { resultBest ->
+            if (resultBest.state != ResultLiveDataType.SUCCESS) return@observe
+            bestOnAllRunsInMilliseconds = resultBest.result!!.timeInMilliseconds
+            refreshBest()
+        })
     }
     
     private fun refreshBest() {

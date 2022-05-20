@@ -2,6 +2,7 @@ package com.xeross.srapp.utils.extensions
 
 import android.content.Context
 import com.xeross.srapp.R
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -189,6 +190,12 @@ object TimeExtensions {
         
         val second = context.resources.getString(R.string.second)
         return context.resources.getString(R.string.time_ago, 0, second)
+    }
+    
+    fun Date.toFormat(): String {
+        val date = this.time
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ROOT)
+        return dateFormat.format(date)
     }
     
 }

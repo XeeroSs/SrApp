@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_3"
         android:supportsRtl="true"
         android:theme="@style/Theme.SrApp">
-        <activity android:name=".ui.settings.SettingActivity"></activity>
+        <activity android:name=".ui.profile.ProfileActivity"></activity>
+        <activity android:name=".ui.settings.SettingActivity" />
         <activity android:name=".ui.categoryform.subcategory.SubcategoryFormActivity" />
         <activity android:name=".ui.category.subcategories.SubcategoriesActivity" />
         <activity android:name=".ui.categoryform.category.CategoryFormActivity" />

@@ -86,6 +86,11 @@ abstract class BaseFirebaseViewModel : ViewModel() {
         return collectionReference.document(documentPath).update(map)
     }
     
+    // CRUD - Update
+    protected fun updateDocument(collectionReference: CollectionReference, documentPath: String, field: String, value: Any): Task<Void> {
+        return collectionReference.document(documentPath).update(field, value)
+    }
+    
     // CRUD - Delete
     protected fun deleteDocument(collectionReference: CollectionReference, documentPath: String): Task<Void> {
         return collectionReference.document(documentPath).delete()
@@ -102,7 +107,7 @@ abstract class BaseFirebaseViewModel : ViewModel() {
                 }
                 apply()
             }
-        } ?: throw Exception("must call buildSharedPreferences()")
+        } ?: throw Exception("must call buildSharedPreferences() for init")
     }
     
     protected inline fun <reified T> getSharedPreferences(iSharedPreferences: ISharedPreferences<T>): T {
@@ -116,6 +121,18 @@ abstract class BaseFirebaseViewModel : ViewModel() {
                 else -> throw ClassCastException("String / Int / Boolean")
             } as T
         }
+    }
+    
+    protected fun getCollectionPath(vararg values: String): CollectionReference {
+        val path = StringBuilder().apply {
+            val size = values.size
+            for (i in 0 until size) {
+                val path = values[i]
+                if (i != 0) append("/")
+                append(path)
+            }
+        }.toString()
+        return getCollection(path)
     }
     
     protected fun getDocumentByTimestamp(collectionReference: CollectionReference, timeToInDays: Int): Task<QuerySnapshot> {
