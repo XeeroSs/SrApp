@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
+import com.xeross.srapp.components.ui.GraphicBar
+import com.xeross.srapp.components.ui.models.DataBar
 import com.xeross.srapp.data.models.SubCategory
 import com.xeross.srapp.listener.ClickListener
 import com.xeross.srapp.ui.adapters.SubcategoriesAdapter
@@ -15,13 +17,14 @@ import com.xeross.srapp.ui.categoryform.subcategory.SubcategoryFormActivity
 import com.xeross.srapp.utils.Constants
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
+import com.xeross.srapp.utils.livedata.ResultLiveDataType
 import kotlinx.android.synthetic.main.activity_category.*
 import kotlinx.android.synthetic.main.activity_subcategories.*
 import kotlinx.android.synthetic.main.activity_subcategory.*
 import kotlinx.android.synthetic.main.cell_subcategory.*
 import kotlinx.android.synthetic.main.fragment_bottom_navigation_menu.*
 
-class SubcategoriesActivity : BaseActivity(), ClickListener<SubCategory> {
+class SubcategoriesActivity : BaseActivity(), ClickListener<SubCategory>, SubcategoriesAdapter.GraphicListener {
     
     companion object {
         const val RC_REFRESH = 888
@@ -61,11 +64,11 @@ class SubcategoriesActivity : BaseActivity(), ClickListener<SubCategory> {
     override fun ui() {
         
         buildHeader(R.string.subcategory, 25f)
-    
+        
         buildBottomNavigationMenu()
         setStatusBarTransparent()
         
-        adapter = SubcategoriesAdapter(this, subCategories, this).also { a ->
+        adapter = SubcategoriesAdapter(this, subCategories, this, this).also { a ->
             list_subcategories.apply {
                 val linearLayoutManager = LinearLayoutManager(this@SubcategoriesActivity, LinearLayoutManager.VERTICAL, false)
                 setHasFixedSize(true)
@@ -74,7 +77,7 @@ class SubcategoriesActivity : BaseActivity(), ClickListener<SubCategory> {
                 adapter = a
             }
         }
-    
+        
         list_subcategories.post {
             // Add margin bottom to recyclerview for this one don't hide by bottom navigation menu
             val paramsRecyclerViewRanking = list_subcategories.layoutParams as ViewGroup.MarginLayoutParams
@@ -108,6 +111,23 @@ class SubcategoriesActivity : BaseActivity(), ClickListener<SubCategory> {
             
             resultLauncher.launch(intent)
         }
+    }
+    
+    override fun notifyGraphicDataChanged(graphicBar: GraphicBar, subCategory: SubCategory) {
+        
+        val limit = graphicBar.getBarTotal()
+        
+        viewModel?.getTimeWithLimit(categoryId, subCategory.id, limit)?.observe(this, {
+            if (it != null && it.state != ResultLiveDataType.SUCCESS) return@observe
+    
+            val bars = ArrayList<DataBar>()
+    
+            it.result!!.forEach { time ->
+                bars.add(DataBar(time.time))
+            }
+    
+            graphicBar.setBars(bars)
+        })
     }
     
     override fun onClick(o: SubCategory) {

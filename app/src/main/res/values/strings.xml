@@ -112,5 +112,7 @@
     <string name="your_name">Name: %1$s</string>
     <string name="an_error_has_occured_please_try_again">An error has occurred. Please try again.</string>
     <string name="no_internet_connection_was_found">No internet connection was found.</string>
+    <string name="display_milliseconds">Afficher les millisecondes</string>
+    <string name="display_milliseconds_on_time_average_from_subcategory">Affiche les milliseconds sur la moyenne des temps d\'une sous-catégorie.</string>
 
 </resources>

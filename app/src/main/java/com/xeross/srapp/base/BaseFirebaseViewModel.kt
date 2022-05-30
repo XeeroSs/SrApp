@@ -149,6 +149,10 @@ abstract class BaseFirebaseViewModel : ViewModel() {
         return collectionReference.whereGreaterThan("createdAt", ts).get()
     }
     
+    protected fun getDocumentByLimit(collectionReference: CollectionReference, limit: Long): Task<QuerySnapshot> {
+        return collectionReference.limit(limit).get()
+    }
+    
     fun getUser(): FirebaseUser? {
         return auth.currentUser
     }

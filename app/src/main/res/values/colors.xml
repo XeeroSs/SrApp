@@ -8,6 +8,7 @@
     <color name="blue_gradient">#364F6B</color> <!--white-->
     <color name="purple_gradient">#6B5072</color> <!--white-->
     <color name="pink_gradient">#FC5185</color> <!--white-->
+    <color name="pink_gradient_variant_2">#FF81AE</color> <!--white-->
     <color name="pink_gradient_variant">#FC5185</color> <!--white-->
 
     <color name="pink_gradient_light">#ef5f91</color> <!--white-->

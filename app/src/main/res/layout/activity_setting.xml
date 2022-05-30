@@ -73,7 +73,7 @@
                         android:fontFamily="@font/gilroy_light"
                         android:gravity="center_vertical"
                         android:maxLines="1"
-                        android:text="Afficher les millisecondes"
+                        android:text="@string/display_milliseconds"
                         android:textAllCaps="true"
                         android:textColor="@color/on_surface"
                         android:textSize="15sp" />
@@ -85,7 +85,7 @@
                         android:fontFamily="@font/gilroy_light"
                         android:gravity="center_vertical"
                         android:maxLines="2"
-                        android:text="Affiche les milliseconds sur la moyenne des temps d'une sous-catégorie."
+                        android:text="@string/display_milliseconds_on_time_average_from_subcategory"
                         android:textColor="@color/light_gray"
                         android:textSize="12sp" />
 

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseAdapter
+import com.xeross.srapp.components.ui.GraphicBar
 import com.xeross.srapp.data.models.SubCategory
 import com.xeross.srapp.listener.ClickListener
 import com.xeross.srapp.utils.extensions.TimeExtensions.toFormatTime
@@ -16,27 +17,18 @@ import kotlinx.android.synthetic.main.cell_subcategory.*
 import kotlinx.android.synthetic.main.cell_subcategory.view.*
 import java.util.*
 
-class SubcategoriesAdapter(context: Context, objectList: ArrayList<SubCategory>, clickListener: ClickListener<SubCategory>) :
+class SubcategoriesAdapter(context: Context, objectList: ArrayList<SubCategory>, clickListener: ClickListener<SubCategory>, private val graGraphicListener: GraphicListener) :
     BaseAdapter<SubcategoriesAdapter.ViewHolder, SubCategory>(context, objectList, clickListener) {
+    
+    interface GraphicListener {
+        fun notifyGraphicDataChanged(graphicBar: GraphicBar, subCategory: SubCategory)
+    }
     
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val item: MaterialCardView = itemView.item_subcategory
         val name: TextView = itemView.text_name_subcategory
         val time: TextView = itemView.text_time_subcategory
-        // val graphic: ChartProgressBar = itemView.graphic_subcategories
-    }
-    
-    // TODO("Set up graphic")
-    private fun setUpGraphic(holder: ViewHolder) {
-/*        val graphics = holder.graphic
-        val color = ContextCompat.getColor(context, R.color.pink_gradient_light_variant)
-        val points = arrayListOf<BarData>()
-        repeat(10) {
-            points.add(BarData("", 5.0f))
-        }
-        
-        graphics.setDataList(points)
-        graphics.build()*/
+        val graphic: GraphicBar = itemView.graphic_subcategories
     }
     
     override fun onClick(holder: ViewHolder, dObject: SubCategory) {
@@ -54,7 +46,7 @@ class SubcategoriesAdapter(context: Context, objectList: ArrayList<SubCategory>,
         holder.time.text = dObject.timeInMilliseconds.toFormatTime()
         holder.name.text = dObject.name
         
-        setUpGraphic(holder)
+        holder.graphic.post { graGraphicListener.notifyGraphicDataChanged(holder.graphic, dObject) }
     }
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(LayoutInflater.from(context).inflate(R.layout.cell_subcategory, parent, false))

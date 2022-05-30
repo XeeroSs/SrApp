@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.Query
 import com.xeross.srapp.base.BaseFirebaseViewModel
 import com.xeross.srapp.data.models.SubCategory
+import com.xeross.srapp.data.models.Time
 import com.xeross.srapp.utils.Constants
+import com.xeross.srapp.utils.livedata.FirestoreUtils.queryAll
+import com.xeross.srapp.utils.livedata.LiveDataQuery
 
 class SubcategoriesViewModel : BaseFirebaseViewModel() {
     
@@ -40,5 +43,13 @@ class SubcategoriesViewModel : BaseFirebaseViewModel() {
     
     private fun getPathSubCollectionToString(uid: String, categoryId: String): String {
         return "${Constants.DATABASE_COLLECTION_CATEGORIES}/$uid/${Constants.DATABASE_COLLECTION_USERS_CATEGORIES}/$categoryId/${Constants.DATABASE_COLLECTION_SUBCATEGORIES}"
+    }
+    
+    fun getTimeWithLimit(categoryId: String, subcategoryId: String, limit: Long): LiveData<LiveDataQuery<List<Time>>>? {
+        val uid = getUserId() ?: return null
+        
+        val timeCollection = getCollectionPath(getPathSubCollectionToString(uid, categoryId), subcategoryId, Constants.DATABASE_COLLECTION_TIME)
+        
+        return getDocumentByLimit(timeCollection, limit).queryAll()
     }
 }
