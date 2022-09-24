@@ -1,17 +1,16 @@
 package com.xeross.srapp.ui.settings
 
+import androidx.viewbinding.ViewBinding
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
+import com.xeross.srapp.databinding.ActivitySettingBinding
 import com.xeross.srapp.ui.auth.login.LoginActivity
 import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity.Companion.RC_REFRESH
 import com.xeross.srapp.ui.settings.types.SettingType
 import com.xeross.srapp.utils.Constants
-import kotlinx.android.synthetic.main.activity_setting.*
 
-class SettingActivity : BaseActivity() {
-    
-    override fun getFragmentId() = R.layout.activity_setting
+class SettingActivity : BaseActivity<ActivitySettingBinding>() {
     
     override fun getViewModelClass() = SettingViewModel::class.java
     private var viewModel: SettingViewModel? = null
@@ -25,11 +24,15 @@ class SettingActivity : BaseActivity() {
         }
     }
     
+    override fun attachViewBinding(): ViewBinding {
+        return ActivitySettingBinding.inflate(layoutInflater)
+    }
+    
     override fun ui() {
-        buildHeader(R.string.settings, 35f)
+        buildHeader(binding.header.headerToolbar, binding.header.headerTitle, R.string.settings, 35f)
         setStatusBarTransparent()
         
-        switches[SettingType.DISPLAY_MILLISECONDS] = switch_display_milliseconds
+        switches[SettingType.DISPLAY_MILLISECONDS] = binding.switchDisplayMilliseconds
         
         initSwitch()
     }
@@ -52,7 +55,7 @@ class SettingActivity : BaseActivity() {
     
     override fun onClick() {
         
-        item_disconnection.setOnClickListener { _ ->
+        binding.itemDisconnection.setOnClickListener { _ ->
             viewModel?.let {
                 it.disconnect()
                 goToActivity<LoginActivity>()

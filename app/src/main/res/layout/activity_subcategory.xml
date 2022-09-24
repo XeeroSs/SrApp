@@ -19,7 +19,6 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_marginTop="@dimen/top_toolbar"
             android:background="@null"
             app:elevation="0dp"
@@ -33,6 +32,7 @@
                 android:layout_height="40dp"
                 android:background="@null"
                 app:elevation="0dp"
+                app:menu="@menu/subcategory_menu"
                 app:navigationIcon="?attr/homeAsUpIndicator"
                 app:navigationIconTint="@color/white" />
 
@@ -180,7 +180,7 @@
                     android:contentDescription="@string/next"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_plus"
-                    android:tint="@color/primary" />
+                    app:tint="@color/primary" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/activity_game_details_button_list_your_stats"
@@ -276,7 +276,7 @@
                     android:contentDescription="@string/next"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_plus"
-                    android:tint="@color/primary" />
+                    app:tint="@color/primary" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/activity_game_details_button_list_ranking"
@@ -309,6 +309,7 @@
     </LinearLayout>
 
     <include
+        android:id="@+id/menu"
         layout="@layout/fragment_bottom_navigation_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

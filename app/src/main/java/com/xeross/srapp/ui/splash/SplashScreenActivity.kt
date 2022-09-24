@@ -8,21 +8,21 @@ import android.util.Pair
 import android.view.View
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
+import androidx.viewbinding.ViewBinding
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
+import com.xeross.srapp.databinding.ActivitySplashScreenBinding
 import com.xeross.srapp.ui.auth.login.LoginActivity
 import com.xeross.srapp.ui.category.category.CategoryActivity
 import com.xeross.srapp.utils.extensions.UIExtensions.setTintGradient
-import kotlinx.android.synthetic.main.activity_splash_screen.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class SplashScreenActivity : BaseActivity() {
+class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding>() {
     
-    override fun getFragmentId() = R.layout.activity_splash_screen
     override fun getViewModelClass() = SplashViewModel::class.java
     
     companion object {
@@ -35,7 +35,13 @@ class SplashScreenActivity : BaseActivity() {
     
     private var viewModel: SplashViewModel? = null
     
+    override fun attachViewBinding(): ViewBinding {
+        return ActivitySplashScreenBinding.inflate(layoutInflater)
+    }
+    
     override fun setUp() {
+        val view = binding.root
+        setContentView(view)
         viewModel = (vm as SplashViewModel)
         viewModel?.build()
     }
@@ -67,7 +73,7 @@ class SplashScreenActivity : BaseActivity() {
         )
         
         
-        logo.setTintGradient(colors, applicationContext)
+        binding.logo.setTintGradient(colors, applicationContext)
     }
     
     override fun onStop() {
@@ -103,7 +109,7 @@ class SplashScreenActivity : BaseActivity() {
         )
         
         
-        logo.setTintGradient(colors, applicationContext)
+        binding.logo.setTintGradient(colors, applicationContext)
     }
     
     private fun sleep() {
@@ -113,7 +119,7 @@ class SplashScreenActivity : BaseActivity() {
         val intent = Intent(applicationContext, intentIfAuth)
         
         // Transition animation
-        val options = ActivityOptions.makeSceneTransitionAnimation(this, Pair(logo, "header"))
+        val options = ActivityOptions.makeSceneTransitionAnimation(this, Pair(binding.logo, "header"))
         
         // start transition animation
         startActivity(intent, options.toBundle())

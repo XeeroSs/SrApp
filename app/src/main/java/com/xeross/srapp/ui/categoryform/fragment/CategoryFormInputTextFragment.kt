@@ -2,16 +2,15 @@ package com.xeross.srapp.ui.categoryform.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.viewbinding.ViewBinding
 import com.xeross.srapp.R
+import com.xeross.srapp.databinding.CellFormEditTextBinding
 import com.xeross.srapp.ui.categoryform.fragment.base.BaseCategoryFormFragment
 import com.xeross.srapp.utils.extensions.UIExtensions.error
-import kotlinx.android.synthetic.main.cell_form_edit_text.view.*
 
-class CategoryFormInputTextFragment : BaseCategoryFormFragment() {
+class CategoryFormInputTextFragment : BaseCategoryFormFragment<CellFormEditTextBinding>() {
     
     companion object {
         
@@ -51,7 +50,7 @@ class CategoryFormInputTextFragment : BaseCategoryFormFragment() {
     }
     
     override fun getExtra(): Pair<String, String>? {
-        val inputText = view?.form_edit_text ?: return null
+        val inputText = binding.formEditText
         val editText = inputText.editText ?: return null
         return Pair(extra ?: return null, editText.text.toString())
     }
@@ -59,7 +58,7 @@ class CategoryFormInputTextFragment : BaseCategoryFormFragment() {
     override fun hasExtra() = true
     
     override fun isNextValid(): Boolean {
-        val inputText = view?.form_edit_text ?: return false
+        val inputText = binding.formEditText
         val editText = inputText.editText ?: return false
         if (editText.text.isBlank()) {
             inputText.error(requireContext(), R.string.field_is_required)
@@ -69,23 +68,22 @@ class CategoryFormInputTextFragment : BaseCategoryFormFragment() {
         return true
     }
     
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        
-        val view = inflater.inflate(R.layout.cell_form_edit_text, container, false)
-        
-        buildUI(view)
-        
-        return view
+    override fun attachViewBinding(inflater: LayoutInflater, container: ViewGroup?): ViewBinding {
+        return CellFormEditTextBinding.inflate(inflater, container, false)
     }
     
-    private fun buildUI(view: View) {
-        val titleView = view.findViewById<TextView>(R.id.form_title)
+    override fun setup() {
+        buildUI()
+    }
+    
+    private fun buildUI() {
+        val titleView = binding.include.formTitle
         titleView.text = title
         
-        val subtitleView = view.findViewById<TextView>(R.id.form_subtitle)
+        val subtitleView = binding.include.formSubtitle
         subtitleView.text = subtitle
         
-        val inputTextLabelView = view.findViewById<TextView>(R.id.form_edit_text_label)
+        val inputTextLabelView = binding.formEditTextLabel
         inputTextLabelView.text = inputTextLabel
         
     }

@@ -1,18 +1,21 @@
 package com.xeross.srapp.ui.auth.register
 
-import com.xeross.srapp.R
+import androidx.viewbinding.ViewBinding
+import com.xeross.srapp.databinding.ActivityRegisterBinding
 import com.xeross.srapp.ui.auth.BaseAuthActivity
 import com.xeross.srapp.ui.auth.register.exceptions.ExceptionRegisterTypes
 import com.xeross.srapp.ui.auth.types.AuthTextInputTypes
 import com.xeross.srapp.ui.category.category.CategoryActivity
-import kotlinx.android.synthetic.main.activity_register.*
 
-class RegisterActivity : BaseAuthActivity() {
+class RegisterActivity : BaseAuthActivity<ActivityRegisterBinding>() {
     
-    override fun getFragmentId() = R.layout.activity_register
     override fun getViewModelClass() = RegisterViewModel::class.java
     
     private var viewModel: RegisterViewModel? = null
+    
+    override fun attachViewBinding(): ViewBinding {
+        return ActivityRegisterBinding.inflate(layoutInflater)
+    }
     
     override fun setUp() {
         viewModel = (vm as RegisterViewModel)
@@ -21,10 +24,10 @@ class RegisterActivity : BaseAuthActivity() {
     
     private fun setInputText() {
         textInputs.apply {
-            add(AuthTextInputTypes.PSEUDO, pseudo_edit_text)
-            add(AuthTextInputTypes.EMAIL, email_edit_text)
-            add(AuthTextInputTypes.PASSWORD, password_edit_text)
-            add(AuthTextInputTypes.CONFIRM_PASSWORD, confirm_password_edit_text)
+            add(AuthTextInputTypes.PSEUDO, binding.pseudoEditText)
+            add(AuthTextInputTypes.EMAIL, binding.emailEditText)
+            add(AuthTextInputTypes.PASSWORD, binding.passwordEditText)
+            add(AuthTextInputTypes.CONFIRM_PASSWORD, binding.confirmPasswordEditText)
         }
     }
     
@@ -33,7 +36,7 @@ class RegisterActivity : BaseAuthActivity() {
     }
     
     override fun onClick() {
-        login_text_button.setOnClickListener {
+        binding.loginTextButton.setOnClickListener {
 /*            val intent = Intent(this, LoginActivity::class.java).also {
                 it.sendExtra(pseudo_edit_text, PSEUDO_EXTRA_REGISTER)
                 it.sendExtra(email_edit_text, EMAIL_EXTRA_REGISTER)
@@ -44,7 +47,7 @@ class RegisterActivity : BaseAuthActivity() {
             finish()
         }
         
-        register_button.setOnClickListener {
+        binding.registerButton.setOnClickListener {
             register()
         }
         
@@ -54,7 +57,7 @@ class RegisterActivity : BaseAuthActivity() {
     private fun getFieldOrNull(authTextInputTypes: AuthTextInputTypes): String? {
         val field = getField(authTextInputTypes)
         if (field != null) return field
-        register_button.antiSpam()
+        binding.registerButton.antiSpam()
         return null
     }
     
@@ -71,7 +74,7 @@ class RegisterActivity : BaseAuthActivity() {
     
     private fun register() {
         
-        register_button.isEnabled = false
+        binding.registerButton.isEnabled = false
         clearTextInputError()
         
         val pseudo = getFieldOrNull(AuthTextInputTypes.PSEUDO) ?: return
@@ -80,7 +83,7 @@ class RegisterActivity : BaseAuthActivity() {
         val confirmPassword = getFieldOrNull(AuthTextInputTypes.CONFIRM_PASSWORD) ?: return
         
         viewModel?.register(pseudo, email, password, confirmPassword)?.observe(this, { ex ->
-            register_button.antiSpam()
+            binding.registerButton.antiSpam()
             ex?.let {
                 when (ExceptionRegisterTypes.SUCCESS) {
                     it[0] -> successRegister()

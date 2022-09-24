@@ -2,19 +2,17 @@ package com.xeross.srapp.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.xeross.srapp.R
 import com.xeross.srapp.data.models.types.StatisticType
-import kotlinx.android.synthetic.main.stats_cell.view.*
+import com.xeross.srapp.databinding.StatsCellBinding
 
 class StatisticAdapter(private val context: Context, private val data: ArrayList<Pair<StatisticType, String>>) : RecyclerView.Adapter<StatisticAdapter.ViewHolder>() {
     
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val result: TextView = itemView.stats_cell_result
-        val category: TextView = itemView.stats_cell_category
+    class ViewHolder(binding: StatsCellBinding) : RecyclerView.ViewHolder(binding.root) {
+        val result: TextView = binding.statsCellResult
+        val category: TextView = binding.statsCellCategory
     }
     
     override fun getItemCount() = data.size
@@ -31,7 +29,6 @@ class StatisticAdapter(private val context: Context, private val data: ArrayList
     }
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(LayoutInflater.from(context).inflate(R.layout.stats_cell, parent, false))
-    
+        ViewHolder(StatsCellBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     
 }

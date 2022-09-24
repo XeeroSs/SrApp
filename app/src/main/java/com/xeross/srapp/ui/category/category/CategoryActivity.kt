@@ -4,27 +4,30 @@ import android.content.Intent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.viewbinding.ViewBinding
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.data.models.Category
+import com.xeross.srapp.databinding.ActivityCategoryBinding
 import com.xeross.srapp.listener.ClickListener
 import com.xeross.srapp.ui.adapters.CategoryAdapter
 import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity
 import com.xeross.srapp.ui.categoryform.category.CategoryFormActivity
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
-import kotlinx.android.synthetic.main.activity_category.*
-import kotlinx.android.synthetic.main.fragment_bottom_navigation_menu.*
 
 
-class CategoryActivity : BaseActivity(), ClickListener<Category> {
+class CategoryActivity : BaseActivity<ActivityCategoryBinding>(), ClickListener<Category> {
     
     companion object {
         const val RC_CREATE_NEW_CATEGORY = 25
     }
     
     override fun getViewModelClass() = CategoryViewModel::class.java
-    override fun getFragmentId() = R.layout.activity_category
+    
+    override fun attachViewBinding(): ViewBinding {
+        return ActivityCategoryBinding.inflate(layoutInflater)
+    }
     
     private lateinit var adapter: CategoryAdapter
     private val categories = ArrayList<Category>()
@@ -40,10 +43,10 @@ class CategoryActivity : BaseActivity(), ClickListener<Category> {
     
     override fun ui() {
         
-        buildHeader(R.string.category, 35f)
+        buildHeader(null, binding.headerTitle, R.string.category, 35f)
         
         adapter = CategoryAdapter(this, categories, this).also { a ->
-            main_activity_list_categories.let {
+            binding.mainActivityListCategories.let {
                 val linearLayoutManager = GridLayoutManager(this, 2)
                 it.setHasFixedSize(true)
                 it.layoutManager = linearLayoutManager
@@ -52,19 +55,19 @@ class CategoryActivity : BaseActivity(), ClickListener<Category> {
             }
         }
         
-        main_activity_list_categories.post {
+        binding.mainActivityListCategories.post {
             // Add margin bottom to recyclerview for this one don't hide by bottom navigation menu
-            val paramsRecyclerViewRanking = main_activity_list_categories.layoutParams as ViewGroup.MarginLayoutParams
-            paramsRecyclerViewRanking.bottomMargin = bottom_navigation_menu.measuredHeight
+            val paramsRecyclerViewRanking = binding.mainActivityListCategories.layoutParams as ViewGroup.MarginLayoutParams
+            paramsRecyclerViewRanking.bottomMargin = binding.menu.bottomNavigationMenu.measuredHeight
         }
         
         
         setStatusBarTransparent()
-        buildBottomNavigationMenu()
+        buildBottomNavigationMenu(binding.menu.bottomNavigationMenu)
     }
     
     override fun onClick() {
-        main_activity_button_add_your_categories.setOnClickListener {
+        binding.mainActivityButtonAddYourCategories.setOnClickListener {
             goToActivity<CategoryFormActivity>(false)
         }
     }

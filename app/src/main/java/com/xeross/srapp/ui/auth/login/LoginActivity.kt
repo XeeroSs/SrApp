@@ -2,26 +2,29 @@ package com.xeross.srapp.ui.auth.login
 
 import android.content.Intent
 import android.util.Log
+import androidx.viewbinding.ViewBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.xeross.srapp.R
+import com.xeross.srapp.databinding.ActivityLoginBinding
 import com.xeross.srapp.ui.auth.BaseAuthActivity
 import com.xeross.srapp.ui.auth.register.RegisterActivity
 import com.xeross.srapp.ui.auth.register.exceptions.ExceptionRegisterTypes
 import com.xeross.srapp.ui.auth.types.AuthTextInputTypes
 import com.xeross.srapp.ui.category.category.CategoryActivity
-import kotlinx.android.synthetic.main.activity_login.*
 
-class LoginActivity : BaseAuthActivity() {
+class LoginActivity : BaseAuthActivity<ActivityLoginBinding>() {
     
     companion object {
         private const val RC_SIGN_IN = 120
         private const val TAG = "LoginActivity"
     }
     
-    override fun getFragmentId() = R.layout.activity_login
+    override fun attachViewBinding(): ViewBinding {
+        return ActivityLoginBinding.inflate(layoutInflater)
+    }
     
     override fun getViewModelClass() = LoginViewModel::class.java
     
@@ -41,7 +44,7 @@ class LoginActivity : BaseAuthActivity() {
     
     private fun setUpGoogle() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestIdToken(getString(R.string.web_client_id))
             .requestEmail()
             .build()
         
@@ -50,8 +53,8 @@ class LoginActivity : BaseAuthActivity() {
     
     private fun setInputText() {
         textInputs.apply {
-            add(AuthTextInputTypes.EMAIL, email_edit_text)
-            add(AuthTextInputTypes.PASSWORD, password_edit_text)
+            add(AuthTextInputTypes.EMAIL, binding.emailEditText)
+            add(AuthTextInputTypes.PASSWORD, binding.passwordEditText)
         }
     }
     
@@ -96,17 +99,17 @@ class LoginActivity : BaseAuthActivity() {
     }
     
     override fun onClick() {
-        register_text_button.setOnClickListener {
+        binding.registerTextButton.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             
             startActivity(intent)
         }
         
-        login_button.setOnClickListener {
+        binding.loginButton.setOnClickListener {
             login()
         }
         
-        google_button_cardview.setOnClickListener {
+        binding.googleButtonCardview.setOnClickListener {
             startIntentGoogle()
         }
         
@@ -120,19 +123,19 @@ class LoginActivity : BaseAuthActivity() {
     private fun getFieldOrNull(authTextInputTypes: AuthTextInputTypes): String? {
         val field = getField(authTextInputTypes)
         if (field != null) return field
-        login_button.antiSpam()
+        binding.loginButton.antiSpam()
         return null
     }
     
     private fun login() {
-        login_button.isEnabled = false
+        binding.loginButton.isEnabled = false
         clearTextInputError()
         
         val email = getFieldOrNull(AuthTextInputTypes.EMAIL) ?: return
         val password = getFieldOrNull(AuthTextInputTypes.PASSWORD) ?: return
         
         viewModel?.login(email, password)?.observe(this, { ex ->
-            login_button.antiSpam()
+            binding.loginButton.antiSpam()
             ex?.let {
                 when (ExceptionRegisterTypes.SUCCESS) {
                     it[0] -> successLogin()

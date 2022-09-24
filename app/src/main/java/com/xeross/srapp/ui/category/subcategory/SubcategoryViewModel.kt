@@ -1,123 +1,75 @@
 package com.xeross.srapp.ui.category.subcategory
 
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import com.xeross.srapp.base.BaseFirebaseViewModel
 import com.xeross.srapp.data.models.SubCategory
 import com.xeross.srapp.data.models.Time
+import com.xeross.srapp.data.models.User
 import com.xeross.srapp.ui.category.subcategory.types.TimeSortType
 import com.xeross.srapp.ui.settings.types.SettingType
 import com.xeross.srapp.utils.Constants
-import java.util.*
+import com.xeross.srapp.utils.livedata.FirestoreUtils.post
+import com.xeross.srapp.utils.livedata.FirestoreUtils.query
+import com.xeross.srapp.utils.livedata.FirestoreUtils.queryAll
+import com.xeross.srapp.utils.livedata.LiveDataPost
+import com.xeross.srapp.utils.livedata.LiveDataQuery
 
 class SubcategoryViewModel : BaseFirebaseViewModel() {
     
-    fun getSubCategoryTimes(categoryId: String, subcategoryId: String?, type: TimeSortType): LiveData<ArrayList<Long>> {
-        val mutableLiveData = MutableLiveData<ArrayList<Long>>()
+    fun getSubCategoryTimes(categoryId: String, subcategoryId: String?, type: TimeSortType): LiveData<LiveDataQuery<List<Time>>>? {
+        if (subcategoryId == null) return null
         
-        if (subcategoryId == null) {
-            mutableLiveData.postValue(arrayListOf())
-            return mutableLiveData
-        }
+        val uid = getUserId() ?: return null
         
-        val uid = getUserId() ?: return mutableLiveData
+        val timeCollection = getCollectionPath(getPathSubCollectionToString(uid, categoryId), subcategoryId, Constants.DATABASE_COLLECTION_TIME)
         
-        val timeCollection = getCollection(getPathSubCollectionToString(uid, categoryId) + "/" + subcategoryId + "/" + Constants.DATABASE_COLLECTION_TIME)
-        
-        getDocumentByTimestamp(timeCollection, type.timeToDays).addOnSuccessListener {
-            it.toObjects(Time::class.java).let { timeObject ->
-                val arrayTimes = arrayListOf<Long>()
-                timeObject.forEach { time ->
-                    arrayTimes.add(time.time)
-                }
-                mutableLiveData.postValue(arrayTimes)
-            }
-        }.addOnFailureListener {
-            mutableLiveData.postValue(arrayListOf())
-        }
-        
-        return mutableLiveData
+        return getDocumentByTimestamp(timeCollection, type.timeToDays).queryAll()
     }
     
-    fun getBestOnAllRuns(categoryId: String, subcategoryId: String): LiveData<Long?> {
-        val mutableLiveData = MutableLiveData<Long?>()
-        
-        val uid = getUserId() ?: return mutableLiveData
+    fun getBestOnAllRuns(categoryId: String, subcategoryId: String): LiveData<LiveDataQuery<SubCategory>>? {
+        val uid = getUserId() ?: return null
         
         val collection = getCollection(getPathSubCollectionToString(uid, categoryId))
         
-        collection.document(subcategoryId).get().addOnSuccessListener {
-            it.toObject(SubCategory::class.java)?.let { timeObject ->
-                mutableLiveData.postValue(timeObject.timeInMilliseconds)
-                return@addOnSuccessListener
-            }
-            mutableLiveData.postValue(null)
-        }.addOnFailureListener {
-            mutableLiveData.postValue(null)
-        }
-        
-        return mutableLiveData
+        return getDocument(collection, subcategoryId).query()
     }
     
-    private fun saveTimeIfBestToSubcategoryDocument(subcategoryId: String, timeToMilliseconds: Long, path: String): LiveData<Boolean> {
-        val mutableLiveData = MutableLiveData<Boolean>()
-        
+    fun saveTimeIfBestToSubcategoryDocument(categoryId: String, subcategoryId: String, timeToMilliseconds: Long): LiveData<LiveDataPost>? {
+        val uid = getUserId() ?: return null
+        val path = getPathSubCollectionToString(uid, categoryId)
         val timeCollection = getCollection(path)
-        
-        timeCollection.document(subcategoryId).update("timeInMilliseconds", timeToMilliseconds).addOnSuccessListener {
-            mutableLiveData.postValue(true)
-        }.addOnFailureListener {
-            mutableLiveData.postValue(false)
-        }
-        
-        return mutableLiveData
+        return updateDocument(timeCollection, subcategoryId, SubCategory::timeInMilliseconds.name, timeToMilliseconds).post()
     }
     
-    private fun saveTimeToTimesCollection(subcategoryId: String, timeToMilliseconds: Long, path: String): LiveData<Boolean> {
-        val mutableLiveData = MutableLiveData<Boolean>()
+    
+    fun saveTime(categoryId: String, subcategoryId: String, timeToMilliseconds: Long): LiveData<LiveDataPost>? {
+        val uid = getUserId() ?: return null
+        val path = getPathSubCollectionToString(uid, categoryId)
         
-        val timeCollection = getCollection(path + "/" + subcategoryId + "/" + Constants.DATABASE_COLLECTION_TIME)
+        val timeCollection = getCollectionPath(path, subcategoryId, Constants.DATABASE_COLLECTION_TIME)
         val timeDocument = timeCollection.document()
         val idTime = timeDocument.id
         
-        timeDocument.set(Time(idTime, timeToMilliseconds)).addOnSuccessListener {
-            mutableLiveData.postValue(true)
-        }.addOnFailureListener {
-            mutableLiveData.postValue(false)
-        }
-        
-        return mutableLiveData
+        return insertDocument(timeCollection, Time(idTime, timeToMilliseconds), idTime).post()
     }
     
-    fun saveTime(context: LifecycleOwner, categoryId: String?, subcategoryId: String?, timeToMilliseconds: Long, isBest: Boolean): LiveData<Long?> {
-        val mutableLiveData = MutableLiveData<Long?>()
+    fun updateUserProfile(isBest: Boolean): LiveData<LiveDataPost>? {
         
-        if (categoryId == null || subcategoryId == null) {
-            mutableLiveData.postValue(null)
-            return mutableLiveData
+        val uid = getUserId() ?: return null
+        val map = HashMap<String, Any>()
+        val increment = FieldValue.increment(1)
+        
+        map[User::totalTimes.name] = increment
+        
+        if (isBest) {
+            map[User::totalBest.name] = increment
+            println(User::lastBestAt.name)
+            map[User::lastBestAt.name] = Timestamp.now()
         }
         
-        val uid = getUserId() ?: return mutableLiveData
-        val path = getPathSubCollectionToString(uid, categoryId)
-        
-        saveTimeToTimesCollection(subcategoryId, timeToMilliseconds, path).observe(context, {
-            if (!it) {
-                mutableLiveData.postValue(null)
-                return@observe
-            }
-    
-            if (isBest) {
-                saveTimeIfBestToSubcategoryDocument(subcategoryId, timeToMilliseconds, path).observe(context, {
-                    mutableLiveData.postValue(timeToMilliseconds)
-                })
-                return@observe
-            }
-    
-            mutableLiveData.postValue(timeToMilliseconds)
-            return@observe
-        })
-        return mutableLiveData
+        return updateDocument(getCollection(Constants.DATABASE_COLLECTION_USERS), uid, map).post()
     }
     
     private fun getPathSubCollectionToString(uid: String, categoryId: String): String {

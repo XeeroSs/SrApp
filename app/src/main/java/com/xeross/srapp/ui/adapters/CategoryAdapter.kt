@@ -2,7 +2,6 @@ package com.xeross.srapp.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -12,19 +11,19 @@ import com.bumptech.glide.Glide
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseAdapter
 import com.xeross.srapp.data.models.Category
+import com.xeross.srapp.databinding.CategoryCellBinding
 import com.xeross.srapp.listener.ClickListener
-import kotlinx.android.synthetic.main.category_cell.view.*
 
 class CategoryAdapter(context: Context, objectList: ArrayList<Category>, clickListener: ClickListener<Category>) :
     BaseAdapter<CategoryAdapter.ViewHolder, Category>(context, objectList, clickListener) {
     
     private val glide = Glide.with(context)
     
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val image: ImageView = itemView.category_cell_image
-        val info: TextView = itemView.category_cell_info
-        val category: TextView = itemView.category_cell_category
-        val item: LinearLayout = itemView.category_cell_item
+    inner class ViewHolder(binding: CategoryCellBinding) : RecyclerView.ViewHolder(binding.root) {
+        val image: ImageView = binding.categoryCellImage
+        val info: TextView = binding.categoryCellInfo
+        val category: TextView = binding.categoryCellCategory
+        val item: LinearLayout = binding.categoryCellItem
     }
     
     
@@ -53,7 +52,7 @@ class CategoryAdapter(context: Context, objectList: ArrayList<Category>, clickLi
     }
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(LayoutInflater.from(context).inflate(R.layout.category_cell, parent, false))
+        ViewHolder(CategoryCellBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     
     
 }

@@ -7,7 +7,7 @@
     tools:context=".ui.settings.SettingActivity">
 
     <include
-        android:id="@+id/include"
+        android:id="@+id/header"
         layout="@layout/fragment_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/include"
+        android:layout_below="@id/header"
         android:layout_alignParentBottom="true">
 
         <LinearLayout
@@ -51,29 +51,23 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:gravity="center">
+                android:layout_marginBottom="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentBottom="true"
                     android:layout_marginEnd="20dp"
                     android:layout_toStartOf="@id/switch_display_milliseconds"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:start="@id/switch_display_milliseconds">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:fontFamily="@font/gilroy_light"
-                        android:gravity="center_vertical"
                         android:maxLines="1"
-                        android:text="Afficher les millisecondes"
+                        android:text="@string/display_milliseconds"
                         android:textAllCaps="true"
                         android:textColor="@color/on_surface"
                         android:textSize="15sp" />
@@ -83,9 +77,8 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:fontFamily="@font/gilroy_light"
-                        android:gravity="center_vertical"
                         android:maxLines="2"
-                        android:text="Affiche les milliseconds sur la moyenne des temps d'une sous-catégorie."
+                        android:text="@string/display_milliseconds_on_time_average_from_subcategory"
                         android:textColor="@color/light_gray"
                         android:textSize="12sp" />
 
@@ -95,12 +88,9 @@
                     android:id="@+id/switch_display_milliseconds"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
                     android:buttonTint="@color/pink_gradient"
-                    android:checked="true"
-                    android:gravity="center_vertical" />
+                    android:checked="true" />
 
             </RelativeLayout>
 
@@ -143,12 +133,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="20dp"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:start="@id/switch_display_milliseconds">
+                    android:layout_marginEnd="20dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -167,14 +152,12 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
                     android:buttonTint="@color/pink_gradient"
                     android:checked="true"
                     android:gravity="center_vertical"
                     android:src="@drawable/ic_sign_out"
-                    android:tint="@color/on_surface" />
+                    app:tint="@color/on_surface" />
 
             </RelativeLayout>
 

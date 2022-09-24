@@ -2,6 +2,7 @@ package com.xeross.srapp.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.viewbinding.ViewBinding
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import com.xeross.srapp.R
@@ -9,14 +10,12 @@ import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.ui.auth.register.exceptions.ExceptionRegisterTypes
 import com.xeross.srapp.ui.auth.types.AuthTextInputTypes
 import com.xeross.srapp.utils.extensions.UIExtensions.error
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-abstract class BaseAuthActivity : BaseActivity() {
+abstract class BaseAuthActivity<B : ViewBinding> : BaseActivity<B>() {
     
     protected val textInputs = HashMap<AuthTextInputTypes, TextInputLayout>()
     

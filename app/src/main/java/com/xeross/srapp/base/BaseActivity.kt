@@ -5,34 +5,37 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewbinding.ViewBinding
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
+import com.xeross.srapp.ui.profile.ProfileActivity
 import com.xeross.srapp.ui.settings.SettingActivity
 import com.xeross.srapp.utils.injection.ViewModelFactory
-import kotlinx.android.synthetic.main.activity_category.*
-import kotlinx.android.synthetic.main.fragment_bottom_navigation_menu.*
-import kotlinx.android.synthetic.main.fragment_header.*
-import kotlinx.android.synthetic.main.fragment_header.header_title
 import java.util.function.Function
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity<B : ViewBinding> : AppCompatActivity() {
     
-    abstract fun getFragmentId(): Int
     abstract fun getViewModelClass(): Class<*>
+    abstract fun attachViewBinding(): ViewBinding
     abstract fun setUp()
     abstract fun ui()
     abstract fun onClick()
     
     protected var vm: ViewModel? = null
+    protected lateinit var binding: B
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getFragmentId())
+        binding = attachViewBinding() as B
+        setContentView(binding.root)
         vm = provideViewModel()
         setUp()
         ui()
@@ -41,8 +44,8 @@ abstract class BaseActivity : AppCompatActivity() {
     
     @Suppress("UNCHECKED_CAST")
     private fun provideViewModel(): ViewModel {
-        val factory = ViewModelFactory(this)
-        return ViewModelProvider(this, factory).get(getViewModelClass() as Class<ViewModel>)
+        val factory = ViewModelFactory()
+        return ViewModelProvider(this, factory)[getViewModelClass() as Class<ViewModel>]
     }
     
     protected fun setStatusBarTransparent() {
@@ -55,14 +58,16 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
     
-    protected fun buildHeader(resIdTitle: Int, textSize: Float, function: Function<Void?, Boolean>? = null) {
-        with(header_title) {
+    protected fun buildHeader(toolbar: MaterialToolbar?, text: TextView, resIdTitle: Int, textSize: Float, function: Function<Void?, Boolean>? = null) {
+        
+        
+        with(text) {
             post {
                 this.textSize = textSize
             }
             this.text = resources.getString(resIdTitle)
         }
-        header_toolbar?.setNavigationOnClickListener { _ ->
+        toolbar?.setNavigationOnClickListener { _ ->
             function?.let { func ->
                 func.apply(null).takeIf { it }?.let { _ ->
                     finish()
@@ -74,12 +79,16 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
     
-    protected fun buildBottomNavigationMenu(resultIntent: ActivityResultLauncher<Intent>? = null) {
+    protected fun buildBottomNavigationMenu(view: BottomNavigationView, resultIntent: ActivityResultLauncher<Intent>? = null) {
         // unselected the first item (the first item is selected by default when the activity is created)
-        bottom_navigation_menu.menu.getItem(0).isCheckable = false
-        (bottom_navigation_menu as NavigationBarView).setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener {
+        view.menu.getItem(0).isCheckable = false
+        (view as NavigationBarView).setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener {
             // Test
             when (it.itemId) {
+                R.id.menu_profile -> {
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    startActivity(intent)
+                }
                 R.id.menu_home -> {
                 }
                 R.id.menu_settings -> {
@@ -106,5 +115,4 @@ abstract class BaseActivity : AppCompatActivity() {
         if (finishActivity) finish()
         startActivity(intent)
     }
-    
 }

@@ -2,15 +2,13 @@ package com.xeross.srapp.ui.categoryform.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.xeross.srapp.R
+import androidx.viewbinding.ViewBinding
+import com.xeross.srapp.databinding.CellFormImageBinding
 import com.xeross.srapp.ui.categoryform.fragment.base.BaseCategoryFormFragment
 
-class CategoryFormIllustrationFragment : BaseCategoryFormFragment() {
+class CategoryFormIllustrationFragment : BaseCategoryFormFragment<CellFormImageBinding>() {
     
     companion object {
         
@@ -51,24 +49,23 @@ class CategoryFormIllustrationFragment : BaseCategoryFormFragment() {
     
     override fun isNextValid() = true
     
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        
-        val view = inflater.inflate(R.layout.cell_form_image, container, false)
-        
-        buildUI(view)
-        
-        return view
+    override fun attachViewBinding(inflater: LayoutInflater, container: ViewGroup?): ViewBinding {
+        return CellFormImageBinding.inflate(inflater, container, false)
     }
     
-    private fun buildUI(view: View) {
-        val titleView = view.findViewById<TextView>(R.id.form_title)
+    override fun setup() {
+        buildUI()
+    }
+    
+    private fun buildUI() {
+        val titleView = binding.include.formTitle
         titleView.text = title
         
-        val subtitleView = view.findViewById<TextView>(R.id.form_subtitle)
+        val subtitleView = binding.include.formSubtitle
         subtitleView.text = subtitle
         
         resImage?.let {
-            val illustrationView = view.findViewById<ImageView>(R.id.form_illustration)
+            val illustrationView = binding.formIllustration
             illustrationView.setBackgroundResource(it)
         }
     }

@@ -65,6 +65,7 @@
     <string name="invalid_email">Invalid email address format.</string>
     <string name="field_is_required">This field is required.</string>
     <string name="success">Success !</string>
+    <string name="it_does_not_exist">It does not exist.</string>
 
     <!--  Category form  -->
     <string name="category">Category</string>
@@ -102,5 +103,23 @@
     <string name="years">years</string>
     <string name="all_runs">all runs</string>
     <string name="settings">Settings</string>
+    <string name="profile">Profile</string>
+    <string name="total_times">Total time(s)</string>
+    <string name="best_rate">Best rate</string>
+    <string name="total_bests">Total bests</string>
+    <string name="last_best">Last best</string>
+    <string name="account_created_at">Account created at</string>
+    <string name="your_name">Name: %1$s</string>
+    <string name="an_error_has_occured_please_try_again">An error has occurred. Please try again.</string>
+    <string name="no_internet_connection_was_found">No internet connection was found.</string>
+    <string name="display_milliseconds">Afficher les millisecondes</string>
+    <string name="display_milliseconds_on_time_average_from_subcategory">Affiche les milliseconds sur la moyenne des temps d\'une sous-catégorie.</string>
+    <string name="color">Couleur</string>
+    <string name="delete">Supprimer</string>
+    <string name="global">Global</string>
+    <string name="best_is_handle_by_lowest_time">Le meilleur temps est géré en fonction du temps le plus bas.</string>
+    <string name="best_time">Meilleur temps</string>
+    <string name="management">Management</string>
+    <string name="other">Autre</string>
 
 </resources>

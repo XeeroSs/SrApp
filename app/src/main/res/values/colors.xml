@@ -8,9 +8,11 @@
     <color name="blue_gradient">#364F6B</color> <!--white-->
     <color name="purple_gradient">#6B5072</color> <!--white-->
     <color name="pink_gradient">#FC5185</color> <!--white-->
+    <color name="pink_gradient_variant_2">#FF81AE</color> <!--white-->
     <color name="pink_gradient_variant">#FC5185</color> <!--white-->
 
     <color name="pink_gradient_light">#ef5f91</color> <!--white-->
+    <color name="pink_gradient_transparent">#4DFC5185</color> <!--white-->
     <color name="pink_gradient_light_variant">#ff94c2</color> <!--white-->
     <color name="transparent">#00ffffff</color> <!--white-->
 
@@ -42,6 +44,10 @@
     <color name="gold">#FBBC05</color> <!--super dark gray-->
     <color name="negative">#F86D70</color> <!--super dark gray-->
     <color name="positive">#57B894</color> <!--super dark gray-->
+
+
+    <color name="blue_pastel">#ADE3EF</color> <!--super dark gray-->
+    <color name="purple_pastel">#DAADEF</color> <!--super dark gray-->
 
 
     <!--    <color name="purple_light">#794de3</color>

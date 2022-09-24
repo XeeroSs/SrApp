@@ -79,4 +79,23 @@ object UIExtensions {
         }
     }
     
+    fun getGradientWithSingleColor(context: Context, resColorId: Int): GradientDrawable {
+        val fromColor = ContextCompat.getColor(context, resColorId)
+        
+        val r = Color.red(fromColor)
+        val g = Color.green(fromColor)
+        val b = Color.blue(fromColor)
+        val hsv = FloatArray(3)
+        Color.RGBToHSV(r, g, b, hsv)
+        
+        val saturation = hsv[1]
+        val toSaturation = if (saturation < 0.10f) saturation + 0.01f else saturation - 0.01f
+        
+        val toColor = Color.HSVToColor(floatArrayOf(hsv[0], toSaturation, hsv[2]))
+        val gradientDrawable = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(fromColor, toColor))
+        gradientDrawable.cornerRadius = 0f
+        
+        return gradientDrawable
+    }
+    
 }

@@ -55,5 +55,4 @@ object UtilsExtensions {
         val matcher = pattern.matcher(this)
         return matcher.matches()
     }
-    
 }

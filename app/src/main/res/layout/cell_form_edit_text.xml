@@ -33,7 +33,7 @@
             android:textAppearance="@style/TextStyle"
             android:textColorHint="@color/white"
             android:theme="@style/TextInputAuth"
-            app:boxBackgroundColor="@color/pink_gradient"
+            app:boxBackgroundColor="@color/pink_gradient_transparent"
             app:boxCornerRadiusBottomEnd="15dp"
             app:boxCornerRadiusBottomStart="15dp"
             app:boxCornerRadiusTopEnd="15dp"
@@ -47,7 +47,6 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:alpha="0.5"
                 android:fontFamily="@font/gilroy_light"
                 android:inputType="text"
                 android:lines="1"

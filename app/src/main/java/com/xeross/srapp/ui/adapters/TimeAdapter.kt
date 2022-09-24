@@ -2,7 +2,6 @@ package com.xeross.srapp.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -13,12 +12,11 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseAdapter
 import com.xeross.srapp.data.models.Time
+import com.xeross.srapp.databinding.TimeCellBinding
 import com.xeross.srapp.listener.ClickListener
 import com.xeross.srapp.utils.extensions.TimeExtensions.timeAgoToString
 import com.xeross.srapp.utils.extensions.TimeExtensions.toFormatTime
-import kotlinx.android.synthetic.main.time_cell.view.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 class TimeAdapter(context: Context, objectList: ArrayList<Time>, private val current: Date, clickListener: ClickListener<Time>, private val listener: Listener) :
     BaseAdapter<TimeAdapter.ViewHolder, Time>(context, objectList, clickListener) {
@@ -34,12 +32,12 @@ class TimeAdapter(context: Context, objectList: ArrayList<Time>, private val cur
         fun toggle(toggle: Boolean)
     }
     
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val item: RelativeLayout = itemView.item
-        val timeAgo: TextView = itemView.text_days_ago
-        val checkBox: MaterialCheckBox = itemView.check_box
-        val cardview: MaterialCardView = itemView.cardview_time
-        val time: TextView = itemView.text_time
+    class ViewHolder(binding: TimeCellBinding) : RecyclerView.ViewHolder(binding.root) {
+        val item: RelativeLayout = binding.item
+        val timeAgo: TextView = binding.textDaysAgo
+        val checkBox: MaterialCheckBox = binding.checkBox
+        val cardview: MaterialCardView = binding.cardviewTime
+        val time: TextView = binding.textTime
     }
     
     
@@ -78,5 +76,6 @@ class TimeAdapter(context: Context, objectList: ArrayList<Time>, private val cur
     fun getToggles() = toggles
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(LayoutInflater.from(context).inflate(R.layout.time_cell, parent, false))
+        ViewHolder(TimeCellBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    
 }

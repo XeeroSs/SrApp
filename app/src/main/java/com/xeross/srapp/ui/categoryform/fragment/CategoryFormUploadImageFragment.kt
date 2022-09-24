@@ -2,16 +2,13 @@ package com.xeross.srapp.ui.categoryform.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.google.android.material.card.MaterialCardView
-import com.xeross.srapp.R
+import androidx.viewbinding.ViewBinding
+import com.xeross.srapp.databinding.CellFormUploadImageBinding
 import com.xeross.srapp.ui.categoryform.fragment.base.BaseCategoryFormFragment
 
-class CategoryFormUploadImageFragment : BaseCategoryFormFragment() {
+class CategoryFormUploadImageFragment : BaseCategoryFormFragment<CellFormUploadImageBinding>() {
     
     companion object {
         
@@ -59,28 +56,27 @@ class CategoryFormUploadImageFragment : BaseCategoryFormFragment() {
     
     override fun isNextValid() = true
     
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        
-        val view = inflater.inflate(R.layout.cell_form_upload_image, container, false)
-        
-        buildUI(view)
-        
-        return view
+    override fun attachViewBinding(inflater: LayoutInflater, container: ViewGroup?): ViewBinding {
+        return CellFormUploadImageBinding.inflate(inflater, container, false)
     }
     
-    private fun buildUI(view: View) {
-        val titleView = view.findViewById<TextView>(R.id.form_title)
+    override fun setup() {
+        buildUI()
+    }
+    
+    private fun buildUI() {
+        val titleView = binding.include.formTitle
         titleView.text = title
         
-        val subtitleView = view.findViewById<TextView>(R.id.form_subtitle)
+        val subtitleView = binding.include.formSubtitle
         subtitleView.text = subtitle
         
         resImage?.let {
-            val illustrationView = view.findViewById<ImageView>(R.id.form_upload_image)
+            val illustrationView = binding.formUploadImage
             illustrationView.setBackgroundResource(it)
         }
         
-        view.findViewById<MaterialCardView>(R.id.form_upload_image_card)?.setOnClickListener {
+        binding.formUploadImageCard.setOnClickListener {
         
         }
         
