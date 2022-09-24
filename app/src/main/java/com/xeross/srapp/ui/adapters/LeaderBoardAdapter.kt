@@ -2,7 +2,6 @@ package com.xeross.srapp.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -14,22 +13,22 @@ import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseAdapter
 import com.xeross.srapp.data.models.LeaderBoard
 import com.xeross.srapp.data.models.types.DifferenceType
+import com.xeross.srapp.databinding.RankingCellBinding
 import com.xeross.srapp.listener.TimeListener
 import com.xeross.srapp.utils.extensions.UtilsExtensions.toHexColorString
-import kotlinx.android.synthetic.main.ranking_cell.view.*
 
 class LeaderBoardAdapter(context: Context, objectList: ArrayList<LeaderBoard>, private val timeListener: TimeListener) :
     BaseAdapter<LeaderBoardAdapter.ViewHolder, LeaderBoard>(context, objectList, null) {
     
     private val glide = Glide.with(context)
     
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val menu: ImageButton = itemView.ranking_cell_button_menu
-        val difference: TextView = itemView.ranking_cell_difference
-        val profileImage: ImageView = itemView.ranking_cell_profile_image
-        val name: TextView = itemView.ranking_cell_name
-        val time: TextView = itemView.ranking_cell_time
-        val position: TextView = itemView.ranking_cell_position
+    class ViewHolder(binding: RankingCellBinding) : RecyclerView.ViewHolder(binding.root) {
+        val menu: ImageButton = binding.rankingCellButtonMenu
+        val difference: TextView = binding.rankingCellDifference
+        val profileImage: ImageView = binding.rankingCellProfileImage
+        val name: TextView = binding.rankingCellName
+        val time: TextView = binding.rankingCellTime
+        val position: TextView = binding.rankingCellPosition
     }
     
     
@@ -90,7 +89,7 @@ class LeaderBoardAdapter(context: Context, objectList: ArrayList<LeaderBoard>, p
     }
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(LayoutInflater.from(context).inflate(R.layout.ranking_cell, parent, false))
+        ViewHolder(RankingCellBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     
     
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.viewbinding.ViewBinding
 import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver
@@ -22,7 +23,9 @@ import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
 import com.xeross.srapp.base.BaseActivityOAuth
 import com.xeross.srapp.base.BaseAsyncTask
-import kotlinx.coroutines.*
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -73,7 +76,7 @@ class GoogleSheetDataSource() {
         }
     }
     
-    fun getValueToString(nameGSClass: String, baseActivityOAuth: BaseActivityOAuth?, case: String): LiveData<String?> {
+    fun <B : ViewBinding> getValueToString(nameGSClass: String, baseActivityOAuth: BaseActivityOAuth<B>?, case: String): LiveData<String?> {
         val mutableLiveData = MutableLiveData<String?>()
         baseActivityOAuth?.let { activity ->
             service?.let { sheets ->
@@ -81,7 +84,7 @@ class GoogleSheetDataSource() {
                     override fun call(): Boolean {
                         try {
                             val range = "$nameGSClass!$case"
-            
+                            
                             // Catch if there are too many requests
                             val response = try {
                                 sheets.spreadsheets().values()[ID, range].execute()
@@ -89,14 +92,14 @@ class GoogleSheetDataSource() {
                                 // TODO("Too many request")
                                 return false
                             }
-            
+                            
                             val result = response.getValues() ?: run {
                                 mutableLiveData.postValue(null)
                                 return false
                             }
-            
+                            
                             val results = result[0][0].toString()
-            
+                            
                             mutableLiveData.postValue(results)
                         } catch (e: UserRecoverableAuthIOException) {
                             // Trigger intent to have the user authorize
@@ -133,7 +136,7 @@ class GoogleSheetDataSource() {
         return mutableLiveData
     }
     
-    fun getValuesToStringMap(nameGSClass: String, baseActivityOAuth: BaseActivityOAuth?, keyRangeFrom: String, keyRangTo: String, valueRangeFrom: String, valueRangTo: String): LiveData<Map<String, String>?> {
+    fun <B : ViewBinding> getValuesToStringMap(nameGSClass: String, baseActivityOAuth: BaseActivityOAuth<B>?, keyRangeFrom: String, keyRangTo: String, valueRangeFrom: String, valueRangTo: String): LiveData<Map<String, String>?> {
         val mutableLiveData = MutableLiveData<Map<String, String>?>()
         baseActivityOAuth?.let { activity ->
             service?.let { sheets ->
@@ -141,7 +144,7 @@ class GoogleSheetDataSource() {
                     override fun call(): Boolean {
                         try {
                             val keyRange = "$nameGSClass!$keyRangeFrom:$keyRangTo"
-            
+                            
                             // Catch if there are too many requests
                             val keyResponse = try {
                                 sheets.spreadsheets().values()[ID, keyRange].execute()
@@ -149,16 +152,16 @@ class GoogleSheetDataSource() {
                                 // TODO("Too many request")
                                 return false
                             }
-            
+                            
                             val keyResult = keyResponse.getValues() ?: run {
                                 mutableLiveData.postValue(null)
                                 return false
                             }
-            
+                            
                             val keyResults = keyResult.map { it[0].toString() }
-            
+                            
                             val valueRange = "$nameGSClass!$valueRangeFrom:$valueRangTo"
-            
+                            
                             // Catch if there are too many requests
                             val valueResponse = try {
                                 sheets.spreadsheets().values()[ID, valueRange].execute()
@@ -166,14 +169,14 @@ class GoogleSheetDataSource() {
                                 // TODO("Too many request")
                                 return false
                             }
-            
+                            
                             val valueResult = valueResponse.getValues() ?: run {
                                 mutableLiveData.postValue(null)
                                 return false
                             }
-            
+                            
                             val valueResults = valueResult.map { it[0].toString() }
-            
+                            
                             mutableLiveData.postValue(keyResults.zip(valueResults).toMap())
                         } catch (e: UserRecoverableAuthIOException) {
                             // Trigger intent to have the user authorize

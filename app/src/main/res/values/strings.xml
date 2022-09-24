@@ -114,5 +114,12 @@
     <string name="no_internet_connection_was_found">No internet connection was found.</string>
     <string name="display_milliseconds">Afficher les millisecondes</string>
     <string name="display_milliseconds_on_time_average_from_subcategory">Affiche les milliseconds sur la moyenne des temps d\'une sous-catégorie.</string>
+    <string name="color">Couleur</string>
+    <string name="delete">Supprimer</string>
+    <string name="global">Global</string>
+    <string name="best_is_handle_by_lowest_time">Le meilleur temps est géré en fonction du temps le plus bas.</string>
+    <string name="best_time">Meilleur temps</string>
+    <string name="management">Management</string>
+    <string name="other">Autre</string>
 
 </resources>

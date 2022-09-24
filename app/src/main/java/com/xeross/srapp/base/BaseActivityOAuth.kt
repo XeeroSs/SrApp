@@ -3,14 +3,14 @@ package com.xeross.srapp.base
 import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.viewbinding.ViewBinding
 import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.services.sheets.v4.SheetsScopes
 
-abstract class BaseActivityOAuth : BaseActivity() {
+abstract class BaseActivityOAuth<B : ViewBinding> : BaseActivity<B>() {
     
     private val REQUEST_ACCOUNT_PICKER = 1
     private val REQUEST_GOOGLE_PLAY_SERVICES = 2

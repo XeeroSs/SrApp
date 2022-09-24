@@ -6,6 +6,7 @@
         <item name="colorOnBackground">@color/on_background</item>
         <item name="android:colorBackground">@color/background</item>
         <item name="switchStyle">@style/Widget.App.Switch</item>
+        <item name="android:textColorSecondary">@color/white</item>
         <item name="colorSurface">@color/surface</item>
         <item name="colorOnSurface">@color/on_surface</item>
         <item name="android:statusBarColor">@android:color/transparent</item>

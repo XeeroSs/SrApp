@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.xeross.srapp.ui.auth.login.LoginViewModel
 import com.xeross.srapp.ui.auth.register.RegisterViewModel
 import com.xeross.srapp.ui.category.category.CategoryViewModel
+import com.xeross.srapp.ui.category.management.CategoryManagementViewModel
 import com.xeross.srapp.ui.category.subcategories.SubcategoriesViewModel
 import com.xeross.srapp.ui.category.subcategory.SubcategoryViewModel
 import com.xeross.srapp.ui.categoryform.category.CategoryFormViewModel
@@ -20,6 +21,7 @@ class ViewModelFactory : ViewModelProvider.Factory {
     override fun <VM : ViewModel> create(modelClass: Class<VM>): VM {
         return when {
             getViewModel<SplashViewModel>(modelClass) -> SplashViewModel()
+            getViewModel<CategoryManagementViewModel>(modelClass) -> CategoryManagementViewModel()
             getViewModel<SubcategoryViewModel>(modelClass) -> SubcategoryViewModel()
             getViewModel<SubcategoryFormViewModel>(modelClass) -> SubcategoryFormViewModel()
             getViewModel<CategoryFormViewModel>(modelClass) -> CategoryFormViewModel()

@@ -2,9 +2,9 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
+    //id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
-    id 'com.google.secrets_gradle_plugin' version '0.4'
+    //id 'com.google.secrets_gradle_plugin' version '0.4'
  /*   id 'dagger.hilt.android.plugin'*/
 
     // For build.gradle (Groovy DSL)
@@ -17,7 +17,6 @@ repositories {
 
 android {
     compileSdkVersion 31
-    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "com.xeross.srapp"
@@ -54,8 +53,11 @@ android {
         viewBinding = true
     }
     packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
+        resources {
+            excludes += ['META-INF/DEPENDENCIES']
+        }
     }
+    namespace 'com.xeross.srapp'
 }
 
 dependencies {
@@ -70,6 +72,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
     implementation 'com.google.firebase:firebase-firestore-ktx:24.1.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
 
     // ----------------------------------------------------------
 

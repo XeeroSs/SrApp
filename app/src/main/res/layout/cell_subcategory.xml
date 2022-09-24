@@ -24,7 +24,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/shape_subcategory_background"
+android:id="@+id/content"
             android:foreground="?android:attr/selectableItemBackground"
             android:orientation="vertical">
 

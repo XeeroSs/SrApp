@@ -8,6 +8,7 @@ import android.widget.RelativeLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -15,14 +16,16 @@ import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.data.models.ProfileStatistic
 import com.xeross.srapp.data.models.User
+import com.xeross.srapp.databinding.ActivityProfileBinding
 import com.xeross.srapp.ui.adapters.ProfileStatisticAdapter
 import com.xeross.srapp.ui.profile.listener.IProfileStatistic
 import com.xeross.srapp.ui.profile.types.ProfileStatisticType
-import kotlinx.android.synthetic.main.activity_profile.*
 
-class ProfileActivity : BaseActivity(), IProfileStatistic {
+class ProfileActivity : BaseActivity<ActivityProfileBinding>(), IProfileStatistic {
     
-    override fun getFragmentId() = R.layout.activity_profile
+    override fun attachViewBinding(): ViewBinding {
+        return ActivityProfileBinding.inflate(layoutInflater)
+    }
     
     override fun getViewModelClass() = ProfileViewModel::class.java
     private var viewModel: ProfileViewModel? = null
@@ -40,7 +43,7 @@ class ProfileActivity : BaseActivity(), IProfileStatistic {
                 val profileStatistic = ProfileStatistic(resNameId, value, resColorId, resIconId)
                 profileStatistics.add(profileStatistic)
                 adapter?.notifyDataSetChanged()
-        
+                
             }
         })
     }
@@ -108,7 +111,7 @@ class ProfileActivity : BaseActivity(), IProfileStatistic {
     }
     
     private fun setPseudo(viewModel: ProfileViewModel, user: User?) {
-        text_name.text = getString(R.string.your_name, viewModel.getPseudo(user))
+        binding.textName.text = getString(R.string.your_name, viewModel.getPseudo(user))
     }
     
     private fun getProfileStatistics() {
@@ -135,8 +138,8 @@ class ProfileActivity : BaseActivity(), IProfileStatistic {
      * Reduce size image based on content shape size for create a border
      */
     private fun setHeaderImage(uriProfileImage: String?) {
-        val image = image_header
-        val imageContent = content_image_header
+        val image = binding.imageHeader
+        val imageContent = binding.contentImageHeader
         
         // Get new height and width for image
         val borderSize = resources.getDimension(R.dimen.activity_game_details_header_image_border_size)
@@ -156,19 +159,19 @@ class ProfileActivity : BaseActivity(), IProfileStatistic {
     private fun loadImageToHeader(uriProfileImage: String?) {
         uriProfileImage?.let {
             // TODO("Uri")
-            Glide.with(this).load(it).centerInside().circleCrop().into(image_header)
+            Glide.with(this).load(it).centerInside().circleCrop().into(binding.imageHeader)
             return
         }
         Glide.with(this).load(R.drawable.pingu).centerInside()
-            .circleCrop().into(image_header)
+            .circleCrop().into(binding.imageHeader)
         return
     }
     
     override fun ui() {
-        buildHeader(R.string.profile, 35f)
+        buildHeader(binding.headerToolbar, binding.headerTitle, R.string.profile, 35f)
         
         adapter = ProfileStatisticAdapter(this, profileStatistics).also { a ->
-            list_profile_stats.let {
+            binding.listProfileStats.let {
                 val linearLayoutManager = GridLayoutManager(this, 2)
                 it.setHasFixedSize(true)
                 it.layoutManager = linearLayoutManager
@@ -185,7 +188,7 @@ class ProfileActivity : BaseActivity(), IProfileStatistic {
     
     override fun onClick() {
         
-        button_edit_name.setOnClickListener {
+        binding.buttonEditName.setOnClickListener {
             editPseudo()
         }
     }

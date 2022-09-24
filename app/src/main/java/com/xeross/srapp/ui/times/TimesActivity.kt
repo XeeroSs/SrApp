@@ -13,12 +13,14 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.Slide
 import androidx.transition.TransitionManager
-import com.google.android.material.button.MaterialButton
+import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.components.NumberPickerBuilder
 import com.xeross.srapp.data.models.Time
+import com.xeross.srapp.databinding.ActivityTimesBinding
+import com.xeross.srapp.databinding.DialogAddTimeBinding
 import com.xeross.srapp.listener.ClickListener
 import com.xeross.srapp.ui.adapters.TimeAdapter
 import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity
@@ -30,15 +32,10 @@ import com.xeross.srapp.utils.extensions.TimeExtensions.toHourFromTimeInMillisec
 import com.xeross.srapp.utils.extensions.TimeExtensions.toMillisecondFromTimeInMilliseconds
 import com.xeross.srapp.utils.extensions.TimeExtensions.toMinuteFromTimeInMilliseconds
 import com.xeross.srapp.utils.extensions.TimeExtensions.toSecondFromTimeInMilliseconds
-import kotlinx.android.synthetic.main.activity_subcategory.*
-import kotlinx.android.synthetic.main.activity_times.*
-import kotlinx.android.synthetic.main.dialog_add_time.view.*
-import kotlinx.android.synthetic.main.fragment_bottom_navigation_menu.*
 import java.util.*
 import java.util.stream.Collectors
-import kotlin.collections.ArrayList
 
-class TimesActivity : BaseActivity(), TimeAdapter.Listener, ClickListener<Time> {
+class TimesActivity : BaseActivity<ActivityTimesBinding>(), TimeAdapter.Listener, ClickListener<Time> {
     
     private val times = ArrayList<Time>()
     private var adapter: TimeAdapter? = null
@@ -47,7 +44,7 @@ class TimesActivity : BaseActivity(), TimeAdapter.Listener, ClickListener<Time> 
     private lateinit var categoryId: String
     
     // Dialogs
-    private var dialogView: View? = null
+    private var dialogView: DialogAddTimeBinding? = null
     private var dialog: AlertDialog? = null
     
     private var best: Long = 0
@@ -62,10 +59,12 @@ class TimesActivity : BaseActivity(), TimeAdapter.Listener, ClickListener<Time> 
     
     private val numberPickers = ArrayList<NumberPicker>()
     
-    override fun getFragmentId() = R.layout.activity_times
-    
     override fun getViewModelClass() = TimesViewModel::class.java
     private var viewModel: TimesViewModel? = null
+    
+    override fun attachViewBinding(): ViewBinding {
+        return ActivityTimesBinding.inflate(layoutInflater)
+    }
     
     override fun setUp() {
         viewModel = vm as TimesViewModel?
@@ -86,14 +85,14 @@ class TimesActivity : BaseActivity(), TimeAdapter.Listener, ClickListener<Time> 
     
     override fun ui() {
         
-        buildHeader(R.string.times, 35f)
+        buildHeader(binding.header.headerToolbar, binding.header.headerTitle, R.string.times, 35f)
         
         setStatusBarTransparent()
-        buildBottomNavigationMenu()
+        buildBottomNavigationMenu(binding.menu.bottomNavigationMenu)
         setUpDialogs()
         
         adapter = TimeAdapter(this, times, Date(), this, this).also { a ->
-            list_times.let {
+            binding.listTimes.let {
                 val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
                 it.setHasFixedSize(true)
                 it.layoutManager = linearLayoutManager
@@ -103,21 +102,21 @@ class TimesActivity : BaseActivity(), TimeAdapter.Listener, ClickListener<Time> 
         }
         
         // Method View::post allows to call the Thread for UI
-        list_times.post {
+        binding.listTimes.post {
             
             // Add margin bottom to recyclerview for this one don't hide by bottom navigation menu
-            val paramsRecyclerViewRanking = list_times.layoutParams as ViewGroup.MarginLayoutParams
-            paramsRecyclerViewRanking.bottomMargin = bottom_navigation_menu.measuredHeight
+            val paramsRecyclerViewRanking = binding.listTimes.layoutParams as ViewGroup.MarginLayoutParams
+            paramsRecyclerViewRanking.bottomMargin = binding.menu.bottomNavigationMenu.measuredHeight
         }
     }
     
     private fun showTrashButton(toggle: Boolean) {
         val transition = Slide(Gravity.BOTTOM)
         transition.duration = 600
-        transition.addTarget(button_trash)
+        transition.addTarget(binding.buttonTrash)
         
-        TransitionManager.beginDelayedTransition(parentView, transition)
-        button_trash.visibility = if (toggle) View.VISIBLE else View.GONE
+        TransitionManager.beginDelayedTransition(binding.parentView, transition)
+        binding.buttonTrash.visibility = if (toggle) View.VISIBLE else View.GONE
     }
     
     private fun getTimes() {
@@ -160,19 +159,19 @@ class TimesActivity : BaseActivity(), TimeAdapter.Listener, ClickListener<Time> 
     }
     
     private fun setUpDialogs() {
-        dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_time, null, false).also {
+        dialogView = DialogAddTimeBinding.inflate(LayoutInflater.from(this), null, false).also {
             
-            hoursPicker = NumberPickerBuilder(it.findViewById(R.id.hour_picker)).max(999).min().build().add()
-            minutesPicker = NumberPickerBuilder(it.findViewById(R.id.minute_picker)).max(59).min().format { d -> if (d < 10) return@format "0$d" else return@format d.toString() }.build().add()
-            secondsPicker = NumberPickerBuilder(it.findViewById(R.id.second_picker)).max(59).min().format { d -> if (d < 10) return@format "0$d" else return@format d.toString() }.build().add()
-            millisecondsPicker = NumberPickerBuilder(it.findViewById(R.id.millisecond_picker)).max(999).min().format { d -> if (d < 10) return@format "00$d" else if (d < 100) return@format "0$d" else return@format d.toString() }.build().add()
+            hoursPicker = NumberPickerBuilder(it.hourPicker).max(999).min().build().add()
+            minutesPicker = NumberPickerBuilder(it.minutePicker).max(59).min().format { d -> if (d < 10) return@format "0$d" else return@format d.toString() }.build().add()
+            secondsPicker = NumberPickerBuilder(it.secondPicker).max(59).min().format { d -> if (d < 10) return@format "0$d" else return@format d.toString() }.build().add()
+            millisecondsPicker = NumberPickerBuilder(it.millisecondPicker).max(999).min().format { d -> if (d < 10) return@format "00$d" else if (d < 100) return@format "0$d" else return@format d.toString() }.build().add()
             
-            it.findViewById<MaterialButton>(R.id.dismiss_button)?.setOnClickListener { _ ->
+            it.dismissButton?.setOnClickListener { _ ->
                 resetDialogPicker()
                 dialog?.dismiss()
             }
             
-            dialog = MaterialAlertDialogBuilder(this, R.style.WrapEverythingDialog).setBackground(ColorDrawable(Color.TRANSPARENT)).setCancelable(true).setView(it).create()
+            dialog = MaterialAlertDialogBuilder(this, R.style.WrapEverythingDialog).setBackground(ColorDrawable(Color.TRANSPARENT)).setCancelable(true).setView(it.root).create()
         }
     }
     
@@ -181,9 +180,9 @@ class TimesActivity : BaseActivity(), TimeAdapter.Listener, ClickListener<Time> 
     }
     
     private fun updateTime(time: Time) {
-        dialogView?.submit_button?.isEnabled = false
+        dialogView?.submitButton?.isEnabled = false
         getTimeFromDialog(hoursPicker!!.value, minutesPicker!!.value, secondsPicker!!.value, millisecondsPicker!!.value, time)?.observe(this, { timeInMilliseconds ->
-            dialogView?.submit_button?.isEnabled = true
+            dialogView?.submitButton?.isEnabled = true
             if (timeInMilliseconds == null) return@observe
             adapter?.let { a ->
                 times.find { it.timeId == time.timeId }?.time = timeInMilliseconds
@@ -200,7 +199,7 @@ class TimesActivity : BaseActivity(), TimeAdapter.Listener, ClickListener<Time> 
     
     private fun launchDialog(time: Time) {
         
-        dialogView?.findViewById<MaterialButton>(R.id.submit_button)?.setOnClickListener { _ ->
+        dialogView?.submitButton?.setOnClickListener { _ ->
             // The value inputted by the user is not updated if the user is still in the text input of a NumberPicker (In the case where the user himself inputs the value of the NumberPicker with his keyboard).
             // However, disabling it before getting its value allows it to be updated.
             toggleNumberPickers(false)
@@ -225,21 +224,21 @@ class TimesActivity : BaseActivity(), TimeAdapter.Listener, ClickListener<Time> 
     }
     
     override fun onClick() {
-        button_trash.setOnClickListener { _ ->
+        binding.buttonTrash.setOnClickListener { _ ->
             adapter?.let { a ->
                 a.getToggles().takeUnless { it.isEmpty() }?.let { toggles ->
                     viewModel?.let { vm ->
                         isDeleting = true
-                        button_trash.isEnabled = false
+                        binding.buttonTrash.isEnabled = false
                         vm.deleteTimes(this, categoryId, subcategoryId, toggles, times).observe(this, { isOk ->
                             if (isOk) {
                                 toggles.forEach(times::remove)
                                 a.getToggles().removeAll(toggles)
                                 refresh(a)
                             }
-    
+                            
                             isDeleting = false
-                            button_trash.isEnabled = true
+                            binding.buttonTrash.isEnabled = true
                             showTrashButton(false)
                         })
                     }

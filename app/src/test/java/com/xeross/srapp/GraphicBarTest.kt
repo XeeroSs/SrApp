@@ -1,6 +1,6 @@
 package com.xeross.srapp
 
-import com.xeross.srapp.components.ui.models.DataBar
+import com.xeross.srapp.components.ui.models.BarData
 import junitparams.JUnitParamsRunner
 import junitparams.naming.TestCaseName
 import org.junit.Test
@@ -35,13 +35,13 @@ class GraphicBarTest {
         
         var indexBars = 0
         
-        val bars = ArrayList<DataBar>(
+        val bars = ArrayList<BarData>(
             listOf(
-                DataBar(1000),
-                DataBar(300),
-                DataBar(500),
-                DataBar(1),
-                DataBar(2),
+                BarData(1000),
+                BarData(300),
+                BarData(500),
+                BarData(1),
+                BarData(2),
             )
         )
         

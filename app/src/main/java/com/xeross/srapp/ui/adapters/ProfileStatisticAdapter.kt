@@ -2,26 +2,24 @@ package com.xeross.srapp.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
-import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseAdapter
 import com.xeross.srapp.data.models.ProfileStatistic
-import kotlinx.android.synthetic.main.cell_profile_statistic.view.*
+import com.xeross.srapp.databinding.CellProfileStatisticBinding
 
 class ProfileStatisticAdapter(context: Context, objectList: ArrayList<ProfileStatistic>) :
     BaseAdapter<ProfileStatisticAdapter.ViewHolder, ProfileStatistic>(context, objectList, null) {
     
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name: TextView = itemView.text_name
-        val value: TextView = itemView.text_value
-        val icon: ImageView = itemView.image_icon
-        val item: MaterialCardView = itemView.shape_rectangle
+    class ViewHolder(binding: CellProfileStatisticBinding) : RecyclerView.ViewHolder(binding.root) {
+        val name: TextView = binding.textName
+        val value: TextView = binding.textValue
+        val icon: ImageView = binding.imageIcon
+        val item: MaterialCardView = binding.shapeRectangle
     }
     
     
@@ -40,7 +38,6 @@ class ProfileStatisticAdapter(context: Context, objectList: ArrayList<ProfileSta
     }
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(LayoutInflater.from(context).inflate(R.layout.cell_profile_statistic, parent, false))
-    
+        ViewHolder(CellProfileStatisticBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     
 }

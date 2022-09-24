@@ -33,9 +33,9 @@ interface SrcApi {
     @GET("leaderboards/{game}/category/{category}")
     fun getILLeaderBoards(@Path("game") game: String, @Path("level") level: String, @Path("category") category: String): Call<SrcLeaderBoard>
 
-    @Headers("Host: www.speedrun.com",
+/*    @Headers("Host: www.speedrun.com",
             "Accept: application/json",
-            "X-API-Key: ${BuildConfig.SRC_KEY}")
+            "X-API-Key: ${BuildConfig.SRC_KEY}")*/
     @GET("notifications")
     fun getNotifications(/*@Header("X-API-Key") key: String*/): Call<SrcNotifications>
 

@@ -7,7 +7,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import com.xeross.srapp.R
-import com.xeross.srapp.components.ui.models.DataBar
+import com.xeross.srapp.components.ui.models.BarData
 import kotlin.math.abs
 
 
@@ -17,7 +17,7 @@ import kotlin.math.abs
 // TODO("to do")
 class GraphicBar(context: Context, attrs: AttributeSet) : View(context, attrs) {
     
-    private var bars: ArrayList<DataBar> = ArrayList()
+    private var barData: ArrayList<BarData> = ArrayList()
     private var barAmount = 0L
     private val widthBar = (15f)
     private val maxHeightBar = 60f
@@ -63,11 +63,11 @@ class GraphicBar(context: Context, attrs: AttributeSet) : View(context, attrs) {
             
             var startBar = (space + ((overflow / 2) + (spaceBetweenBar / 2)))
             
-            if (!bars.isNullOrEmpty()) {
-                val barHighest = bars.reduce { acc, dataBar ->
+            if (!barData.isNullOrEmpty()) {
+                val barHighest = barData.reduce { acc, dataBar ->
                     if (acc.data > dataBar.data) acc else dataBar
                 }.data
-                val barLowest = bars.reduce { acc, dataBar ->
+                val barLowest = barData.reduce { acc, dataBar ->
                     if (acc.data < dataBar.data) acc else dataBar
                 }.data
                 
@@ -75,17 +75,17 @@ class GraphicBar(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 
                 repeat(totalBars) {
                     
-                    bars.getOrNull(indexBars)?.let { bar ->
+                    barData.getOrNull(indexBars)?.let { bar ->
                         val data = bar.data
                         val percent = (((data - barLowest.toDouble()) /
                                 (barHighest.toDouble() - barLowest)) * 100)
-                        // TODO("if(percent == 0.0)")
+                        // TODO("if(percent == 0.x)")
                         
                         val bottomBar = (if (measuredHeight <= space) space
                         else (measuredHeight - space).coerceAtLeast(space))
                         
                         val topHeight = measuredHeight - (space * 5)
-                        val overflowHeight = (((/*bottomBar + */topHeight) * percent.toInt()) / 100)
+                        val overflowHeight = (((topHeight) * percent.toInt()) / 100)
                         
                         val heightBar = (bottomBar - maxHeightBar) - overflowHeight
                         
@@ -112,9 +112,8 @@ class GraphicBar(context: Context, attrs: AttributeSet) : View(context, attrs) {
         
     }
     
-    fun setBars(bars: ArrayList<DataBar>) {
-        this.bars = bars
-        requestLayout()
+    fun setBars(barData: ArrayList<BarData>) {
+        this.barData = barData
         invalidate()
     }
     

@@ -5,11 +5,13 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewbinding.ViewBinding
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
 import com.xeross.srapp.components.ui.GraphicBar
-import com.xeross.srapp.components.ui.models.DataBar
+import com.xeross.srapp.components.ui.models.BarData
 import com.xeross.srapp.data.models.SubCategory
+import com.xeross.srapp.databinding.ActivitySubcategoriesBinding
 import com.xeross.srapp.listener.ClickListener
 import com.xeross.srapp.ui.adapters.SubcategoriesAdapter
 import com.xeross.srapp.ui.category.subcategory.SubCategoryActivity
@@ -18,19 +20,16 @@ import com.xeross.srapp.utils.Constants
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_NAME
 import com.xeross.srapp.utils.livedata.ResultLiveDataType
-import kotlinx.android.synthetic.main.activity_category.*
-import kotlinx.android.synthetic.main.activity_subcategories.*
-import kotlinx.android.synthetic.main.activity_subcategory.*
-import kotlinx.android.synthetic.main.cell_subcategory.*
-import kotlinx.android.synthetic.main.fragment_bottom_navigation_menu.*
 
-class SubcategoriesActivity : BaseActivity(), ClickListener<SubCategory>, SubcategoriesAdapter.GraphicListener {
+class SubcategoriesActivity : BaseActivity<ActivitySubcategoriesBinding>(), ClickListener<SubCategory>, SubcategoriesAdapter.GraphicListener {
     
     companion object {
         const val RC_REFRESH = 888
     }
     
-    override fun getFragmentId() = R.layout.activity_subcategories
+    override fun attachViewBinding(): ViewBinding {
+        return ActivitySubcategoriesBinding.inflate(layoutInflater)
+    }
     
     override fun getViewModelClass() = SubcategoriesViewModel::class.java
     private var viewModel: SubcategoriesViewModel? = null
@@ -63,13 +62,13 @@ class SubcategoriesActivity : BaseActivity(), ClickListener<SubCategory>, Subcat
     // TODO("make color gradient")
     override fun ui() {
         
-        buildHeader(R.string.subcategory, 25f)
+        buildHeader(binding.header.headerToolbar, binding.header.headerTitle, R.string.subcategory, 25f)
         
-        buildBottomNavigationMenu()
+        buildBottomNavigationMenu(binding.menu.bottomNavigationMenu)
         setStatusBarTransparent()
         
         adapter = SubcategoriesAdapter(this, subCategories, this, this).also { a ->
-            list_subcategories.apply {
+            binding.listSubcategories.apply {
                 val linearLayoutManager = LinearLayoutManager(this@SubcategoriesActivity, LinearLayoutManager.VERTICAL, false)
                 setHasFixedSize(true)
                 layoutManager = linearLayoutManager
@@ -78,10 +77,10 @@ class SubcategoriesActivity : BaseActivity(), ClickListener<SubCategory>, Subcat
             }
         }
         
-        list_subcategories.post {
+        binding.listSubcategories.post {
             // Add margin bottom to recyclerview for this one don't hide by bottom navigation menu
-            val paramsRecyclerViewRanking = list_subcategories.layoutParams as ViewGroup.MarginLayoutParams
-            paramsRecyclerViewRanking.bottomMargin = bottom_navigation_menu.measuredHeight
+            val paramsRecyclerViewRanking = binding.listSubcategories.layoutParams as ViewGroup.MarginLayoutParams
+            paramsRecyclerViewRanking.bottomMargin = binding.menu.bottomNavigationMenu.measuredHeight
         }
         
         refresh()
@@ -104,7 +103,7 @@ class SubcategoriesActivity : BaseActivity(), ClickListener<SubCategory>, Subcat
     }
     
     override fun onClick() {
-        add_subcategory.setOnClickListener {
+        binding.addSubcategory.setOnClickListener {
             val intent = Intent(this, SubcategoryFormActivity::class.java)
             //     intent.putExtra(EXTRA_CATEGORY_NAME, o.name)
             intent.putExtra(EXTRA_CATEGORY_ID, categoryId)
@@ -119,13 +118,13 @@ class SubcategoriesActivity : BaseActivity(), ClickListener<SubCategory>, Subcat
         
         viewModel?.getTimeWithLimit(categoryId, subCategory.id, limit)?.observe(this, {
             if (it != null && it.state != ResultLiveDataType.SUCCESS) return@observe
-    
-            val bars = ArrayList<DataBar>()
-    
+            
+            val bars = ArrayList<BarData>()
+            
             it.result!!.forEach { time ->
-                bars.add(DataBar(time.time))
+                bars.add(BarData(time.time))
             }
-    
+            
             graphicBar.setBars(bars)
         })
     }

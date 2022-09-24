@@ -1,24 +1,20 @@
 package com.xeross.srapp.ui.categoryform.category
 
 import androidx.fragment.app.Fragment
+import androidx.viewbinding.ViewBinding
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseActivity
+import com.xeross.srapp.databinding.ActivityCategoryFormBinding
 import com.xeross.srapp.ui.categoryform.adapters.CategoryFormPageAdapter
 import com.xeross.srapp.ui.categoryform.fragment.base.BaseCategoryFormFragment
 import com.xeross.srapp.ui.categoryform.interfaces.ICategoryFormType
 import com.xeross.srapp.ui.categoryform.types.CategoryFormPageType
-import kotlinx.android.synthetic.main.activity_category_form.*
-import kotlinx.android.synthetic.main.activity_category_form.dots_indicator
-import kotlinx.android.synthetic.main.activity_category_form.next_button
-import kotlinx.android.synthetic.main.activity_category_form.previous_button
-import kotlinx.android.synthetic.main.activity_category_form.view_pager
-import kotlinx.android.synthetic.main.activity_subcategory_form.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class CategoryFormActivity : BaseActivity() {
+class CategoryFormActivity : BaseActivity<ActivityCategoryFormBinding>() {
     
     companion object {
         // ~ 1s
@@ -30,7 +26,9 @@ class CategoryFormActivity : BaseActivity() {
         const val EXTRA_UPLOAD_IMAGE_SUBCATEGORY_FRAGMENT = "EXTRA_UPLOAD_IMAGE_SUBCATEGORY_FRAGMENT"
     }
     
-    override fun getFragmentId() = R.layout.activity_category_form
+    override fun attachViewBinding(): ViewBinding {
+        return ActivityCategoryFormBinding.inflate(layoutInflater)
+    }
     
     override fun getViewModelClass() = CategoryFormViewModel::class.java
     
@@ -55,7 +53,7 @@ class CategoryFormActivity : BaseActivity() {
     
     override fun ui() {
         
-        buildHeader(R.string.category, 30f) { !isRequest }
+        buildHeader(binding.header.headerToolbar, binding.header.headerTitle, R.string.category, 30f) { !isRequest }
         
         setStatusBarTransparent()
         buildViewPager()
@@ -65,21 +63,21 @@ class CategoryFormActivity : BaseActivity() {
         cancel = getString(R.string.cancel)
         done = getString(R.string.done)
         
-        dots_indicator.setDotsClickable(false)
+        binding.dotsIndicator.setDotsClickable(false)
         
-        previous_button.text = cancel
-        next_button.text = next
+        binding.previousButton.text = cancel
+        binding.nextButton.text = next
     }
     
     private fun buildViewPager() {
         adapter = CategoryFormPageAdapter(supportFragmentManager, maxPage, CategoryFormPageType.values() as Array<ICategoryFormType>).also {
-            view_pager.adapter = it
+            binding.viewPager.adapter = it
         }
-        dots_indicator.setViewPager(view_pager)
+        binding.dotsIndicator.setViewPager(binding.viewPager)
     }
     
     override fun onClick() {
-        previous_button.setOnClickListener {
+        binding.previousButton.setOnClickListener {
             
             buttonAntiSpam()
             
@@ -92,18 +90,18 @@ class CategoryFormActivity : BaseActivity() {
             
             index = (index - 1)
             
-            view_pager.currentItem = index
+            binding.viewPager.currentItem = index
             
             // If the previous page is the first
             if ((index) == 0) {
-                previous_button.text = cancel
+                binding.previousButton.text = cancel
                 return@setOnClickListener
             }
             
-            next_button.text = next
+            binding.nextButton.text = next
         }
         
-        next_button.setOnClickListener {
+        binding.nextButton.setOnClickListener {
             
             var index = getIndexPage()
             
@@ -124,15 +122,15 @@ class CategoryFormActivity : BaseActivity() {
             
             index = (index + 1)
             
-            view_pager.currentItem = index
+            binding.viewPager.currentItem = index
             
             // If the next page is the last
             if ((index) == (maxPage - 1)) {
-                next_button.text = done
+                binding.nextButton.text = done
                 return@setOnClickListener
             }
             
-            previous_button.text = previous
+            binding.previousButton.text = previous
         }
     }
     
@@ -142,39 +140,39 @@ class CategoryFormActivity : BaseActivity() {
         val nameSubcategory = extras[EXTRA_INPUT_TEXT_SUBCATEGORY_FRAGMENT] ?: return
         val imageSubcategory = extras[EXTRA_UPLOAD_IMAGE_SUBCATEGORY_FRAGMENT]
         
-        next_button.isEnabled = false
-        previous_button.isEnabled = false
+        binding.nextButton.isEnabled = false
+        binding.previousButton.isEnabled = false
         isRequest = true
         
         viewModel?.createCategoryToDatabase(nameCategory, imageCategory, nameSubcategory, imageSubcategory)?.observe(this, {
-    
-            next_button.isEnabled = true
-            previous_button.isEnabled = true
+            
+            binding.nextButton.isEnabled = true
+            binding.previousButton.isEnabled = true
             isRequest = false
             if (!it) return@observe
-    
+            
             // TODO("Send extra")
             finish()
         })
     }
     
-    private fun getBaseCategoryFormFragment(fragment: Fragment): BaseCategoryFormFragment {
-        return (fragment as? BaseCategoryFormFragment) ?: throw ClassCastException("must be BaseCategoryFormFragment")
+    private fun getBaseCategoryFormFragment(fragment: Fragment): BaseCategoryFormFragment<*> {
+        return (fragment as? BaseCategoryFormFragment<*>) ?: throw ClassCastException("must be BaseCategoryFormFragment")
     }
     
     private fun buttonAntiSpam() {
-        next_button.isEnabled = false
-        previous_button.isEnabled = false
+        binding.nextButton.isEnabled = false
+        binding.previousButton.isEnabled = false
         
         // Start task with coroutines
         CoroutineScope(Dispatchers.Main).launch {
             delay(BUTTON_ANTI_SPAM_DELAY)
             
-            next_button.isEnabled = true
-            previous_button.isEnabled = true
+            binding.nextButton.isEnabled = true
+            binding.previousButton.isEnabled = true
             
         }
     }
     
-    private fun getIndexPage() = view_pager.currentItem
+    private fun getIndexPage() = binding.viewPager.currentItem
 }
