@@ -1,4 +1,4 @@
-package com.xeross.srapp.base
+package com.xeross.srapp.base.activity
 
 import android.accounts.AccountManager
 import android.content.Intent

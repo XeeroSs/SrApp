@@ -16,7 +16,7 @@ import androidx.transition.TransitionManager
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xeross.srapp.R
-import com.xeross.srapp.base.BaseActivity
+import com.xeross.srapp.base.activity.BaseActivity
 import com.xeross.srapp.components.NumberPickerBuilder
 import com.xeross.srapp.data.models.Time
 import com.xeross.srapp.databinding.ActivityTimesBinding

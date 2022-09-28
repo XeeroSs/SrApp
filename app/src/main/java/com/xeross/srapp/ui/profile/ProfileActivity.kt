@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xeross.srapp.R
-import com.xeross.srapp.base.BaseActivity
+import com.xeross.srapp.base.activity.BaseActivity
 import com.xeross.srapp.data.models.ProfileStatistic
 import com.xeross.srapp.data.models.User
 import com.xeross.srapp.databinding.ActivityProfileBinding

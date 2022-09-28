@@ -10,7 +10,7 @@ import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.viewbinding.ViewBinding
 import com.xeross.srapp.R
-import com.xeross.srapp.base.BaseActivity
+import com.xeross.srapp.base.activity.BaseActivity
 import com.xeross.srapp.databinding.ActivitySplashScreenBinding
 import com.xeross.srapp.ui.auth.login.LoginActivity
 import com.xeross.srapp.ui.category.category.CategoryActivity

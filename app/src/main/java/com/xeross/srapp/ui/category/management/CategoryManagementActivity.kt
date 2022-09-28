@@ -4,7 +4,7 @@ import android.widget.LinearLayout
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.xeross.srapp.R
-import com.xeross.srapp.base.BaseActivity
+import com.xeross.srapp.base.activity.BaseActivity
 import com.xeross.srapp.databinding.ActivityCategoryManagementBinding
 import com.xeross.srapp.ui.settings.manager.SettingViewManager
 import com.xeross.srapp.utils.Constants.SUBCATEGORY_BEST_TIME_SHARED_PREFERENCES
