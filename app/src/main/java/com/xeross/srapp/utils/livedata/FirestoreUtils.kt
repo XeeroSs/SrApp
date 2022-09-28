@@ -1,5 +1,6 @@
 package com.xeross.srapp.utils.livedata
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Task
@@ -7,6 +8,7 @@ import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.FirebaseStorage
 import com.xeross.srapp.R
 
 object FirestoreUtils {
@@ -28,12 +30,8 @@ object FirestoreUtils {
             throw FirebaseFirestoreException("The requested document cannot be mapped to ${T::class.java} object. Please check if the data fields match.", FirebaseFirestoreException.Code.INVALID_ARGUMENT)
         }
         this.addOnFailureListener { e ->
-            e.printStackTrace()
-            val message = when (e.cause) {
-                is FirebaseNetworkException -> R.string.no_internet_connection_was_found
-                else -> R.string.an_error_has_occured_please_try_again
-            }
-            result.postValue(LiveDataQuery(ResultLiveDataType.SUCCESS, message, null))
+            val message = getErrorMessage(e)
+            result.postValue(LiveDataQuery(ResultLiveDataType.FAIL, message, null))
         }
         return result
     }
@@ -56,12 +54,8 @@ object FirestoreUtils {
             }
         }
         this.addOnFailureListener { e ->
-            e.printStackTrace()
-            val message = when (e.cause) {
-                is FirebaseNetworkException -> R.string.no_internet_connection_was_found
-                else -> R.string.an_error_has_occured_please_try_again
-            }
-            result.postValue(LiveDataQuery(ResultLiveDataType.SUCCESS, message, null))
+            val message = getErrorMessage(e)
+            result.postValue(LiveDataQuery(ResultLiveDataType.FAIL, message, null))
         }
         return result
     }
@@ -72,14 +66,34 @@ object FirestoreUtils {
             result.postValue(LiveDataPost(ResultLiveDataType.SUCCESS, R.string.success))
         }
         this.addOnFailureListener { e ->
-            e.printStackTrace()
-            val message = when (e.cause) {
-                is FirebaseNetworkException -> R.string.no_internet_connection_was_found
-                else -> R.string.an_error_has_occured_please_try_again
-            }
-            result.postValue(LiveDataPost(ResultLiveDataType.SUCCESS, message))
+            val message = getErrorMessage(e)
+            result.postValue(LiveDataPost(ResultLiveDataType.FAIL, message))
         }
         return result
+    }
+    
+    fun uploadAndGetImage(storage: FirebaseStorage, uri: Uri, categoryId: String): LiveData<LiveDataQuery<Uri?>> {
+        val result = MutableLiveData<LiveDataQuery<Uri?>>()
+        val reference = storage.getReference(categoryId)
+        reference.putFile(uri).addOnSuccessListener {
+            reference.downloadUrl.addOnSuccessListener { pathImageSavedInFirebase ->
+                result.postValue(LiveDataQuery(ResultLiveDataType.SUCCESS, R.string.success, pathImageSavedInFirebase))
+            }.addOnFailureListener { e ->
+                result.postValue(LiveDataQuery(ResultLiveDataType.FAIL, getErrorMessage(e), null))
+            }
+        }.addOnFailureListener { e ->
+            result.postValue(LiveDataQuery(ResultLiveDataType.FAIL, getErrorMessage(e), null))
+        }
+        return result
+    }
+    
+    // 325
+    fun getErrorMessage(e: java.lang.Exception): Int {
+        e.printStackTrace()
+        return when (e.cause) {
+            is FirebaseNetworkException -> R.string.no_internet_connection_was_found
+            else -> R.string.an_error_has_occured_please_try_again
+        }
     }
     
 }

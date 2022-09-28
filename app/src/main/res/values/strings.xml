@@ -122,4 +122,9 @@
     <string name="management">Management</string>
     <string name="other">Autre</string>
 
+    <!-- Permission -->
+    <string name="permission">Permission</string>
+    <string name="message_permission">To add an image, please enable permission</string>
+    <string name="ok">OK</string>
+
 </resources>

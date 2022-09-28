@@ -2,6 +2,8 @@ package com.xeross.srapp.base
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -13,7 +15,9 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.xeross.srapp.listener.ISharedPreferences
+import com.xeross.srapp.utils.livedata.LiveDataQuery
 import io.reactivex.rxjava3.disposables.Disposable
 import java.sql.Timestamp
 import java.util.*
@@ -23,6 +27,7 @@ abstract class BaseFirebaseViewModel : ViewModel() {
     private var disposable: Disposable? = null
     private var auth: FirebaseAuth = Firebase.auth
     private var database = Firebase.firestore
+    private var storage = FirebaseStorage.getInstance()
     
     protected var sharedPreferences: SharedPreferences? = null
     

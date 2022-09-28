@@ -2,11 +2,12 @@ package com.xeross.srapp.ui.category.category
 
 import android.content.Intent
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewbinding.ViewBinding
 import com.xeross.srapp.R
-import com.xeross.srapp.base.BaseActivity
+import com.xeross.srapp.base.activity.BaseActivity
 import com.xeross.srapp.data.models.Category
 import com.xeross.srapp.databinding.ActivityCategoryBinding
 import com.xeross.srapp.listener.ClickListener
@@ -33,6 +34,12 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding>(), ClickListener<
     private val categories = ArrayList<Category>()
     
     private var viewModel: CategoryViewModel? = null
+    
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == SubcategoriesActivity.RC_REFRESH) {
+            getCategories()
+        }
+    }
     
     override fun setUp() {
         viewModel = (vm as CategoryViewModel)
@@ -68,7 +75,8 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding>(), ClickListener<
     
     override fun onClick() {
         binding.mainActivityButtonAddYourCategories.setOnClickListener {
-            goToActivity<CategoryFormActivity>(false)
+            val intent = Intent(this, CategoryFormActivity::class.java)
+            resultLauncher.launch(intent)
         }
     }
     
@@ -81,11 +89,11 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding>(), ClickListener<
     
     private fun getCategories() {
         categories.clear()
-        viewModel?.getCategories()?.observe(this, {
+        viewModel?.getCategories()?.observe(this) {
             if (it == null) return@observe
             categories.addAll(it)
             adapter.notifyDataSetChanged()
-        })
+        }
     }
     
     override fun onClick(o: Category) {

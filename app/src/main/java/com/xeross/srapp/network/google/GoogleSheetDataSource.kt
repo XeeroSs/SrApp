@@ -21,7 +21,7 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.client.util.store.FileDataStoreFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
-import com.xeross.srapp.base.BaseActivityOAuth
+import com.xeross.srapp.base.activity.BaseActivityOAuth
 import com.xeross.srapp.base.BaseAsyncTask
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch

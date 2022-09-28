@@ -3,8 +3,9 @@ package com.xeross.srapp.ui.categoryform.category
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.xeross.srapp.R
-import com.xeross.srapp.base.BaseActivity
+import com.xeross.srapp.base.activity.BaseActivity
 import com.xeross.srapp.databinding.ActivityCategoryFormBinding
+import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity
 import com.xeross.srapp.ui.categoryform.adapters.CategoryFormPageAdapter
 import com.xeross.srapp.ui.categoryform.fragment.base.BaseCategoryFormFragment
 import com.xeross.srapp.ui.categoryform.interfaces.ICategoryFormType
@@ -144,16 +145,16 @@ class CategoryFormActivity : BaseActivity<ActivityCategoryFormBinding>() {
         binding.previousButton.isEnabled = false
         isRequest = true
         
-        viewModel?.createCategoryToDatabase(nameCategory, imageCategory, nameSubcategory, imageSubcategory)?.observe(this, {
-            
+        viewModel?.createCategoryToDatabase(nameCategory, imageCategory, nameSubcategory, imageSubcategory)?.observe(this) {
+    
             binding.nextButton.isEnabled = true
             binding.previousButton.isEnabled = true
             isRequest = false
             if (!it) return@observe
-            
-            // TODO("Send extra")
+    
+            setResult(SubcategoriesActivity.RC_REFRESH)
             finish()
-        })
+        }
     }
     
     private fun getBaseCategoryFormFragment(fragment: Fragment): BaseCategoryFormFragment<*> {

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
 import com.xeross.srapp.R
-import com.xeross.srapp.base.BaseActivity
+import com.xeross.srapp.base.activity.BaseActivity
 import com.xeross.srapp.components.ui.GraphicBar
 import com.xeross.srapp.components.ui.models.BarData
 import com.xeross.srapp.data.models.SubCategory

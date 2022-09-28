@@ -1,14 +1,18 @@
 package com.xeross.srapp.ui.categoryform.fragment
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.bumptech.glide.Glide
+import com.xeross.srapp.base.fragment.BaseGalleryFragment
 import com.xeross.srapp.databinding.CellFormUploadImageBinding
-import com.xeross.srapp.ui.categoryform.fragment.base.BaseCategoryFormFragment
 
-class CategoryFormUploadImageFragment : BaseCategoryFormFragment<CellFormUploadImageBinding>() {
+
+class CategoryFormUploadImageFragment : BaseGalleryFragment<CellFormUploadImageBinding>() {
+    
     
     companion object {
         
@@ -31,6 +35,7 @@ class CategoryFormUploadImageFragment : BaseCategoryFormFragment<CellFormUploadI
         }
     }
     
+    
     private var title: String? = null
     private var subtitle: String? = null
     private var resImage: Int? = null
@@ -47,9 +52,10 @@ class CategoryFormUploadImageFragment : BaseCategoryFormFragment<CellFormUploadI
         }
     }
     
+    private var uri: Uri? = null
+    
     override fun getExtra(): Pair<String, String>? {
-        // TODO("upload image")
-        return Pair(extra ?: return null, "")
+        return Pair(extra ?: return null, uri.toString())
     }
     
     override fun hasExtra() = true
@@ -77,9 +83,14 @@ class CategoryFormUploadImageFragment : BaseCategoryFormFragment<CellFormUploadI
         }
         
         binding.formUploadImageCard.setOnClickListener {
-        
+            openGalleryWithPermissionCheck()
         }
         
+    }
+    
+    override fun getUri(cropImageToUri: Uri) {
+        uri = cropImageToUri
+        context?.let { Glide.with(it).load(cropImageToUri).into(binding.formUploadImage) }
     }
     
 }

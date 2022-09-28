@@ -57,6 +57,7 @@ android {
             excludes += ['META-INF/DEPENDENCIES']
         }
     }
+
     namespace 'com.xeross.srapp'
 }
 
@@ -151,6 +152,13 @@ dependencies {
 
     // UI
     //  implementation "androidx.cardview:cardview:1.0.0"
+    implementation "com.github.permissions-dispatcher:permissionsdispatcher:4.9.2"
+    kapt "com.github.permissions-dispatcher:permissionsdispatcher-processor:4.9.2"
+  //  implementation "com.github.permissions-dispatcher:ktx:4.9.2"
+
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+
+
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:3.0.3'
 }
 
