@@ -22,7 +22,7 @@ import com.xeross.srapp.databinding.ActivitySubcategoryBinding
 import com.xeross.srapp.databinding.DialogAddTimeBinding
 import com.xeross.srapp.listener.TimeListener
 import com.xeross.srapp.ui.adapters.StatisticAdapter
-import com.xeross.srapp.ui.category.management.CategoryManagementActivity
+import com.xeross.srapp.ui.category.management.subcategory.SubcategoryManagementActivity
 import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity.Companion.RC_REFRESH
 import com.xeross.srapp.ui.category.subcategory.types.TimeSortType
 import com.xeross.srapp.ui.settings.types.SettingType
@@ -41,7 +41,7 @@ import com.xeross.srapp.utils.extensions.TimeExtensions.toFormatTimeWithoutMilli
 import com.xeross.srapp.utils.livedata.ResultLiveDataType
 
 
-class SubCategoryActivity : BaseActivity<ActivitySubcategoryBinding>(), TimeListener {
+class SubcategoryActivity : BaseActivity<ActivitySubcategoryBinding>(), TimeListener {
     
     companion object {
         private const val TAG = "GameDetailActivityTAG"
@@ -107,8 +107,14 @@ class SubCategoryActivity : BaseActivity<ActivitySubcategoryBinding>(), TimeList
     
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.subcategory_menu_settings -> {
-            val intent = Intent(this, CategoryManagementActivity::class.java)
-            startActivity(intent)
+    
+            val intent = Intent(this, SubcategoryManagementActivity::class.java)
+    
+            intent.putExtra(EXTRA_CATEGORY_ID, categoryId)
+            intent.putExtra(EXTRA_SUBCATEGORY_ID, subcategory.id)
+    
+            resultLauncher.launch(intent)
+            
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -202,14 +208,14 @@ class SubCategoryActivity : BaseActivity<ActivitySubcategoryBinding>(), TimeList
         
         with(viewModel ?: return) {
             
-            saveTime(categoryId, subCategoryId, timeToMilliseconds)?.observe(this@SubCategoryActivity) { result ->
+            saveTime(categoryId, subCategoryId, timeToMilliseconds)?.observe(this@SubcategoryActivity) { result ->
                 dialogView?.submitButton?.isEnabled = true
                 if (result.state != ResultLiveDataType.SUCCESS) return@observe
                 
                 val isBest = if (bestInMilliseconds <= 0) true else bestInMilliseconds > timeToMilliseconds
                 
-                if (isBest) saveTimeIfBestToSubcategoryDocument(categoryId, subCategoryId, timeToMilliseconds)?.observe(this@SubCategoryActivity, {})
-                updateUserProfile(isBest)?.observe(this@SubCategoryActivity, {})
+                if (isBest) saveTimeIfBestToSubcategoryDocument(categoryId, subCategoryId, timeToMilliseconds)?.observe(this@SubcategoryActivity, {})
+                updateUserProfile(isBest)?.observe(this@SubcategoryActivity, {})
                 
                 setResult(RC_REFRESH)
                 times.add(timeToMilliseconds)
@@ -365,7 +371,7 @@ class SubCategoryActivity : BaseActivity<ActivitySubcategoryBinding>(), TimeList
         val subCategoryId = subcategory.id
         
         with(viewModel ?: return) {
-            getSubCategoryTimes(categoryId, subCategoryId, currentTimeSort)?.observe(this@SubCategoryActivity, { resultTimes ->
+            getSubCategoryTimes(categoryId, subCategoryId, currentTimeSort)?.observe(this@SubcategoryActivity, { resultTimes ->
                 if (resultTimes.state != ResultLiveDataType.SUCCESS) return@observe
                 
                 resultTimes.result!!.forEach { time ->
@@ -380,7 +386,7 @@ class SubCategoryActivity : BaseActivity<ActivitySubcategoryBinding>(), TimeList
     }
     
     private fun SubcategoryViewModel.getBestOnAllRuns(subCategoryId: String) {
-        getBestOnAllRuns(categoryId, subCategoryId)?.observe(this@SubCategoryActivity, { resultBest ->
+        getBestOnAllRuns(categoryId, subCategoryId)?.observe(this@SubcategoryActivity, { resultBest ->
             if (resultBest.state != ResultLiveDataType.SUCCESS) return@observe
             bestOnAllRunsInMilliseconds = resultBest.result!!.timeInMilliseconds
             refreshBest()

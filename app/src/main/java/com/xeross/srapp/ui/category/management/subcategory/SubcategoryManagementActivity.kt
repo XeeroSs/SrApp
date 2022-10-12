@@ -1,4 +1,4 @@
-package com.xeross.srapp.ui.category.management
+package com.xeross.srapp.ui.category.management.subcategory
 
 import android.widget.LinearLayout
 import androidx.viewbinding.ViewBinding
@@ -6,25 +6,26 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import com.xeross.srapp.R
 import com.xeross.srapp.base.activity.BaseActivity
 import com.xeross.srapp.databinding.ActivityCategoryManagementBinding
+import com.xeross.srapp.databinding.ActivitySubcategoryManagementBinding
 import com.xeross.srapp.ui.settings.manager.SettingViewManager
 import com.xeross.srapp.utils.Constants.SUBCATEGORY_BEST_TIME_SHARED_PREFERENCES
 import com.xeross.srapp.utils.extensions.UIExtensions
 import java.util.function.Function
 
 
-class CategoryManagementActivity : BaseActivity<ActivityCategoryManagementBinding>() {
+class SubcategoryManagementActivity : BaseActivity<ActivitySubcategoryManagementBinding>() {
     
     override fun attachViewBinding(): ViewBinding {
-        return ActivityCategoryManagementBinding.inflate(layoutInflater)
+        return ActivitySubcategoryManagementBinding.inflate(layoutInflater)
     }
     
-    override fun getViewModelClass() = CategoryManagementViewModel::class.java
-    private lateinit var viewModel: CategoryManagementViewModel
+    override fun getViewModelClass() = SubcategoryManagementViewModel::class.java
+    private lateinit var viewModel: SubcategoryManagementViewModel
     
     private var switchBestTime: SwitchMaterial? = null
     
     override fun setUp() {
-        viewModel = vm as CategoryManagementViewModel
+        viewModel = vm as SubcategoryManagementViewModel
         viewModel.build()
     }
     
@@ -37,9 +38,9 @@ class CategoryManagementActivity : BaseActivity<ActivityCategoryManagementBindin
             
             category(R.string.global)
             
-            val contentColor = LinearLayout(this@CategoryManagementActivity)
+            val contentColor = LinearLayout(this@SubcategoryManagementActivity)
             
-            contentColor.background = UIExtensions.getGradientWithSingleColor(this@CategoryManagementActivity.applicationContext, R.color.pink_gradient)
+            contentColor.background = UIExtensions.getGradientWithSingleColor(this@SubcategoryManagementActivity.applicationContext, R.color.pink_gradient)
             
             subcategoryWithCustomView(R.string.color, contentColor, 50, 50, true, Function { _ ->
                 return@Function true

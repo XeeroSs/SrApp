@@ -83,7 +83,7 @@ class CategoryFormUploadImageFragment : BaseGalleryFragment<CellFormUploadImageB
         }
         
         binding.formUploadImageCard.setOnClickListener {
-            openGalleryWithPermissionCheck()
+            openGallery()
         }
         
     }

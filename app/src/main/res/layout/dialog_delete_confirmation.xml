@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="350dp"
+    android:layout_height="350dp"
+    android:layout_gravity="center"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="0dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/linearLayout2"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp">
+
+            <LinearLayout
+                android:id="@+id/content_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="25dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_extra_bold"
+                    android:gravity="center"
+                    android:text="Supprimer la catégorie ?"
+                    android:textColor="@color/on_surface"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/gilroy_light"
+
+                    android:gravity="center"
+                    android:text="Cette action est définitive"
+                    android:textColor="@color/on_surface"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/content_title"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/gilroy_light"
+                    android:maxLines="1"
+                    android:text="@string/type_confirm_to_confirm"
+                    android:textColor="@color/on_surface"
+                    android:textSize="13sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confirm_edit_text"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:textAppearance="@style/TextStyle"
+                    android:theme="@style/TextInputAuth"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/gilroy_light"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:maxLength="32"
+                        android:maxLines="1"
+                        android:textAppearance="@style/TextStyle" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.xeross.srapp.components.ui.MaterialToggleButton
+                    android:id="@+id/delete_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:backgroundTint="@color/negative"
+                    android:enabled="false"
+                    android:textColor="@color/white"
+                    app:iconTint="@color/white"
+                    android:fontFamily="@font/gilroy_light"
+                    android:text="@string/delete"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    app:cornerRadius="4dp"
+                    app:icon="@drawable/ic_trash"
+                    app:iconSize="14dp"
+                    app:iconGravity="textStart" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true">
+
+            <com.xeross.srapp.components.ui.MaterialToggleButton
+                android:id="@+id/cancel_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="-1dp"
+                android:layout_marginEnd="-1dp"
+                android:layout_marginBottom="-1dp"
+                android:background="@drawable/shape_ripple_button"
+                android:fontFamily="@font/gilroy_light"
+                app:backgroundTint="@color/positive"
+                android:text="@string/cancel"
+                android:textAllCaps="false"
+                android:textSize="16sp">
+
+            </com.xeross.srapp.components.ui.MaterialToggleButton>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>

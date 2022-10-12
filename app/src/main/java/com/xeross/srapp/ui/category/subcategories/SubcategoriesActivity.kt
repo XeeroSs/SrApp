@@ -1,6 +1,8 @@
 package com.xeross.srapp.ui.category.subcategories
 
 import android.content.Intent
+import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -14,7 +16,9 @@ import com.xeross.srapp.data.models.SubCategory
 import com.xeross.srapp.databinding.ActivitySubcategoriesBinding
 import com.xeross.srapp.listener.ClickListener
 import com.xeross.srapp.ui.adapters.SubcategoriesAdapter
-import com.xeross.srapp.ui.category.subcategory.SubCategoryActivity
+import com.xeross.srapp.ui.category.management.category.CategoryManagementActivity
+import com.xeross.srapp.ui.category.management.subcategory.SubcategoryManagementActivity
+import com.xeross.srapp.ui.category.subcategory.SubcategoryActivity
 import com.xeross.srapp.ui.categoryform.subcategory.SubcategoryFormActivity
 import com.xeross.srapp.utils.Constants
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
@@ -67,6 +71,13 @@ class SubcategoriesActivity : BaseActivity<ActivitySubcategoriesBinding>(), Clic
         buildBottomNavigationMenu(binding.menu.bottomNavigationMenu)
         setStatusBarTransparent()
         
+        setSupportActionBar(binding.header.headerToolbar)
+        supportActionBar?.title = null
+        
+        binding.header.headerToolbar.setNavigationOnClickListener {
+            finish()
+        }
+        
         adapter = SubcategoriesAdapter(this, subCategories, this, this).also { a ->
             binding.listSubcategories.apply {
                 val linearLayoutManager = LinearLayoutManager(this@SubcategoriesActivity, LinearLayoutManager.VERTICAL, false)
@@ -86,14 +97,33 @@ class SubcategoriesActivity : BaseActivity<ActivitySubcategoriesBinding>(), Clic
         refresh()
     }
     
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.subcategory_menu_settings -> {
+            
+            val intent = Intent(this, CategoryManagementActivity::class.java)
+            
+            intent.putExtra(EXTRA_CATEGORY_ID, categoryId)
+            
+            resultLauncher.launch(intent)
+            
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
+    
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.subcategory_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+    
     private fun refresh() {
         subCategories.clear()
         adapter?.notifyDataSetChanged()
-        viewModel?.getSubcategories(categoryId)?.observe(this, {
+        viewModel?.getSubcategories(categoryId)?.observe(this) {
             it.takeIf { it != null && it.isNotEmpty() }?.let { list ->
                 refresh(list)
             }
-        })
+        }
     }
     
     private fun refresh(list: ArrayList<SubCategory>) {
@@ -116,7 +146,7 @@ class SubcategoriesActivity : BaseActivity<ActivitySubcategoriesBinding>(), Clic
         
         val limit = graphicBar.getBarTotal()
         
-        viewModel?.getTimeWithLimit(categoryId, subCategory.id, limit)?.observe(this, {
+        viewModel?.getTimeWithLimit(categoryId, subCategory.id, limit)?.observe(this) {
             if (it != null && it.state != ResultLiveDataType.SUCCESS) return@observe
             
             val bars = ArrayList<BarData>()
@@ -126,11 +156,11 @@ class SubcategoriesActivity : BaseActivity<ActivitySubcategoriesBinding>(), Clic
             }
             
             graphicBar.setBars(bars)
-        })
+        }
     }
     
     override fun onClick(o: SubCategory) {
-        val intent = Intent(this, SubCategoryActivity::class.java)
+        val intent = Intent(this, SubcategoryActivity::class.java)
         
         intent.putExtra(EXTRA_CATEGORY_NAME, categoryName)
         intent.putExtra(EXTRA_CATEGORY_ID, categoryId)

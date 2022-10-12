@@ -115,4 +115,5 @@ abstract class BaseActivity<B : ViewBinding> : AppCompatActivity() {
         if (finishActivity) finish()
         startActivity(intent)
     }
+    
 }

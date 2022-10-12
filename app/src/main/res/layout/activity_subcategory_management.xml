@@ -89,7 +89,8 @@
                     android:id="@+id/category_management_content_image_header"
                     android:layout_width="@dimen/activity_game_details_header_image_size"
                     android:layout_height="@dimen/activity_game_details_header_image_size"
-                    android:background="@drawable/shape_image_header">
+                    android:background="@drawable/shape_image_header"
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/category_management_image_header"
@@ -98,24 +99,6 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:contentDescription="@string/game_details_content_image_description" />
-
-                    <RelativeLayout
-                        android:id="@+id/item_image_header"
-                        android:layout_width="@dimen/activity_game_details_header_image_size"
-                        android:layout_height="@dimen/activity_game_details_header_image_size"
-                        android:alpha="0.5"
-                        android:background="@drawable/shape_image_header_surface">
-
-                        <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:alpha="0.8"
-                            android:src="@drawable/ic_edit"
-                            app:tint="@color/on_background" />
-
-                    </RelativeLayout>
 
                 </RelativeLayout>
 
@@ -158,8 +141,8 @@
         android:layout_alignParentBottom="true">
 
         <LinearLayout
-            android:id="@+id/category_management_content"
             android:layout_width="match_parent"
+            android:id="@+id/category_management_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginTop="40dp"

@@ -15,10 +15,16 @@
         android:roundIcon="@mipmap/ic_launcher_3"
         android:supportsRtl="true"
         android:theme="@style/Theme.SrApp">
-        <activity android:name=".ui.category.management.CategoryManagementActivity"></activity>
+
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
+
+        <activity android:name=".ui.category.management.subcategory.SubcategoryManagementActivity"></activity>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/>
         <activity android:name=".ui.profile.ProfileActivity" />
+        <activity android:name=".ui.category.management.category.CategoryManagementActivity" />
         <activity android:name=".ui.settings.SettingActivity" />
         <activity android:name=".ui.categoryform.subcategory.SubcategoryFormActivity" />
         <activity android:name=".ui.category.subcategories.SubcategoriesActivity" />
@@ -27,7 +33,7 @@
         <activity android:name=".ui.auth.login.LoginActivity" />
         <activity android:name=".ui.category.category.CategoryActivity" />
         <activity android:name=".ui.times.TimesActivity" />
-        <activity android:name=".ui.category.subcategory.SubCategoryActivity" />
+        <activity android:name=".ui.category.subcategory.SubcategoryActivity" />
         <activity
             android:name=".ui.splash.SplashScreenActivity"
             android:exported="true">

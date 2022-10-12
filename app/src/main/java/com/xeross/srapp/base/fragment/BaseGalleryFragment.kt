@@ -29,8 +29,12 @@ abstract class BaseGalleryFragment<B : ViewBinding> : BaseCategoryFormFragment<B
         onRequestPermissionsResult(requestCode, grantResults)
     }
     
-    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun openGallery() {
+        openGalleryWithoutPermissionWithPermissionCheck()
+    }
+    
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+    fun openGalleryWithoutPermission() {
         
         context?.let { context ->
             CropImage.activity().setScaleType(CropImageView.ScaleType.CENTER_CROP)

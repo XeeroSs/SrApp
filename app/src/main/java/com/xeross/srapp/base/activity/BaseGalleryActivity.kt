@@ -28,8 +28,12 @@ abstract class BaseGalleryActivity<B : ViewBinding> : BaseActivity<B>(), Gallery
         onRequestPermissionsResult(requestCode, grantResults)
     }
     
-    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun openGallery() {
+        openGalleryWithoutPermissionWithPermissionCheck()
+    }
+    
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+    fun openGalleryWithoutPermission() {
         
         CropImage.activity().setScaleType(CropImageView.ScaleType.CENTER_CROP)
             .setCropShape(CropImageView.CropShape.RECTANGLE)
