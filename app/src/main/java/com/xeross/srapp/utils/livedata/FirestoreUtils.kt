@@ -72,15 +72,26 @@ object FirestoreUtils {
         return result
     }
     
-    fun uploadAndGetImage(storage: FirebaseStorage, uri: Uri, categoryId: String): LiveData<LiveDataQuery<Uri?>> {
+    fun uploadAndGetImage(storage: FirebaseStorage, uri: Uri, uid: String, categoryId: String): LiveData<LiveDataQuery<Uri?>> {
         val result = MutableLiveData<LiveDataQuery<Uri?>>()
-        val reference = storage.getReference(categoryId)
+        val reference = storage.getReference("$uid-$categoryId")
         reference.putFile(uri).addOnSuccessListener {
             reference.downloadUrl.addOnSuccessListener { pathImageSavedInFirebase ->
                 result.postValue(LiveDataQuery(ResultLiveDataType.SUCCESS, R.string.success, pathImageSavedInFirebase))
             }.addOnFailureListener { e ->
                 result.postValue(LiveDataQuery(ResultLiveDataType.FAIL, getErrorMessage(e), null))
             }
+        }.addOnFailureListener { e ->
+            result.postValue(LiveDataQuery(ResultLiveDataType.FAIL, getErrorMessage(e), null))
+        }
+        return result
+    }
+    
+    fun getImage(storage: FirebaseStorage, uid: String, categoryId: String): LiveData<LiveDataQuery<Uri>> {
+        val result = MutableLiveData<LiveDataQuery<Uri>>()
+        val reference = storage.getReference("$uid-$categoryId")
+        reference.downloadUrl.addOnSuccessListener { uri ->
+            result.postValue(LiveDataQuery(ResultLiveDataType.SUCCESS, R.string.success, uri))
         }.addOnFailureListener { e ->
             result.postValue(LiveDataQuery(ResultLiveDataType.FAIL, getErrorMessage(e), null))
         }

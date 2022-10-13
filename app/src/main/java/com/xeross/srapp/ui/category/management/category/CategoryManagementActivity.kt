@@ -3,8 +3,6 @@ package com.xeross.srapp.ui.category.management.category
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.widget.RelativeLayout
 import android.widget.Toast
@@ -18,6 +16,7 @@ import com.xeross.srapp.databinding.ActivityCategoryManagementBinding
 import com.xeross.srapp.databinding.DialogDeleteConfirmationBinding
 import com.xeross.srapp.ui.settings.manager.SettingViewManager
 import com.xeross.srapp.utils.Constants
+import com.xeross.srapp.utils.OnTextChangedWatcher
 import com.xeross.srapp.utils.livedata.ResultLiveDataType
 import java.util.function.Function
 
@@ -66,6 +65,12 @@ class CategoryManagementActivity : BaseGalleryActivity<ActivityCategoryManagemen
             build()
         }
         
+        updateCategoryName()
+        updateCategoryImage()
+        
+    }
+    
+    private fun updateCategoryName() {
         viewModel.getCategory(categoryId)?.observe(this) { query ->
             if (query.state == ResultLiveDataType.FAIL) {
                 Toast.makeText(this, query.resMessageId, Toast.LENGTH_SHORT).show()
@@ -73,11 +78,22 @@ class CategoryManagementActivity : BaseGalleryActivity<ActivityCategoryManagemen
             }
             
             query.result?.let { category ->
-                setHeaderImage(category.imageURL)
                 loadCategoryName(category.name)
             }
         }
-        
+    }
+    
+    private fun updateCategoryImage() {
+        viewModel.getCategoryImage(categoryId)?.observe(this) { query ->
+            if (query.state == ResultLiveDataType.FAIL) {
+                Toast.makeText(this, query.resMessageId, Toast.LENGTH_SHORT).show()
+                return@observe
+            }
+            query.result?.let { uri ->
+                setHeaderImage(uri)
+            }
+            
+        }
     }
     
     private fun loadCategoryName(name: String) {
@@ -87,7 +103,7 @@ class CategoryManagementActivity : BaseGalleryActivity<ActivityCategoryManagemen
     /**
      * Reduce size image based on content shape size for create a border
      */
-    private fun setHeaderImage(imageURL: String?) {
+    private fun setHeaderImage(imageURL: Uri?) {
         val image = binding.categoryManagementImageHeader
         val imageContent = binding.categoryManagementContentImageHeader
         val itemImageHeader = binding.itemImageHeader
@@ -111,15 +127,14 @@ class CategoryManagementActivity : BaseGalleryActivity<ActivityCategoryManagemen
         loadCategoryImage(imageURL)
     }
     
-    private fun loadCategoryImage(imageURL: String?) {
-        imageURL?.takeIf {
-            it.isNotBlank()
-        }?.let {
-            Glide.with(this).load(it)
+    private fun loadCategoryImage(uri: Uri?) {
+        if (uri != null) {
+            Glide.with(this).load(uri)
                 .centerCrop() // scale image to fill the entire ImageView
                 .circleCrop().into(binding.categoryManagementImageHeader)
             return
         }
+        
         
         Glide.with(this).load(R.drawable.ill_image_upload_amico)
             .centerInside()
@@ -147,19 +162,9 @@ class CategoryManagementActivity : BaseGalleryActivity<ActivityCategoryManagemen
             dialogView?.confirmEditText?.editText?.let { editText ->
                 editText.text?.clear()
                 
-                editText.addTextChangedListener(object : TextWatcher {
-                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    }
-                    
+                editText.addTextChangedListener(object : OnTextChangedWatcher() {
                     override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                        if (text.toString() == "CONFIRM") {
-                            deleteButton.isEnabled = true
-                            return
-                        }
-                        deleteButton.isEnabled = false
-                    }
-                    
-                    override fun afterTextChanged(p0: Editable?) {
+                        deleteButton.isEnabled = text.toString() == "CONFIRM"
                     }
                 })
             }
@@ -181,16 +186,22 @@ class CategoryManagementActivity : BaseGalleryActivity<ActivityCategoryManagemen
     }
     
     override fun getUri(cropImageToUri: Uri) {
-        
-/*        viewModel.uploadImage(categoryId)?.observe(this) { query ->
+        viewModel.uploadImage(categoryId, cropImageToUri)?.observe(this) { query ->
             if (query.state == ResultLiveDataType.FAIL) {
                 Toast.makeText(this, query.resMessageId, Toast.LENGTH_SHORT).show()
                 return@observe
             }
             
-            query.result?.let { _ ->
-                Glide.with(this).load(cropImageToUri).into(binding.categoryManagementImageHeader)
+            query.result?.let { uri ->
+                viewModel.updateImagePathToDatabase(categoryId, categoryId)?.observe(this) { query ->
+                    if (query.state == ResultLiveDataType.FAIL) {
+                        Toast.makeText(this, query.resMessageId, Toast.LENGTH_SHORT).show()
+                        return@observe
+                    }
+                    
+                    setHeaderImage(uri)
+                }
             }
-        }*/
+        }
     }
 }

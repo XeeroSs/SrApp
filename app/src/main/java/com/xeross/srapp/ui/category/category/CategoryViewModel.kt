@@ -1,11 +1,14 @@
 package com.xeross.srapp.ui.category.category
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.xeross.srapp.base.BaseFirebaseViewModel
 import com.xeross.srapp.data.models.Category
 import com.xeross.srapp.utils.Constants.DATABASE_COLLECTION_CATEGORIES
 import com.xeross.srapp.utils.Constants.DATABASE_COLLECTION_USERS_CATEGORIES
+import com.xeross.srapp.utils.livedata.FirestoreUtils.getImage
+import com.xeross.srapp.utils.livedata.LiveDataQuery
 
 class CategoryViewModel : BaseFirebaseViewModel() {
     
@@ -48,5 +51,12 @@ class CategoryViewModel : BaseFirebaseViewModel() {
         }
         
         return mutableLiveData
+    }
+    
+    fun getImageFromStorage(categoryId: String): LiveData<LiveDataQuery<Uri>>? {
+        val uid = getUserId() ?: return null
+        
+        return getImage(getStorage(), uid, categoryId)
+        
     }
 }

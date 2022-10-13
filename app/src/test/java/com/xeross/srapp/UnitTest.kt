@@ -11,6 +11,10 @@ import org.junit.Test
 class UnitTest {
     @Test
     fun test() {
+        testBooleanWithKotlin()
+    }
+    
+    private fun testEnum() {
         val enumPrevious = EnumTest::class.java.getPreviousOrNull(EnumTest.THREE)
         assertEquals(enumPrevious, EnumTest.TWO)
         
@@ -30,6 +34,14 @@ class UnitTest {
         var index: Int = elements.indexOf(element)
         index = (index - 1).takeUnless { it < 0 } ?: return null
         return elements[index]
+    }
+    
+    private fun testBooleanWithKotlin() {
+/*        if (text.toString() == "CONFIRM") {
+            deleteButton.isEnabled = true
+            return
+        }
+        deleteButton.isEnabled = false*/
     }
     
     @Suppress("unused")

@@ -12,9 +12,10 @@ import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseAdapter
 import com.xeross.srapp.data.models.Category
 import com.xeross.srapp.databinding.CategoryCellBinding
+import com.xeross.srapp.listener.AsyncRecyclerListener
 import com.xeross.srapp.listener.ClickListener
 
-class CategoryAdapter(context: Context, objectList: ArrayList<Category>, clickListener: ClickListener<Category>) :
+class CategoryAdapter(context: Context, objectList: ArrayList<Category>, clickListener: ClickListener<Category>, val asyncRecyclerListener: AsyncRecyclerListener<ViewHolder, Category>) :
     BaseAdapter<CategoryAdapter.ViewHolder, Category>(context, objectList, clickListener) {
     
     private val glide = Glide.with(context)
@@ -44,7 +45,9 @@ class CategoryAdapter(context: Context, objectList: ArrayList<Category>, clickLi
         holder.category.text = dObject.name
         
         dObject.imageURL?.takeIf { it.isNotBlank() }?.let { url ->
-            glide.load(url).into(holder.image)
+            
+            asyncRecyclerListener.execute(holder, dObject)
+            
         } ?: run {
             holder.image.scaleType = ImageView.ScaleType.CENTER_INSIDE
             glide.load(R.drawable.ill_gaming_amico).into(holder.image)
