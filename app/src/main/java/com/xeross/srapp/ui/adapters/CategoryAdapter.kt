@@ -2,14 +2,17 @@ package com.xeross.srapp.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.xeross.srapp.R
 import com.xeross.srapp.base.BaseAdapter
+import com.xeross.srapp.components.ui.ProgressAnimation
 import com.xeross.srapp.data.models.Category
 import com.xeross.srapp.databinding.CategoryCellBinding
 import com.xeross.srapp.listener.AsyncRecyclerListener
@@ -25,6 +28,7 @@ class CategoryAdapter(context: Context, objectList: ArrayList<Category>, clickLi
         val info: TextView = binding.categoryCellInfo
         val category: TextView = binding.categoryCellCategory
         val item: LinearLayout = binding.categoryCellItem
+        val progress: ProgressAnimation = binding.progressLinear
     }
     
     
@@ -40,15 +44,20 @@ class CategoryAdapter(context: Context, objectList: ArrayList<Category>, clickLi
         }
     }
     
+    //
     override fun updateItem(holder: ViewHolder, dObject: Category) {
         holder.info.text = "9 catégories • #6"
         holder.category.text = dObject.name
+        
+        holder.progress.setGradientColors(intArrayOf(ContextCompat.getColor(context, R.color.color_progress_gradient_start),
+            ContextCompat.getColor(context, R.color.color_progress_gradient_end)))
         
         dObject.imageURL?.takeIf { it.isNotBlank() }?.let { url ->
             
             asyncRecyclerListener.execute(holder, dObject)
             
         } ?: run {
+            holder.progress.visibility = View.GONE
             holder.image.scaleType = ImageView.ScaleType.CENTER_INSIDE
             glide.load(R.drawable.ill_gaming_amico).into(holder.image)
         }

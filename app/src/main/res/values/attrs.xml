@@ -3,4 +3,8 @@
     <declare-styleable name="graphic_bar">
         <attr name="bar_color" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="progress_animation">
+    </declare-styleable>
+
 </resources>

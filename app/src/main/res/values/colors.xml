@@ -49,6 +49,13 @@
     <color name="blue_pastel">#ADE3EF</color> <!--super dark gray-->
     <color name="purple_pastel">#DAADEF</color> <!--super dark gray-->
 
+    <color name="color_progress_gradient_start">#f5f5f5</color> <!--super dark gray-->
+    <color name="color_progress_gradient_end">#ececec</color> <!--super dark gray-->
+
+
+<!--    <color name="color_progress_gradient_start">#f5f5f5</color>
+    <color name="color_progress_gradient_end">#ececec</color> -->
+
 
     <!--    <color name="purple_light">#794de3</color>
         <color name="purple">#6a59ff</color>

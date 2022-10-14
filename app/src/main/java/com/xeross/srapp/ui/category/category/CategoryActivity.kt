@@ -1,6 +1,7 @@
 package com.xeross.srapp.ui.category.category
 
 import android.content.Intent
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -107,6 +108,8 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding>(), ClickListener<
     
     override fun execute(holder: CategoryAdapter.ViewHolder, dObject: Category) {
         viewModel?.getImageFromStorage(dObject.id)?.observe(this) { query ->
+            holder.progress.visibility = View.GONE
+            
             if (query.state == ResultLiveDataType.FAIL) {
                 holder.image.scaleType = ImageView.ScaleType.CENTER_INSIDE
                 glide.load(R.drawable.ill_gaming_amico).into(holder.image)
@@ -121,7 +124,6 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding>(), ClickListener<
     
     override fun onClick(o: Category) {
         val intent = Intent(this, SubcategoriesActivity::class.java)
-        //     intent.putExtra(EXTRA_CATEGORY_NAME, o.name)
         intent.putExtra(EXTRA_CATEGORY_ID, o.id)
         intent.putExtra(EXTRA_CATEGORY_NAME, o.name)
         startActivity(intent)
