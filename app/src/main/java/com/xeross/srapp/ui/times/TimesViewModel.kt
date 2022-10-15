@@ -8,7 +8,6 @@ import com.google.firebase.firestore.Query
 import com.xeross.srapp.base.BaseFirebaseViewModel
 import com.xeross.srapp.data.models.Time
 import com.xeross.srapp.utils.Constants
-import java.util.*
 
 class TimesViewModel : BaseFirebaseViewModel() {
     
@@ -47,14 +46,14 @@ class TimesViewModel : BaseFirebaseViewModel() {
         
         if (toggles.contains(best)) {
             times.removeAll(toggles)
-            val newBest = times.stream().min(Comparator.comparing(Time::time)).get()
+            val newBest = if (times.isNotEmpty()) times.stream().min(Comparator.comparing(Time::time)).get() else Time("", 0)
             
             val subcategoryCollection = getCollection(getPathSubCollectionToString(uid, categoryId))
             
             subcategoryCollection.document(subcategoryId).update("timeInMilliseconds", newBest.time).addOnSuccessListener {
-                deleteTimes(toggles, timeCollection).observe(context, {
+                deleteTimes(toggles, timeCollection).observe(context) {
                     mutableLiveData.postValue(true)
-                })
+                }
             }.addOnFailureListener {
                 mutableLiveData.postValue(false)
             }
@@ -86,7 +85,7 @@ class TimesViewModel : BaseFirebaseViewModel() {
         return mutableLiveData
     }
     
-    fun updateTime( categoryId: String, subcategoryId: String, timeToMilliseconds: Long, time: Time): LiveData<Long?> {
+    fun updateTime(categoryId: String, subcategoryId: String, timeToMilliseconds: Long, time: Time): LiveData<Long?> {
         val mutableLiveData = MutableLiveData<Long?>()
         
         val uid = getUserId() ?: return mutableLiveData

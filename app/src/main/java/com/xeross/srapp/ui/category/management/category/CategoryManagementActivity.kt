@@ -14,6 +14,7 @@ import com.xeross.srapp.R
 import com.xeross.srapp.base.activity.BaseGalleryActivity
 import com.xeross.srapp.databinding.ActivityCategoryManagementBinding
 import com.xeross.srapp.databinding.DialogDeleteConfirmationBinding
+import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity
 import com.xeross.srapp.ui.settings.manager.SettingViewManager
 import com.xeross.srapp.utils.Constants
 import com.xeross.srapp.utils.OnTextChangedWatcher
@@ -199,6 +200,7 @@ class CategoryManagementActivity : BaseGalleryActivity<ActivityCategoryManagemen
                         return@observe
                     }
                     
+                    setResult(SubcategoriesActivity.RC_REFRESH)
                     setHeaderImage(uri)
                 }
             }

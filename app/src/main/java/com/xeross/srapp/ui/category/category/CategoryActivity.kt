@@ -17,6 +17,7 @@ import com.xeross.srapp.databinding.ActivityCategoryBinding
 import com.xeross.srapp.listener.AsyncRecyclerListener
 import com.xeross.srapp.listener.ClickListener
 import com.xeross.srapp.ui.adapters.CategoryAdapter
+import com.xeross.srapp.ui.category.category.types.CategorySortType
 import com.xeross.srapp.ui.category.subcategories.SubcategoriesActivity
 import com.xeross.srapp.ui.categoryform.category.CategoryFormActivity
 import com.xeross.srapp.utils.Constants.EXTRA_CATEGORY_ID
@@ -29,6 +30,8 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding>(), ClickListener<
     companion object {
         const val RC_CREATE_NEW_CATEGORY = 25
     }
+    
+    private var currentCategorySort = CategorySortType.LAST_UPDATE
     
     override fun getViewModelClass() = CategoryViewModel::class.java
     
@@ -58,9 +61,30 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding>(), ClickListener<
         getCategories()
     }
     
+    private fun onClickCategorySortMenu(view: View) {
+        showMenu(view, R.menu.popup_category_sort_menu).setOnMenuItemClickListener { menu ->
+            CategorySortType.values().find { menu.itemId == it.resId }?.let { type ->
+                currentCategorySort = type
+                setPlaceHolder()
+                getCategories()
+            }
+            return@setOnMenuItemClickListener true
+        }
+    }
+    
+    private fun setPlaceHolder() {
+        val textSort = binding.mainActivityTextYourCategories
+        
+        val resSort = resources.getString(R.string.game_details_text_stats, getString(currentCategorySort.resStringId))
+    
+        textSort.text = resSort
+    }
+    
     override fun ui() {
         
         buildHeader(null, binding.headerTitle, R.string.category, 35f)
+        
+        setPlaceHolder()
         
         adapter = CategoryAdapter(this, categories, this, this).also { a ->
             binding.mainActivityListCategories.let {
@@ -84,6 +108,11 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding>(), ClickListener<
     }
     
     override fun onClick() {
+        
+        binding.mainActivityTextYourCategories.setOnClickListener {
+            onClickCategorySortMenu(it)
+        }
+        
         binding.mainActivityButtonAddYourCategories.setOnClickListener {
             val intent = Intent(this, CategoryFormActivity::class.java)
             resultLauncher.launch(intent)
@@ -102,6 +131,7 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding>(), ClickListener<
         viewModel?.getCategories()?.observe(this) {
             if (it == null) return@observe
             categories.addAll(it)
+            categories.sortWith(currentCategorySort.comparator)
             adapter.notifyDataSetChanged()
         }
     }
@@ -117,6 +147,7 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding>(), ClickListener<
             }
             
             query.result?.let { uri ->
+                holder.image.scaleType = ImageView.ScaleType.CENTER_CROP
                 glide.load(uri.toString()).into(holder.image)
             }
         }
@@ -126,7 +157,7 @@ class CategoryActivity : BaseActivity<ActivityCategoryBinding>(), ClickListener<
         val intent = Intent(this, SubcategoriesActivity::class.java)
         intent.putExtra(EXTRA_CATEGORY_ID, o.id)
         intent.putExtra(EXTRA_CATEGORY_NAME, o.name)
-        startActivity(intent)
+        resultLauncher.launch(intent)
         return
     }
     

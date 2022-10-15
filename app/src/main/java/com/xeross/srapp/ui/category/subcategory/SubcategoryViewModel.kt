@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.xeross.srapp.base.BaseFirebaseViewModel
+import com.xeross.srapp.data.models.Category
 import com.xeross.srapp.data.models.SubCategory
 import com.xeross.srapp.data.models.Time
 import com.xeross.srapp.data.models.User
@@ -78,6 +79,14 @@ class SubcategoryViewModel : BaseFirebaseViewModel() {
     
     fun getToggleFromSharedPreferences(settingType: SettingType): Boolean {
         return getSharedPreferences(settingType)
+    }
+    
+    fun updateCategoryLastUpdatedAt(categoryId: String): LiveData<LiveDataPost>? {
+        val uid = getUserId() ?: return null
+        
+        val timeCollection = getCollectionPath("${Constants.DATABASE_COLLECTION_CATEGORIES}/$uid/${Constants.DATABASE_COLLECTION_USERS_CATEGORIES}")
+        
+        return updateDocument(timeCollection, categoryId, Category::lastUpdatedAt.name, Timestamp.now()).post()
     }
     
 }

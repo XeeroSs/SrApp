@@ -2,7 +2,6 @@ package com.xeross.srapp.ui.categoryform.category
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.Timestamp
 import com.xeross.srapp.base.BaseFirebaseViewModel
 import com.xeross.srapp.data.models.Category
 import com.xeross.srapp.data.models.SubCategory

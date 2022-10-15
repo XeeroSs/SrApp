@@ -89,6 +89,7 @@ class SubcategoryActivity : BaseActivity<ActivitySubcategoryBinding>(), TimeList
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RC_REFRESH) {
             setResult(RC_REFRESH)
+            viewModel?.updateCategoryLastUpdatedAt(categoryId)
             getTimes()
         }
     }
@@ -107,12 +108,12 @@ class SubcategoryActivity : BaseActivity<ActivitySubcategoryBinding>(), TimeList
     
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.subcategory_menu_settings -> {
-    
+            
             val intent = Intent(this, SubcategoryManagementActivity::class.java)
-    
+            
             intent.putExtra(EXTRA_CATEGORY_ID, categoryId)
             intent.putExtra(EXTRA_SUBCATEGORY_ID, subcategory.id)
-    
+            
             resultLauncher.launch(intent)
             
             true
@@ -126,8 +127,6 @@ class SubcategoryActivity : BaseActivity<ActivitySubcategoryBinding>(), TimeList
     }
     
     override fun ui() {
-        
-        setPlaceHolder()
         
         setSupportActionBar(binding.headerSubcategoryToolbar)
         supportActionBar?.title = null
@@ -209,19 +208,26 @@ class SubcategoryActivity : BaseActivity<ActivitySubcategoryBinding>(), TimeList
         with(viewModel ?: return) {
             
             saveTime(categoryId, subCategoryId, timeToMilliseconds)?.observe(this@SubcategoryActivity) { result ->
-                dialogView?.submitButton?.isEnabled = true
-                if (result.state != ResultLiveDataType.SUCCESS) return@observe
+                if (result.state != ResultLiveDataType.SUCCESS) {
+                    dialogView?.submitButton?.isEnabled = true
+                    return@observe
+                }
                 
-                val isBest = if (bestInMilliseconds <= 0) true else bestInMilliseconds > timeToMilliseconds
-                
-                if (isBest) saveTimeIfBestToSubcategoryDocument(categoryId, subCategoryId, timeToMilliseconds)?.observe(this@SubcategoryActivity, {})
-                updateUserProfile(isBest)?.observe(this@SubcategoryActivity, {})
-                
-                setResult(RC_REFRESH)
-                times.add(timeToMilliseconds)
-                refresh()
-                resetDialogPicker()
-                dialog?.dismiss()
+                updateCategoryLastUpdatedAt(categoryId)?.observe(this@SubcategoryActivity) { _ ->
+                    dialogView?.submitButton?.isEnabled = true
+                    val isBest = if (bestInMilliseconds <= 0) true else bestInMilliseconds > timeToMilliseconds
+                    
+                    if (isBest) {
+                        saveTimeIfBestToSubcategoryDocument(categoryId, subCategoryId, timeToMilliseconds)?.observe(this@SubcategoryActivity, {})
+                    }
+                    updateUserProfile(isBest)?.observe(this@SubcategoryActivity, {})
+                    
+                    setResult(RC_REFRESH)
+                    times.add(timeToMilliseconds)
+                    refresh()
+                    resetDialogPicker()
+                    dialog?.dismiss()
+                }
             }
             
         }
@@ -231,6 +237,7 @@ class SubcategoryActivity : BaseActivity<ActivitySubcategoryBinding>(), TimeList
     private fun refresh() {
         setHeaderImage()
         getStats()
+        refreshBest()
     }
     
     private fun resetDialogPicker() {
@@ -371,7 +378,7 @@ class SubcategoryActivity : BaseActivity<ActivitySubcategoryBinding>(), TimeList
         val subCategoryId = subcategory.id
         
         with(viewModel ?: return) {
-            getSubCategoryTimes(categoryId, subCategoryId, currentTimeSort)?.observe(this@SubcategoryActivity, { resultTimes ->
+            getSubCategoryTimes(categoryId, subCategoryId, currentTimeSort)?.observe(this@SubcategoryActivity) { resultTimes ->
                 if (resultTimes.state != ResultLiveDataType.SUCCESS) return@observe
                 
                 resultTimes.result!!.forEach { time ->
@@ -381,16 +388,16 @@ class SubcategoryActivity : BaseActivity<ActivitySubcategoryBinding>(), TimeList
                 refresh()
                 
                 getBestOnAllRuns(subCategoryId)
-            })
+            }
         }
     }
     
     private fun SubcategoryViewModel.getBestOnAllRuns(subCategoryId: String) {
-        getBestOnAllRuns(categoryId, subCategoryId)?.observe(this@SubcategoryActivity, { resultBest ->
+        getBestOnAllRuns(categoryId, subCategoryId)?.observe(this@SubcategoryActivity) { resultBest ->
             if (resultBest.state != ResultLiveDataType.SUCCESS) return@observe
             bestOnAllRunsInMilliseconds = resultBest.result!!.timeInMilliseconds
             refreshBest()
-        })
+        }
     }
     
     private fun refreshBest() {

@@ -121,12 +121,12 @@ class TimesActivity : BaseActivity<ActivityTimesBinding>(), TimeAdapter.Listener
     
     private fun getTimes() {
         times.clear()
-        viewModel?.getTimes(categoryId, subcategoryId)?.observe(this, {
+        viewModel?.getTimes(categoryId, subcategoryId)?.observe(this) {
             if (it == null) return@observe
             times.addAll(it)
             getListenerTime(it)
             adapter?.notifyDataSetChanged()
-        })
+        }
     }
     
     private fun getListenerTime(times: ArrayList<Time>) {

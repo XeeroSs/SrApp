@@ -18,7 +18,7 @@ import com.google.android.material.navigation.NavigationBarView
 import com.xeross.srapp.R
 import com.xeross.srapp.ui.profile.ProfileActivity
 import com.xeross.srapp.ui.settings.SettingActivity
-import com.xeross.srapp.utils.injection.ViewModelFactory
+import com.xeross.srapp.data.injection.ViewModelFactory
 import java.util.function.Function
 
 abstract class BaseActivity<B : ViewBinding> : AppCompatActivity() {

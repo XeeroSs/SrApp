@@ -46,6 +46,7 @@ class SubcategoriesActivity : BaseActivity<ActivitySubcategoriesBinding>(), Clic
     
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RC_REFRESH) {
+            setResult(SubcategoriesActivity.RC_REFRESH)
             refresh()
         }
     }

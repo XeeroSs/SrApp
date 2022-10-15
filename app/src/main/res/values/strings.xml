@@ -128,5 +128,8 @@
     <string name="ok">OK</string>
     <string name="type_confirm_to_confirm">Type \"CONFIRM\" to confirm</string>
     <string name="confirm">Confirm</string>
+    <string name="recently">recently</string>
+    <string name="name_asc">name Z-A</string>
+    <string name="name_desc">name A-Z</string>
 
 </resources>
